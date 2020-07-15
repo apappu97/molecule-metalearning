@@ -70,6 +70,7 @@ class CommonArgs(Tap):
     num_workers: int = 8   # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
     # MetaLearning parameters
+    dummy: bool = False # dummy for faking tasks during debug
     meta_batch_size: int = 32 # Num tasks in meta batches
     meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
     meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0, 0.2)

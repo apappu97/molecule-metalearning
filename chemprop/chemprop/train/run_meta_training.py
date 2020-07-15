@@ -91,7 +91,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     #     )
 
     # If this happens, then need to move this logic into the task data loader
-    # when it creates the datasets! 
+    # when it creates the datasets!
     # if args.features_scaling:
     #     features_scaler = train_data.normalize_features(replace_nan_token=0)
     #     val_data.normalize_features(features_scaler)
@@ -136,95 +136,98 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Set up MetaTaskDataLoaders, which takes care of task splits under the hood 
     # Set up task splits into T_tr, T_val, T_test
 
-    assert args.chembl_assay_metadata_pickle_path is not None
-    with open(args.chembl_assay_metadata_pickle_path +
-            'chembl_128_assay_type_to_names.pickle', 'rb') as handle:
-        chembl_128_assay_type_to_names = pickle.load(handle)
-    with open(args.chembl_assay_metadata_pickle_path +
-            'chembl_128_assay_name_to_type.pickle', 'rb') as handle:
-        chembl_128_assay_name_to_type = pickle.load(handle)
-
-    """ 
-    Copy GSK implementation of task split 
-    We have 5 Task types remaining
-    ADME (A)
-    Toxicity (T)
-    Unassigned (U) 
-    Binding (B)
-    Functional (F)
-    resulting in 902 tasks.
-
-    For T_val, randomly select 10 B and F tasks
-    For T_test, select another 10 B and F tasks and allocate all A, T, and U
-    tasks to the test split.
-    For T_train, allocate the remaining B and F tasks. 
-
-    """
     import pdb; pdb.set_trace()
-    T_val_num_BF_tasks = args.meta_split_sizes_BF[0]
-    T_test_num_BF_tasks = args.meta_split_sizes_BF[1]
-    T_val_idx = T_val_num_BF_tasks
-    T_test_idx = T_val_num_BF_tasks + T_test_num_BF_tasks
+    if not args.dummy:
+        assert args.chembl_assay_metadata_pickle_path is not None
+        with open(args.chembl_assay_metadata_pickle_path + 'chembl_128_assay_type_to_names.pickle', 'rb') as handle:
+            chembl_128_assay_type_to_names = pickle.load(handle)
+        with open(args.chembl_assay_metadata_pickle_path + 'chembl_128_assay_name_to_type.pickle', 'rb') as handle:
+            chembl_128_assay_name_to_type = pickle.load(handle)
 
-    chembl_id_to_idx = {chembl_id: idx for idx, chembl_id in enumerate(args.task_names)}
+        """ 
+        Copy GSK implementation of task split 
+        We have 5 Task types remaining
+        ADME (A)
+        Toxicity (T)
+        Unassigned (U) 
+        Binding (B)
+        Functional (F)
+        resulting in 902 tasks.
 
-    # Shuffle B and F tasks
-    randomized_B_tasks = np.copy(chembl_128_assay_type_to_names['B'])
-    np.random.shuffle(randomized_B_tasks)
-    randomized_B_task_indices = [chembl_id_to_idx[assay] for assay in
-            randomized_B_tasks]
+        For T_val, randomly select 10 B and F tasks
+        For T_test, select another 10 B and F tasks and allocate all A, T, and U
+        tasks to the test split.
+        For T_train, allocate the remaining B and F tasks. 
 
-    randomized_F_tasks = np.copy(chembl_128_assay_type_to_names['F'])
-    np.random.shuffle(randomized_F_tasks)
-    randomized_F_task_indices = [chembl_id_to_idx[assay] for assay in
-            randomized_F_tasks]
+        """
+        T_val_num_BF_tasks = args.meta_split_sizes_BF[0]
+        T_test_num_BF_tasks = args.meta_split_sizes_BF[1]
+        T_val_idx = T_val_num_BF_tasks
+        T_test_idx = T_val_num_BF_tasks + T_test_num_BF_tasks
 
-    # Grab B and F indices for T_val
-    T_val_B_task_indices = randomized_B_task_indices[:T_val_idx]
-    T_val_F_task_indices = randomized_F_task_indices[:T_val_idx]
+        chembl_id_to_idx = {chembl_id: idx for idx, chembl_id in enumerate(args.task_names)}
 
-    # Grab B and F indices for T_test
-    T_test_B_task_indices = randomized_B_task_indices[T_val_idx:T_test_idx]
-    T_test_F_task_indices = randomized_F_task_indices[T_val_idx:T_test_idx]
-    # Grab all A, T and U indices for T_test
-    T_test_A_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['A']]
-    T_test_T_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['T']]
-    T_test_U_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['U']]
+        # Shuffle B and F tasks
+        randomized_B_tasks = np.copy(chembl_128_assay_type_to_names['B'])
+        np.random.shuffle(randomized_B_tasks)
+        randomized_B_task_indices = [chembl_id_to_idx[assay] for assay in randomized_B_tasks]
 
-    # Slot remaining BF tasks into T_tr
-    T_tr_B_task_indices = randomized_B_task_indices[T_test_idx:]
-    T_tr_F_task_indices = randomized_F_task_indices[T_test_idx:]
+        randomized_F_tasks = np.copy(chembl_128_assay_type_to_names['F'])
+        np.random.shuffle(randomized_F_tasks)
+        randomized_F_task_indices = [chembl_id_to_idx[assay] for assay in randomized_F_tasks]
 
-    T_tr = [0] * len(args.task_names)
-    T_val = [0] * len(args.task_names)
-    T_test = [0] * len(args.task_names)
+        # Grab B and F indices for T_val
+        T_val_B_task_indices = randomized_B_task_indices[:T_val_idx]
+        T_val_F_task_indices = randomized_F_task_indices[:T_val_idx]
 
-    # Now make task bit vectors
-    for idx_list in (T_tr_B_task_indices, T_tr_F_task_indices):
-        for idx in idx_list:
+        # Grab B and F indices for T_test
+        T_test_B_task_indices = randomized_B_task_indices[T_val_idx:T_test_idx]
+        T_test_F_task_indices = randomized_F_task_indices[T_val_idx:T_test_idx]
+        # Grab all A, T and U indices for T_test
+        T_test_A_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['A']]
+        T_test_T_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['T']]
+        T_test_U_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['U']]
+
+        # Slot remaining BF tasks into T_tr
+        T_tr_B_task_indices = randomized_B_task_indices[T_test_idx:]
+        T_tr_F_task_indices = randomized_F_task_indices[T_test_idx:]
+
+        T_tr = [0] * len(args.task_names)
+        T_val = [0] * len(args.task_names)
+        T_test = [0] * len(args.task_names)
+    
+        # Now make task bit vectors
+        for idx_list in (T_tr_B_task_indices, T_tr_F_task_indices):
+            for idx in idx_list:
+                T_tr[idx] = 1
+
+        for idx_list in (T_val_B_task_indices, T_val_F_task_indices):
+            for idx in idx_list:
+                T_val[idx] = 1
+
+        for idx_list in (T_test_B_task_indices, T_test_F_task_indices, T_test_A_task_indices, T_test_T_task_indices, T_test_U_task_indices):
+            for idx in idx_list:
+                T_test[idx] = 1
+
+
+    else:
+        """
+        Random task split for testing
+        """
+        print("Running in dummy mode")
+        task_indices = list(range(len(args.task_names)))
+        np.random.shuffle(task_indices)
+        train_task_split, val_task_split, test_task_split = 0.8, 0.1, 0.1
+        train_task_cutoff = int(len(task_indices) * train_task_split)
+        val_task_cutoff = train_task_cutoff + int(len(task_indices)*val_task_split)
+        T_tr, T_val, T_test = [0] * len(task_indices), [0] * len(task_indices), [0] * len(task_indices)
+        for idx in task_indices[:train_task_cutoff]:
             T_tr[idx] = 1
-
-    for idx_list in (T_val_B_task_indices, T_val_F_task_indices):
-        for idx in idx_list:
+        for idx in task_indices[train_task_cutoff:val_task_cutoff]:
             T_val[idx] = 1
-
-    for idx_list in (T_test_B_task_indices, T_test_F_task_indices, T_test_A_task_indices, T_test_T_task_indices, T_test_U_task_indices):
-        for idx in idx_list:
+        for idx in task_indices[val_task_cutoff:]:
             T_test[idx] = 1
 
-
-    """
-    Random task split for testing
-    task_indices = list(range(len(args.task_names)))
-    np.random.shuffle(task_indices)
-    train_task_split, val_task_split, test_task_split = 0.9, 0, 0.1
-    train_task_cutoff = int(len(task_indices) * train_task_split)
-    train_task_idxs, test_task_idxs = [0] * len(task_indices), [0] * len(task_indices)
-    for idx in task_indices[:train_task_cutoff]:
-        train_task_idxs[idx] = 1
-    for idx in task_indices[train_task_cutoff:]:
-        test_task_idxs[idx] = 1
-    """
 
     train_meta_task_data_loader = MetaTaskDataLoader(
             dataset=data,
@@ -246,6 +249,12 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             sizes=args.meta_test_split_sizes,
             args=args,
             logger=logger)
+
+    # Initialize scaler and scale training targets by subtracting mean and dividing standard deviation (regression only)
+    if args.dataset_type == 'regression':
+        raise ValueError("This script can only be run on ChEMBL clf")
+    else:
+        scaler = None
 
     import pdb; pdb.set_trace()
     for meta_train_batch in train_meta_task_data_loader.tasks():
