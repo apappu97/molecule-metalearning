@@ -67,7 +67,7 @@ def evaluate_predictions(preds: List[List[float]],
     return results
 
 
-def evaluate(model: nn.Module,
+def meta_evaluate(model: nn.Module,
              data_loader: MoleculeDataLoader,
              num_tasks: int,
              metric_func: Callable,

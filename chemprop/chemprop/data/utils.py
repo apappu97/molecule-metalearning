@@ -14,7 +14,7 @@ from .data import MoleculeDatapoint, MoleculeDataset
 from .scaffold import log_scaffold_stats, scaffold_split
 from chemprop.args import PredictArgs, TrainArgs
 from chemprop.features import load_features
-
+from memory_profiler import profile
 
 def get_task_names(path: str, smiles_column: str = None) -> List[str]:
     """
@@ -95,6 +95,7 @@ def filter_invalid_smiles(data: MoleculeDataset) -> MoleculeDataset:
                             and datapoint.mol.GetNumHeavyAtoms() > 0])
 
 
+@profile
 def get_data(path: str,
              smiles_column: str = None,
              target_columns: List[str] = None,
@@ -228,7 +229,7 @@ def get_data_from_smiles(smiles: List[str],
 
     return data
 
-
+@profile
 def split_data(data: MoleculeDataset,
                split_type: str = 'random',
                sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),

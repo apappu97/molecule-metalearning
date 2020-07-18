@@ -6,6 +6,7 @@ import torch #type: ignore
 from logging import Logger
 from chemprop.args import TrainArgs
 import numpy as np
+import math
 
 class TaskDataLoader:
     """ A TaskDataLoader is a wrapper for a single task, and handles generating
@@ -80,7 +81,6 @@ class TaskDataLoader:
                 test_data = MoleculeDataset(test)
         elif split_type == 'scaffold_balanced':
             if sizes[1] == 0:
-                import pdb; pdb.set_trace()
                 val = None
             else:
                 # This is hacky
@@ -196,3 +196,9 @@ class MetaTaskDataLoader:
         """
         for i in range(0, len(self.task_data_loaders), self.meta_batch_size):
             yield self.task_data_loaders[i:i+self.meta_batch_size]
+
+    def __len__(self) -> int:
+        """ 
+        Returns number of task batches
+        """
+        return math.ceil(len(self.task_data_loaders) * 1.0 / self.meta_batch_size)

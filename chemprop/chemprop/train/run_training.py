@@ -21,8 +21,10 @@ from chemprop.models import MoleculeModel
 from chemprop.nn_utils import param_count
 from chemprop.utils import build_optimizer, build_lr_scheduler, get_loss_func, get_metric_func, load_checkpoint,\
     makedirs, save_checkpoint, save_smiles_splits
+import wandb
+from memory_profiler import profile
 
-
+@profile
 def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     """
     Trains a model and returns test scores on the model checkpoint with the highest validation score.
@@ -96,7 +98,6 @@ def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         test_data.normalize_features(features_scaler)
     else:
         features_scaler = None
-
     args.train_data_size = len(train_data)
     
     debug(f'Total size = {len(data):,} | '
@@ -158,6 +159,7 @@ def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     for model_idx in range(args.ensemble_size):
         # Tensorboard writer
         save_dir = os.path.join(args.save_dir, f'model_{model_idx}')
+        print("save dir for model is {}".format(save_dir))
         makedirs(save_dir)
         try:
             writer = SummaryWriter(log_dir=save_dir)
@@ -171,7 +173,8 @@ def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         else:
             debug(f'Building model {model_idx}')
             model = MoleculeModel(args)
-
+        
+        wandb.watch(model)
         debug(model)
         debug(f'Number of parameters = {param_count(model):,}')
         if args.cuda:
@@ -220,6 +223,7 @@ def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             avg_val_score = np.nanmean(val_scores)
             debug(f'Validation {args.metric} = {avg_val_score:.6f}')
             writer.add_scalar(f'validation_{args.metric}', avg_val_score, n_iter)
+            wandb.log({'epoch': epoch, 'val_auc': avg_val_score})
 
             if args.show_individual_scores:
                 # Individual validation scores
@@ -287,4 +291,4 @@ def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         for task_name, ensemble_score in zip(args.task_names, ensemble_scores):
             info(f'Ensemble test {task_name} {args.metric} = {ensemble_score:.6f}')
 
-    return ensemble_scores
+    return ensemble_scores, best_epoch

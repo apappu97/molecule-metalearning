@@ -1,3 +1,6 @@
 jobs/
 *.csv
 *.npz
+logs/
+*.e*
+*.o*

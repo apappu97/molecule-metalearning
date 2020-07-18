@@ -9,6 +9,8 @@ from rdkit import Chem
 from .scaler import StandardScaler
 from chemprop.features import get_features_generator
 from chemprop.features import BatchMolGraph, MolGraph
+from memory_profiler import profile
+from pympler import muppy, summary
 
 
 # Cache of graph featurizations
@@ -36,11 +38,11 @@ class MoleculeDatapoint:
         if features is not None and features_generator is not None:
             raise ValueError('Cannot provide both loaded features and a features generator.')
 
-        self.smiles = smiles
-        self.targets = targets
-        self.row = row or OrderedDict()
-        self.features = features
-        self.features_generator = features_generator
+        self.smiles = smiles # str
+        self.targets = targets # 1310
+        self.row = row or OrderedDict() # 1310 ???
+        self.features = features # 2048
+        self.features_generator = features_generator # str
         self._mol = 'None'  # Initialize with 'None' to distinguish between None returned by invalid molecule
 
         # Generate additional features if given a generator
@@ -188,7 +190,8 @@ class MoleculeDataset(Dataset):
         if seed is not None:
             self._random.seed(seed)
         self._random.shuffle(self._data)
-    
+
+    @profile
     def normalize_features(self, scaler: StandardScaler = None, replace_nan_token: int = 0) -> StandardScaler:
         """
         Normalizes the features of the dataset using a StandardScaler (subtract mean, divide by standard deviation).
@@ -213,8 +216,8 @@ class MoleculeDataset(Dataset):
             self._scaler = StandardScaler(replace_nan_token=replace_nan_token)
             self._scaler.fit(features)
 
-        for d in self._data:
-            d.set_features(self._scaler.transform(d.features.reshape(1, -1))[0])
+        # for d in self._data:
+        #     d.set_features(self._scaler.transform(d.features.reshape(1, -1))[0])
 
         return self._scaler
     

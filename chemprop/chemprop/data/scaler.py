@@ -1,7 +1,8 @@
 from typing import Any, List
 
 import numpy as np
-
+from memory_profiler import profile
+from pympler import muppy, summary
 
 class StandardScaler:
     """A StandardScaler normalizes a dataset.
@@ -22,6 +23,7 @@ class StandardScaler:
         self.stds = stds
         self.replace_nan_token = replace_nan_token
 
+    @profile
     def fit(self, X: List[List[float]]) -> 'StandardScaler':
         """
         Learns means and standard deviations across the 0th axis.
@@ -30,12 +32,16 @@ class StandardScaler:
         :return: The fitted StandardScaler.
         """
         X = np.array(X).astype(float)
-        self.means = np.nanmean(X, axis=0)
+        print('shape of X array: ', X.shape)
+        print(sys.getsizeof(X))
         self.stds = np.nanstd(X, axis=0)
+        self.means = np.nanmean(X, axis=0)
         self.means = np.where(np.isnan(self.means), np.zeros(self.means.shape), self.means)
         self.stds = np.where(np.isnan(self.stds), np.ones(self.stds.shape), self.stds)
         self.stds = np.where(self.stds == 0, np.ones(self.stds.shape), self.stds)
-
+        # all_objects = muppy.get_objects()
+        # sum1 = summary.summarize(all_objects)
+        # summary.print_(sum1)
         return self
 
     def transform(self, X: List[List[float]]):

@@ -67,13 +67,9 @@ class CommonArgs(Tap):
     features_path: List[str] = None  # Path(s) to features to use in FNN (instead of features_generator)
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
-    num_workers: int = 8   # Number of workers for the parallel data loading (0 means sequential)
+    num_workers: int = 0   # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
-    # MetaLearning parameters
-    dummy: bool = False # dummy for faking tasks during debug
-    meta_batch_size: int = 32 # Num tasks in meta batches
-    meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
-    meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0, 0.2)
+
 
     @property
     def device(self) -> torch.device:
@@ -128,7 +124,6 @@ class TrainArgs(CommonArgs):
     separate_test_path: str = None  # Path to separate test set, optional
     split_type: Literal['random', 'scaffold_balanced', 'predetermined', 'crossval', 'index_predetermined'] = 'random'  # Method of splitting the data into train/val/test
     split_sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1)  # Split proportions for train/validation/test sets
-    meta_split_sizes_BF: Tuple[int, int] = (10, 10) # Number of B and F tasks to split into T_val and T_test
     num_folds: int = 1  # Number of folds when performing cross validation
     folds_file: str = None  # Optional file of fold labels
     val_fold_index: int = None  # Which fold to use as val for leave-one-out cross val
@@ -145,7 +140,6 @@ class TrainArgs(CommonArgs):
     log_frequency: int = 10  # The number of batches between each logging of the training loss
     show_individual_scores: bool = False  # Show all scores for individual targets, not just average, at the end
     cache_cutoff: int = 10000  # Maximum number of molecules in dataset to allow caching. Below this number, caching is used and data loading is sequential. Above this number, caching is not used and data loading is parallel.
-    chembl_assay_metadata_pickle_path: str  = None # Path to ChEMBL pickle files that store assay metadata
 
     # Model arguments
     bias: bool = False  # Whether to add bias to linear layers
@@ -170,6 +164,21 @@ class TrainArgs(CommonArgs):
     max_lr: float = 1e-3  # Maximum learning rate
     final_lr: float = 1e-4  # Final learning rate
     class_balance: bool = False  # Trains with an equal number of positives and negatives in each batch (only for single task classification)
+
+    # MetaLearning parameters
+    chembl_assay_metadata_pickle_path: str  = None # Path to ChEMBL pickle files that store assay metadata
+    dummy: bool = False # dummy for faking tasks during debug
+    num_inner_gradient_steps: int = 2 # Number of inner gradient steps per task during inner loop of meta learning
+    meta_batch_size: int = 3 # Num tasks in meta batches
+    meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.2, 0)
+    meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
+    meta_learning: bool = False # Whether the model is meta learning
+    inner_loop_lr: float = 0.05 # Inner loop learning rate during fast adaptation
+    outer_loop_lr: float = 3e-3 # Outer loop learning rate
+    FO_MAML: bool = False # Whether to do First Order MAML
+    ANIL: bool = False # Whether to do ANIL
+    results_save_dir: str # Where to save the pickled dictionary of results
+    experiment_name: str
 
     def __init__(self, *args, **kwargs) -> None:
         super(TrainArgs, self).__init__(*args, **kwargs)

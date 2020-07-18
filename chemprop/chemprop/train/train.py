@@ -11,8 +11,10 @@ from tqdm import tqdm
 from chemprop.args import TrainArgs
 from chemprop.data import MoleculeDataLoader, MoleculeDataset
 from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
+import wandb
+from memory_profiler import profile
 
-
+@profile
 def train(model: nn.Module,
           data_loader: MoleculeDataLoader,
           loss_func: Callable,
@@ -76,6 +78,7 @@ def train(model: nn.Module,
         n_iter += len(batch)
 
         # Log and/or add to tensorboard
+        wandb.log({'n_iter': n_iter, 'loss_avg': loss_sum/iter_count})
         if (n_iter // args.batch_size) % args.log_frequency == 0:
             lrs = scheduler.get_lr()
             pnorm = compute_pnorm(model)

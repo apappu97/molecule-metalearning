@@ -22,7 +22,12 @@ class MoleculeModel(nn.Module):
         self.multiclass = args.dataset_type == 'multiclass'
         self.featurizer = featurizer
 
-        self.output_size = args.num_tasks
+        # Check to see if we are meta learning. If we are, then only single output node is required
+        if args.meta_learning:
+            print("Meta learning, so output of FFN is 1")
+            self.output_size = 1
+        else:
+            self.output_size = args.num_tasks
         if self.multiclass:
             self.output_size *= args.multiclass_num_classes
 
@@ -86,6 +91,12 @@ class MoleculeModel(nn.Module):
                 dropout,
                 nn.Linear(args.ffn_hidden_size, self.output_size),
             ])
+
+        # Remove first dropout if dealing with features only
+        if args.features_only:
+            assert ffn[0] is dropout
+            ffn = ffn[1:]
+            assert ffn[0] is not dropout
 
         # Create FFN model
         self.ffn = nn.Sequential(*ffn)

@@ -10,10 +10,11 @@ import torch
 from tqdm import trange
 import pickle
 from torch.optim.lr_scheduler import ExponentialLR
+import learn2learn as l2l
 
-from .meta_evaluate import evaluate, evaluate_predictions
+from .evaluate import evaluate, evaluate_predictions
 from .predict import predict
-from .train import train
+from .meta_train import meta_train
 from chemprop.args import TrainArgs
 from chemprop.data import StandardScaler, MoleculeDataLoader, MetaTaskDataLoader
 from chemprop.data.utils import get_class_sizes, get_data, get_task_names, split_data
@@ -136,7 +137,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Set up MetaTaskDataLoaders, which takes care of task splits under the hood 
     # Set up task splits into T_tr, T_val, T_test
 
-    import pdb; pdb.set_trace()
     if not args.dummy:
         assert args.chembl_assay_metadata_pickle_path is not None
         with open(args.chembl_assay_metadata_pickle_path + 'chembl_128_assay_type_to_names.pickle', 'rb') as handle:
@@ -145,7 +145,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             chembl_128_assay_name_to_type = pickle.load(handle)
 
         """ 
-        Copy GSK implementation of task split 
+        Load ChEMBL task splits. Same in spirit as GSK implementation of task splits.
         We have 5 Task types remaining
         ADME (A)
         Toxicity (T)
@@ -153,62 +153,15 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         Binding (B)
         Functional (F)
         resulting in 902 tasks.
-
-        For T_val, randomly select 10 B and F tasks
-        For T_test, select another 10 B and F tasks and allocate all A, T, and U
-        tasks to the test split.
-        For T_train, allocate the remaining B and F tasks. 
-
         """
-        T_val_num_BF_tasks = args.meta_split_sizes_BF[0]
-        T_test_num_BF_tasks = args.meta_split_sizes_BF[1]
-        T_val_idx = T_val_num_BF_tasks
-        T_test_idx = T_val_num_BF_tasks + T_test_num_BF_tasks
 
         chembl_id_to_idx = {chembl_id: idx for idx, chembl_id in enumerate(args.task_names)}
-
-        # Shuffle B and F tasks
-        randomized_B_tasks = np.copy(chembl_128_assay_type_to_names['B'])
-        np.random.shuffle(randomized_B_tasks)
-        randomized_B_task_indices = [chembl_id_to_idx[assay] for assay in randomized_B_tasks]
-
-        randomized_F_tasks = np.copy(chembl_128_assay_type_to_names['F'])
-        np.random.shuffle(randomized_F_tasks)
-        randomized_F_task_indices = [chembl_id_to_idx[assay] for assay in randomized_F_tasks]
-
-        # Grab B and F indices for T_val
-        T_val_B_task_indices = randomized_B_task_indices[:T_val_idx]
-        T_val_F_task_indices = randomized_F_task_indices[:T_val_idx]
-
-        # Grab B and F indices for T_test
-        T_test_B_task_indices = randomized_B_task_indices[T_val_idx:T_test_idx]
-        T_test_F_task_indices = randomized_F_task_indices[T_val_idx:T_test_idx]
-        # Grab all A, T and U indices for T_test
-        T_test_A_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['A']]
-        T_test_T_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['T']]
-        T_test_U_task_indices = [chembl_id_to_idx[assay] for assay in chembl_128_assay_type_to_names['U']]
-
-        # Slot remaining BF tasks into T_tr
-        T_tr_B_task_indices = randomized_B_task_indices[T_test_idx:]
-        T_tr_F_task_indices = randomized_F_task_indices[T_test_idx:]
-
-        T_tr = [0] * len(args.task_names)
-        T_val = [0] * len(args.task_names)
-        T_test = [0] * len(args.task_names)
-    
-        # Now make task bit vectors
-        for idx_list in (T_tr_B_task_indices, T_tr_F_task_indices):
-            for idx in idx_list:
-                T_tr[idx] = 1
-
-        for idx_list in (T_val_B_task_indices, T_val_F_task_indices):
-            for idx in idx_list:
-                T_val[idx] = 1
-
-        for idx_list in (T_test_B_task_indices, T_test_F_task_indices, T_test_A_task_indices, T_test_T_task_indices, T_test_U_task_indices):
-            for idx in idx_list:
-                T_test[idx] = 1
-
+        with open(args.chembl_assay_metadata_pickle_path + 'meta_train_task_split.pickle', 'rb') as handle:
+            T_tr = pickle.load(handle)
+        with open(args.chembl_assay_metadata_pickle_path + 'meta_val_task_split.pickle', 'rb') as handle:
+            T_val = pickle.load(handle)
+        with open(args.chembl_assay_metadata_pickle_path + 'meta_test_task_split.pickle', 'rb') as handle:
+            T_test = pickle.load(handle)
 
     else:
         """
@@ -228,7 +181,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         for idx in task_indices[val_task_cutoff:]:
             T_test[idx] = 1
 
-
     train_meta_task_data_loader = MetaTaskDataLoader(
             dataset=data,
             tasks=T_tr,
@@ -239,7 +191,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     val_meta_task_data_loader = MetaTaskDataLoader(
             dataset=data,
             tasks=T_val,
-            sizes=args.meta_test_split_sizes,
+            sizes=args.meta_train_split_sizes,
             args=args,
             logger=logger)
 
@@ -256,11 +208,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     else:
         scaler = None
 
-    import pdb; pdb.set_trace()
-    for meta_train_batch in train_meta_task_data_loader.tasks():
-        for train_task in meta_train_batch:
-            print('In inner loop')
-            continue
 
     # Train ensemble of models
     for model_idx in range(args.ensemble_size):
@@ -290,23 +237,25 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         save_checkpoint(os.path.join(save_dir, 'model.pt'), model, scaler, features_scaler, args)
 
         # Optimizers
-        optimizer = build_optimizer(model, args)
+        # optimizer = build_optimizer(model, args)
 
         # Learning rate schedulers
-        scheduler = build_lr_scheduler(optimizer, args)
+        # scheduler = build_lr_scheduler(optimizer, args)
 
+        # Keep it simple, we are using fixed outer and inner loop LRs and ADAM optimizer. 
+        maml_model = l2l.algorithms.MAML(model, lr=args.inner_loop_lr, first_order=args.FO_MAML)
+        meta_opt = optim.ADAM(maml.parameters(), args.outer_loop_lr)
         # Run training
         best_score = float('inf') if args.minimize_score else -float('inf')
         best_epoch, n_iter = 0, 0
         for epoch in trange(args.epochs):
             debug(f'Epoch {epoch}')
 
-            n_iter = train(
+            n_iter = meta_train(
                 model=model,
-                data_loader=train_data_loader,
+                meta_task_data_loader=train_meta_task_data_loader,
                 loss_func=loss_func,
-                optimizer=optimizer,
-                scheduler=scheduler,
+                meta_optimizer=meta_opt,
                 args=args,
                 n_iter=n_iter,
                 logger=logger,
@@ -314,7 +263,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             )
             if isinstance(scheduler, ExponentialLR):
                 scheduler.step()
-            val_scores = evaluate(
+            val_scores = meta_evaluate(
                 model=model,
                 data_loader=val_data_loader,
                 num_tasks=args.num_tasks,
