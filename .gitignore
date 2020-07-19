@@ -4,3 +4,7 @@ jobs/
 logs/
 *.e*
 *.o*
+filtered_chembl/
+wandb/
+results/
+.vscode

@@ -12,9 +12,7 @@ from chemprop.args import TrainArgs
 from chemprop.data import MoleculeDataLoader, MoleculeDataset
 from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
 import wandb
-from memory_profiler import profile
 
-@profile
 def train(model: nn.Module,
           data_loader: MoleculeDataLoader,
           loss_func: Callable,

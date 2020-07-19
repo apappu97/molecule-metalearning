@@ -22,9 +22,7 @@ from chemprop.nn_utils import param_count
 from chemprop.utils import build_optimizer, build_lr_scheduler, get_loss_func, get_metric_func, load_checkpoint,\
     makedirs, save_checkpoint, save_smiles_splits
 import wandb
-from memory_profiler import profile
 
-@profile
 def run_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     """
     Trains a model and returns test scores on the model checkpoint with the highest validation score.

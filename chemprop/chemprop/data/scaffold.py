@@ -9,7 +9,6 @@ from tqdm import tqdm
 import numpy as np
 
 from .data import MoleculeDataset
-from memory_profiler import profile
 
 def generate_scaffold(mol: Union[str, Chem.Mol], include_chirality: bool = False) -> str:
     """
@@ -46,7 +45,6 @@ def scaffold_to_smiles(mols: Union[List[str], List[Chem.Mol]],
     return scaffolds
 
 
-@profile
 def scaffold_split(data: MoleculeDataset,
                    sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
                    balanced: bool = False,

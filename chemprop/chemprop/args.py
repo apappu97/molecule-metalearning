@@ -67,7 +67,7 @@ class CommonArgs(Tap):
     features_path: List[str] = None  # Path(s) to features to use in FNN (instead of features_generator)
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
-    num_workers: int = 0   # Number of workers for the parallel data loading (0 means sequential)
+    num_workers: int = 8  # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
 
 

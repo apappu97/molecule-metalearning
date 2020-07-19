@@ -9,8 +9,6 @@ from rdkit import Chem
 from .scaler import StandardScaler
 from chemprop.features import get_features_generator
 from chemprop.features import BatchMolGraph, MolGraph
-from memory_profiler import profile
-from pympler import muppy, summary
 
 
 # Cache of graph featurizations
@@ -191,7 +189,6 @@ class MoleculeDataset(Dataset):
             self._random.seed(seed)
         self._random.shuffle(self._data)
 
-    @profile
     def normalize_features(self, scaler: StandardScaler = None, replace_nan_token: int = 0) -> StandardScaler:
         """
         Normalizes the features of the dataset using a StandardScaler (subtract mean, divide by standard deviation).
