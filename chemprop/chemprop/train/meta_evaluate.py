@@ -13,6 +13,7 @@ from .meta_train import fast_adapt, process_batch_and_predict
 from chemprop.utils import save_checkpoint, load_checkpoint
 import wandb
 from memory_profiler import profile
+import pdb
 
 @profile
 def meta_evaluate(maml_model,
@@ -36,7 +37,6 @@ def meta_evaluate(maml_model,
     :param logger: Logger.
     :return: A list with the score for each task based on `metric_func`.
     """
-    ## TODO Finish this function -- after we fast adapt, we should score the predictions and append the AUC for the task
 
     val_task_results = []
     for meta_val_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
@@ -103,7 +103,7 @@ def meta_test(maml_model,
             best_val_loss = float('inf')
             best_epoch = 0
             # save the best performing model in case it occurred at 0 epochs 
-            save_checkpoint(os.path.join(save_dir, 'model.pt'), model, scaler=None, features_scaler=None, args=args)
+            save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'), learner, scaler=None, features_scaler=None, args=args)
 
             for epoch in trange(meta_test_epochs):
                 task_adaptation_loss = 0.0
@@ -117,6 +117,9 @@ def meta_test(maml_model,
                         batch_avg_loss = adaptation_loss.item()
                     wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})
                     task_adaptation_loss += batch_avg_loss
+                    del preds
+                    del batch_targets
+                    del adaptation_loss
                 
                 task_adaptation_loss /= len(task.train_data_loader) # normalize by number of batches to get avg batch mean loss 
                 wandb.log({'meta_test_{}_epoch_adaptation_loss'.format(task.assay_name): task_adaptation_loss})
@@ -135,7 +138,7 @@ def meta_test(maml_model,
                 wandb.log({'meta_test_{}_epoch_val_loss'.format(task.assay_name): task_val_loss})
                 
                 if task_val_loss < best_val_loss:
-                    info('New best model for test task {} at epoch {}'.format(task.assay_name, epoch))
+                    info('New best model for test task {} at epoch {} with loss {}'.format(task.assay_name, epoch + 1, task_val_loss))
                     best_val_loss = task_val_loss
                     best_epoch = epoch
                     # save best checkpoint at meta test time 
@@ -144,7 +147,7 @@ def meta_test(maml_model,
             best_epochs.append(best_epoch)
             info('Finished early stopping for task {}, beginning testing'.format(task.assay_name))
             # Now that early stopping has identified the best model, calculate test loss
-
+            pdb.set_trace()
             model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
             model.eval()
             preds = predict(
@@ -165,4 +168,6 @@ def meta_test(maml_model,
             )
             test_task_results.append(results)
 
-        return test_task_results, best_epochs
+            del model # no longer need the model for this test task
+
+    return test_task_results, best_epochs

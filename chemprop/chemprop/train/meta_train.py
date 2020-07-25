@@ -45,6 +45,10 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
         learner.adapt(adaptation_loss)
         wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
 
+        del preds
+        del batch_targets 
+        del adaptation_loss
+
 def calculate_meta_loss(learner, task, task_idx, loss_func):
     # After inner adaptation steps, calculate evaluation loss and return 
     try:

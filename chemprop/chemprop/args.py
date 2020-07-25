@@ -156,7 +156,7 @@ class TrainArgs(CommonArgs):
     ensemble_size: int = 1  # Number of models in ensemble
 
     # Training arguments
-    epochs: int = 1  # Number of META epochs to run
+    epochs: int = 2  # Number of META epochs to run
     warmup_epochs: float = 2.0  # Number of epochs during which learning rate increases linearly from init_lr to max_lr. Afterwards, learning rate decreases exponentially from max_lr to final_lr.
     init_lr: float = 1e-4  # Initial learning rate
     max_lr: float = 1e-3  # Maximum learning rate

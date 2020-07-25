@@ -112,7 +112,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
     else:
         """
-        Random task split for testing of *REDUCED* size 
+        Random task split for testing of *REDUCED* size, hence the 0.005 splits
         """
         print("Running in dummy mode")
         task_indices = list(range(len(args.task_names)))
@@ -232,10 +232,9 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         )
         info('Took {} seconds to complete one epoch of meta training and testing'.format(time.time() - start_time))
 
-        """ TODO DEBUG CODE REMOVE """
         # Average validation score
         avg_val_score = np.nanmean(val_task_scores)
-        debug(f'Meta Validation Score {args.metric} = {avg_val_score:.6f}')
+        debug(f'Meta validation score {args.metric} = {avg_val_score:.6f}')
         wandb.log({'meta_val_score': avg_val_score})
 
         if args.show_individual_scores:
@@ -258,6 +257,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     
     # Meta test time -- evaluate with early stopping
     start_time = time.time()
+    pdb.set_trace()
     test_scores, best_epochs = meta_test(
             maml_model, 
             test_meta_task_data_loader, 
@@ -269,7 +269,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             args=args,
             logger=logger)
     info('Took {} seconds to complete meta testing'.format(time.time() - start_time))
-    
+    pdb.set_trace()
     # Average test score
     avg_test_score = np.nanmean(test_scores)
     info(f'Model test {args.metric} = {avg_test_score:.6f}')
