@@ -7,7 +7,7 @@ import numpy as np
 from .run_meta_training import run_meta_training
 from chemprop.args import TrainArgs
 from chemprop.data.utils import get_task_names
-from chemprop.utils import makedirs
+from chemprop.utils import makedirs, save_results
 
 
 def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float]:
@@ -21,13 +21,15 @@ def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, 
 
     # Run training on different random seeds for each fold
     all_scores = []
+    all_best_epochs = []
     for fold_num in range(args.num_folds):
         info(f'Fold {fold_num}')
         args.seed = init_seed + fold_num
         args.save_dir = os.path.join(save_dir, f'fold_{fold_num}')
         makedirs(args.save_dir)
-        model_scores = run_meta_training(args, logger)
+        model_scores, meta_best_epochs = run_meta_training(args, logger)
         all_scores.append(model_scores)
+        all_best_epochs.append(meta_best_epochs)
     all_scores = np.array(all_scores)
 
     # Report results
@@ -45,6 +47,9 @@ def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, 
     avg_scores = np.nanmean(all_scores, axis=1)  # average score for each model across tasks
     mean_score, std_score = np.nanmean(avg_scores), np.nanstd(avg_scores)
     info(f'Overall test {args.metric} = {mean_score:.6f} +/- {std_score:.6f}')
+
+    # Save results for later analysis
+    save_results(all_scores, all_best_epochs, task_names, args)
 
     if args.show_individual_scores:
         for task_num, task_name in enumerate(task_names):

@@ -28,6 +28,7 @@ class MoleculeModel(nn.Module):
             self.output_size = 1
         else:
             self.output_size = args.num_tasks
+
         if self.multiclass:
             self.output_size *= args.multiclass_num_classes
 

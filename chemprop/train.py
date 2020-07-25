@@ -12,10 +12,9 @@ if __name__ == '__main__':
     wandb.init(name=args.experiment_name)
     setup_wandb(args)
     start_time = time.time()
-    wandb.log({"start_time": start_time})
     logger = create_logger(name='train', save_dir=args.save_dir, quiet=args.quiet)
     cross_validate(args, logger)
     end_time = time.time()
     info = logger.info if logger is not None else print
     info('Total running time was {} seconds'.format(end_time - start_time))
-    wandb.log({"end_time": end_time, "elapsed_time": end_time -  start_time})
+    wandb.log({"total_time": end_time -  start_time})

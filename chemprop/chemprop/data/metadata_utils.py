@@ -7,17 +7,25 @@ from logging import Logger
 from chemprop.args import TrainArgs
 import numpy as np
 import math
+from tqdm import tqdm
+from memory_profiler import profile
 
 class TaskDataLoader:
-    """ A TaskDataLoader is a wrapper for a single task, and handles generating
-    the train, validation (optional) and test sets for this task """
+    """ 
+    A TaskDataLoader is a wrapper for a single task, and handles generating
+    the train, validation and test (optional) datasets for this task.
+
+    At meta train time, we only need a train (fast adapt) and validation set (meta update on validation set)
+    At meta test time, we need a train (fast adapt), validation (early stopping), and test set (for testing)
+    """
 
     def __init__(self,
             dataset: MoleculeDataset,
+            assay_name: str,
             task_mask: List[int],
+            num_workers: int,
             split_type: str = 'random',
             sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
-            num_workers: int = 8,
             cache: bool = False,
             args: TrainArgs = None,
             logger: Logger = None):
@@ -42,6 +50,7 @@ class TaskDataLoader:
         if len(task_mask) != dataset.num_tasks():
             raise ValueError('Task mask is a one-hot vector, so should be equal to num_tasks() on MoleculeDataset object')
 
+        self._assay_name = assay_name
         self.task_mask = task_mask
         task_idx = np.argmax(task_mask)
         self.task_idx = task_idx
@@ -61,7 +70,8 @@ class TaskDataLoader:
         if split_type == 'random':
             self.data.shuffle(seed=args.seed)
             train_size = int(sizes[0] * len(self.data))
-            if sizes[1] != 0:
+            if sizes[2] != 0:
+                # At meta test time, so need a test set
                 train_val_size = int((sizes[0] + sizes[1]) * len(self.data))
                 train = self.data[:train_size]
                 val = self.data[train_size:train_val_size]
@@ -72,26 +82,27 @@ class TaskDataLoader:
                 test_data = MoleculeDataset(test)
 
             else:
-                # no holdout set
+                # At meta train time, no test set needed
                 train = self.data[:train_size]
-                val = None
-                test = self.data[train_size:]
+                val = self.data[train_size:]
+                test = None 
 
                 train_data = MoleculeDataset(train)
-                test_data = MoleculeDataset(test)
+                val_data = MoleculeDataset(test)
         elif split_type == 'scaffold_balanced':
-            if sizes[1] == 0:
-                val = None
+            # This is hacky
+            if sizes[2] == 0:
+                test = None
             else:
-                # This is hacky
-                val = 'Not None'
+                test = 'Not None'
             train_data, val_data, test_data = scaffold_split(self.data, sizes=sizes, balanced=True, seed=args.seed, logger=logger)
 
         if args.features_scaling:
             features_scaler = train_data.normalize_features(replace_nan_token=0)
-            if val is not None:
-                val_data.normalize_features(features_scaler)
-            test_data.normalize_features(features_scaler)
+            val_data.normalize_features(features_scaler)
+
+            if test is not None:
+                test_data.normalize_features(features_scaler)
         else:
             features_scaler = None
 
@@ -105,34 +116,76 @@ class TaskDataLoader:
                 class_balance=args.class_balance,
                 shuffle=True,
                 seed=args.seed)
+        self._train_data_loader_iterator = iter(self._train_data_loader)
 
-        if val is not None:
-            self._val_data_loader = MoleculeDataLoader(
-                    dataset=val_data,
-                    batch_size=args.batch_size,
-                    num_workers=num_workers,
-                    cache=cache)
-        else:
-            self._val_data_loader = None
+        self._val_data_loader = MoleculeDataLoader(
+                dataset=val_data,
+                batch_size=args.batch_size,
+                num_workers=num_workers,
+                cache=cache)
+        self._val_data_loader_iterator = iter(self._val_data_loader)
 
-        self._test_data_loader = MoleculeDataLoader(
+        if test is not None:
+            self._test_data_loader = MoleculeDataLoader(
                 dataset=test_data,
                 batch_size=args.batch_size,
                 num_workers=num_workers,
                 cache=cache)
+            self._test_data_iterator = iter(self._test_data_loader)
+        else:
+            self._test_data_loader = None 
+            self._test_data_iterator = None 
 
-    @property
-    def train_data_loader(self) -> MoleculeDataLoader:
+    @property 
+    def train_data_loader(self):
         return self._train_data_loader
 
-    @property
-    def val_data_loader(self) -> MoleculeDataLoader:
-        # Note, this may be none
+    @property 
+    def val_data_loader(self):
         return self._val_data_loader
 
     @property
-    def test_data_loader(self) -> MoleculeDataLoader:
+    def test_data_loader(self):
         return self._test_data_loader
+
+    @property
+    def train_data_loader_iter(self):
+        return self._train_data_loader_iterator
+
+    @property
+    def val_data_loader_iter(self):
+        # Note, this may be none
+        return self._val_data_loader_iterator
+
+    @property
+    def test_data_loader_iter(self):
+        return self._test_data_loader_iterator
+    
+    def get_targets(self, split):
+        assert split in ['train', 'val', 'test']
+        if split == 'train':
+            data_loader = self._train_data_loader
+        elif split == 'val':
+            data_loader = self._val_data_loader
+        else:
+            data_loader = self._test_data_loader
+        return data_loader.targets()
+    
+    def re_initialize_iterator(self, split):
+        """
+        A bit hacky, re initializes the iterator when it's been exhausted
+        """
+        assert split in ['train', 'val', 'test']
+        if split == 'train':
+            self._train_data_loader_iterator = iter(self._train_data_loader)
+        elif split == 'val':
+            self._val_data_loader_iterator = iter(self._val_data_loader)
+        else:
+            self._test_data_loader_iterator = iter(self._test_data_loader)
+
+    @property
+    def assay_name(self) -> str:
+        return self._assay_name
 
     def get_task_mask(self) -> torch.Tensor:
         return self.task_mask
@@ -146,8 +199,10 @@ class MetaTaskDataLoader:
     def __init__(self,
             dataset: MoleculeDataset,
             tasks: List[int],
+            task_names: List[str],
+            meta_batch_size: int,
+            num_workers: int,
             sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
-            num_workers: int = 8,
             cache: bool = False,
             args: TrainArgs = None,
             logger: Logger = None):
@@ -157,7 +212,7 @@ class MetaTaskDataLoader:
         :param dataset: A MoleculeDataset
         :param split_type: type of split
         :param sizes: tuple for size of splits
-        :param tasks: Bit vector with 1s for tasks
+        :param tasks: Bit vector with 1s for all tasks in this split
         :param num_works: Number of workers used to build batches
         :param cache: Whether to cache the graph featurizations of molecules
         for faster processing
@@ -165,30 +220,29 @@ class MetaTaskDataLoader:
         :param logger: logger for logging
         """
         if len(tasks) != dataset.num_tasks():
-            raise ValueError("length of tasks must equal dataset.num_tasks()")
-        self.meta_batch_size = args.meta_batch_size
+            raise ValueError("Length of tasks must equal dataset.num_tasks()")
+        self.meta_batch_size = meta_batch_size
+
         task_data_loaders = []
-        for idx in np.nonzero(tasks)[0]:
+        meta_task_names = []
+        for idx in tqdm(np.nonzero(tasks)[0]):
             task_mask = [0] * len(tasks)
             task_mask[idx] = 1
+            task_name = task_names[idx]
+            meta_task_names.append(task_name)
             task_data_loader = TaskDataLoader(
                     dataset=dataset,
-                    task_mask=tasks,
+                    assay_name=task_name,
+                    task_mask=task_mask,
+                    num_workers=num_workers,
                     split_type=args.split_type,
                     sizes=sizes,
-                    num_workers=num_workers,
                     cache=cache,
                     args=args,
                     logger=logger)
             task_data_loaders.append(task_data_loader)
         self.task_data_loaders = task_data_loaders
-
-#    def __iter__(self) -> Iterator[TaskDataLoader]:
-#        """
-#        Returns an iterator over the task data loaders
-#        """
-#        return iter(self.task_data_loaders)
-
+        self.meta_task_names = meta_task_names
 
     def tasks(self) -> Iterator[TaskDataLoader]:
         """

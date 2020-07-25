@@ -1,26 +1,72 @@
 import logging
 from typing import Callable
 
-from tensorboardX import SummaryWriter
 import torch
 import torch.nn as nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
-from tqdm import tqdm
+from tqdm import tqdm, trange
 
 from chemprop.args import TrainArgs
 from chemprop.data import MoleculeDataLoader, MoleculeDataset, MetaTaskDataLoader, TaskDataLoader
 from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
+import wandb
+from memory_profiler import profile
+import pdb
 
+def process_batch_and_predict(learner, batch, task_idx_item):
+    mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
+    batch_targets = torch.Tensor([tb[task_idx_item] for tb in target_batch])
+    preds = learner(mol_batch, features_batch)
 
+    if preds.size()[-1] == 1:
+        preds = torch.squeeze(preds, dim = -1)
+    # Move tensors to correct device
+    batch_targets = batch_targets.to(preds.device)
+    return preds, batch_targets
+
+def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
+    """
+    Takes care of logic for fast adapting the learner
+    """
+    # pdb.set_trace()
+    # Fast adapt learner over batches of this task
+    task_idx_item = task_idx.item()
+    for step in range(num_inner_steps):
+        try:
+            batch = next(task.train_data_loader_iter)
+        except StopIteration:
+            task.re_initialize_iterator('train')
+            batch = next(task.train_data_loader_iter)
+
+        preds, batch_targets = process_batch_and_predict(learner, batch, task_idx_item)
+        adaptation_loss = loss_func(preds, batch_targets)
+        adaptation_loss = adaptation_loss.mean()
+        learner.adapt(adaptation_loss)
+        wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
+
+def calculate_meta_loss(learner, task, task_idx, loss_func):
+    # After inner adaptation steps, calculate evaluation loss and return 
+    try:
+        batch = next(task.val_data_loader_iter)
+    except StopIteration:
+        task.re_initialize_iterator('val')
+        batch = next(task.val_data_loader_iter)
+
+    preds, batch_targets = process_batch_and_predict(learner, batch, task_idx.item())
+    eval_loss = loss_func(preds, batch_targets)
+    eval_loss = eval_loss.mean()
+    
+    return eval_loss 
+
+@profile
 def meta_train(maml_model,
           meta_task_data_loader: MetaTaskDataLoader,
+          epoch: int,
           loss_func: Callable,
           meta_optimizer: Optimizer,
           args: TrainArgs,
-          n_iter: int = 0,
-          logger: logging.Logger = None,
-          writer: SummaryWriter = None) -> int:
+          logger: logging.Logger = None) -> int:
     """
     Trains a model for an epoch on TASKS.
     We define an epoch as a loop over all batches of tasks.
@@ -33,76 +79,45 @@ def meta_train(maml_model,
     The epoch concludes once all task batches have been cycled through.
 
     :param maml_model: l2L maml Model.
-    :param data_loader: A MoleculeDataLoader.
+    :param meta_task_data_loader: A MetaTaskDataLoader.
+    :param epoch: The current epoch -- used to skip batches of data for each task we've already seen while preserving the iterator interface
     :param loss_func: Loss function.
     :param meta_optimizer: An Optimizer.
     :param args: Arguments.
-    :param n_iter: The number of iterations (training examples) trained on so far.
     :param logger: A logger for printing intermediate results.
-    :param writer: A tensorboardX SummaryWriter.
     :return: The total number of iterations (training examples) trained on so far.
     """
     debug = logger.debug if logger is not None else print
     maml_model.train()
-    # meta_train_erorr refers to the fast adaptation error on each task
+    # meta_train_error refers to the fast adaptation error on each task
     # meta_val_error refers to the error on the evaluation sets from each task
-    total_meta_train_error, total_meta_val_error = 0.0, 0.0
-
-    import pdb; pdb.set_trace()
-    for meta_train_batch in tqdm(train_meta_task_data_loader.tasks(), total = len(train_meta_task_data_loader)):
-        # Zero out the meta opt gradient for new meta batch
-        meta_optimizer.zero_grad()
-        evaluation_losses = []
+    for meta_train_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
+        
+        task_evaluation_loss = 0.0
+        
         for task in tqdm(meta_train_batch):
             learner = maml_model.clone()
             curr_task_mask = torch.Tensor(task.get_task_mask()) # Bit vector for current task
             curr_task_target_idx = torch.argmax(curr_task_mask)
-            curr_inner_gradient_step = 0 
-            # Fast adapt learner over batches of this task
-            for batch in tqdm(task.train_data_loader, total=args.num_inner_gradient_steps):
-                mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
-                batch_targets = torch.Tensor(target_batch[:, curr_task_target_idx])
-                preds = learner(mol_batch, features_batch)
-                rel_preds = preds[:, curr_task_target_idx]
-                assert rel_preds.size() == batch_targets.size()
+            
+            fast_adapt(learner, task, curr_task_target_idx, loss_func, args.num_inner_gradient_steps)
+            eval_loss = calculate_meta_loss(learner, task, curr_task_target_idx, loss_func)
+            task_evaluation_loss += eval_loss
 
-                # Move tensors to correct device
-                batch_targets = batch_targets.to(preds.device)
-                adaptation_loss = loss_func(preds, batch_targets)
-                learner.adapt(adaptation_loss)
+        # Should we average over the task evaluation losses?
+        task_evaluation_loss = task_evaluation_loss / len(meta_train_batch)
 
-                curr_inner_gradient_step += 1
-                if curr_inner_gradient_step>= args.num_inner_gradient_steps: break
-
-           # After inner adaptation steps, calculate evaluation loss and store for later meta update (after batch of tasks)
-            for batch in tqdm(task.val_data_loader):
-                mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
-                batch_targets = torch.Tensor(target_batch[:, curr_task_target_idx])
-                preds = learner(mol_batch, features_batch)
-
-                # Move tensors to correct device
-                batch_targets = batch_targets.to(preds.device)
-                eval_loss = loss_func(preds, batch_targets)
-                # Call backward here according to l2l documentation
-                eval_loss.backward()
-                evaluation_losses.append(eval_loss.item())
-                break
-
-        # Now done with meta batch of tasks, perform meta update.
-        evaluation_loss = sum(evaluation_losses)
+        # Now that we are done with meta batch of tasks, perform meta update.
+        # Zero out the meta opt gradient for new meta batch
+        # pdb.set_trace()
+        meta_optimizer.zero_grad()
+        task_evaluation_loss.backward()
         meta_optimizer.step()
-        # Log and/or add to tensorboard
-        if (n_iter // args.batch_size) % args.log_frequency == 0:
-            pnorm = compute_pnorm(model)
-            gnorm = compute_gnorm(model)
-            loss_avg = loss_sum / iter_count
-            loss_sum, iter_count = 0, 0
 
-            debug(f'Loss = {loss_avg:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
-
-            if writer is not None:
-                writer.add_scalar('train_loss', loss_avg, n_iter)
-                writer.add_scalar('param_norm', pnorm, n_iter)
-                writer.add_scalar('gradient_norm', gnorm, n_iter)
-
-    return n_iter
+        # Compute stats and log to wandb 
+        with torch.no_grad():
+            avg_meta_loss = task_evaluation_loss.item()
+        pnorm = compute_pnorm(maml_model)
+        gnorm = compute_gnorm(maml_model)
+        debug(f'Meta loss = {avg_meta_loss:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
+        wandb.log({'batch_meta_loss': avg_meta_loss, 'PNorm': pnorm, 'GNorm': gnorm})
