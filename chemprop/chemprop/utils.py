@@ -109,7 +109,6 @@ def save_checkpoint(path: str,
     }
     torch.save(state, path)
 
-
 def load_checkpoint(path: str,
                     device: torch.device = None,
                     logger: logging.Logger = None) -> MoleculeModel:

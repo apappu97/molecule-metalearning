@@ -27,7 +27,7 @@ import time
 import pdb
 from memory_profiler import profile
 
-@profile
+# @profile
 def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     """
     Trains a model and returns test scores on the model checkpoint with the highest validation score.
@@ -169,22 +169,27 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
     # Load/build model
     # Only set up for one model, no ensembling
-    if args.checkpoint_paths is not None:
-        debug(f'Loading model')
-        model = load_checkpoint(args.checkpoint_paths[0], logger=logger)
-    else:
-        debug(f'Building model ')
-        model = MoleculeModel(args)
+    def _setup_maml_model(args):
+        if args.checkpoint_paths is not None:
+            debug(f'Loading model')
+            model = load_checkpoint(args.checkpoint_paths[0], logger=logger)
+        else:
+            debug(f'Building model ')
+            model = MoleculeModel(args)
 
-    debug(model)
-    debug(f'Number of parameters = {param_count(model):,}')
-    # if args.cuda:
-    #     debug('Moving model to cuda')
-    # model = model.to(args.device)
+        # Keep it simple, we are using fixed outer and inner loop LRs and ADAM optimizer. 
+        maml_model = l2l.algorithms.MAML(model, lr=args.inner_loop_lr, first_order=args.FO_MAML, allow_nograd=True)
+        debug(f'Number of parameters = {param_count(maml_model):,}')
+        debug(maml_model)
+        if args.cuda:
+            debug('Moving maml model to cuda')
+        maml_model = maml_model.to(args.device)
+        return maml_model
 
+    maml_model = _setup_maml_model(args)
     # Ensure that model is saved in correct location for evaluation if 0 epochs
     maml_model_name = 'maml_model.pt'
-    save_checkpoint(os.path.join(save_dir, maml_model_name), model, scaler=scaler, features_scaler=None, args=args)
+    save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, features_scaler=None, args=args)
 
     # Optimizers
     # optimizer = build_optimizer(model, args)
@@ -192,11 +197,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Learning rate schedulers
     # scheduler = build_lr_scheduler(optimizer, args)
 
-    # Keep it simple, we are using fixed outer and inner loop LRs and ADAM optimizer. 
-    maml_model = l2l.algorithms.MAML(model, lr=args.inner_loop_lr, first_order=args.FO_MAML, allow_nograd=True)
-    if args.cuda:
-        debug('Moving maml model to cuda')
-    maml_model = maml_model.to(args.device)
     meta_opt = optim.Adam(maml_model.parameters(), args.outer_loop_lr)
     # Run training
     best_score = float('inf') if args.minimize_score else -float('inf')
@@ -247,17 +247,20 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         if args.minimize_score and avg_val_score < best_score or \
                 not args.minimize_score and avg_val_score > best_score:
             best_score, best_epoch = avg_val_score, epoch
-            save_checkpoint(os.path.join(save_dir, maml_model_name), model, scaler=scaler, args=args)        
+            save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, args=args)        
             wandb.save(os.path.join(save_dir, maml_model_name))
     
     # Evaluate on test set using model with best validation score
     info(f'Best validation {args.metric} = {best_score:.6f} on epoch {best_epoch}')
-    model = load_checkpoint(os.path.join(save_dir, maml_model_name), device=args.device, logger=logger)
-    maml_model = l2l.algorithms.MAML(model, lr=args.meta_test_lr, first_order=args.FO_MAML, allow_nograd=True)
+
+    def _load_maml_model(save_dir, maml_model_name, args):
+        model = load_checkpoint(os.path.join(save_dir, maml_model_name), device=args.device, logger=logger)
+        maml_model = l2l.algorithms.MAML(model, lr=args.meta_test_lr, first_order=args.FO_MAML, allow_nograd=True)
+        return maml_model
     
+    maml_model = _load_maml_model(save_dir, maml_model_name, args)
     # Meta test time -- evaluate with early stopping
     start_time = time.time()
-    pdb.set_trace()
     test_scores, best_epochs = meta_test(
             maml_model, 
             test_meta_task_data_loader, 

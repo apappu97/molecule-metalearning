@@ -6,6 +6,7 @@ import torch.nn as nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
 from tqdm import tqdm, trange
+import numpy as np
 
 from chemprop.args import TrainArgs
 from chemprop.data import MoleculeDataLoader, MoleculeDataset, MetaTaskDataLoader, TaskDataLoader
@@ -14,16 +15,21 @@ import wandb
 from memory_profiler import profile
 import pdb
 
-def process_batch_and_predict(learner, batch, task_idx_item):
+def predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func):
     mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
-    batch_targets = torch.Tensor([tb[task_idx_item] for tb in target_batch])
+    batch_targets = torch.Tensor([tb[task_idx] for tb in target_batch])
     preds = learner(mol_batch, features_batch)
 
     if preds.size()[-1] == 1:
         preds = torch.squeeze(preds, dim = -1)
-    # Move tensors to correct device
+    # Move tensors to correct device and calculate average loss
     batch_targets = batch_targets.to(preds.device)
-    return preds, batch_targets
+    loss = loss_func(preds, batch_targets)
+    loss = loss.mean()
+    return loss
+
+def get_task_idx(task):
+    return np.argmax(task.get_task_mask())
 
 def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     """
@@ -31,7 +37,7 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     """
     # pdb.set_trace()
     # Fast adapt learner over batches of this task
-    task_idx_item = task_idx.item()
+    learner.train()
     for step in range(num_inner_steps):
         try:
             batch = next(task.train_data_loader_iter)
@@ -39,15 +45,9 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
             task.re_initialize_iterator('train')
             batch = next(task.train_data_loader_iter)
 
-        preds, batch_targets = process_batch_and_predict(learner, batch, task_idx_item)
-        adaptation_loss = loss_func(preds, batch_targets)
-        adaptation_loss = adaptation_loss.mean()
+        adaptation_loss = predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func)
         learner.adapt(adaptation_loss)
         wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
-
-        del preds
-        del batch_targets 
-        del adaptation_loss
 
 def calculate_meta_loss(learner, task, task_idx, loss_func):
     # After inner adaptation steps, calculate evaluation loss and return 
@@ -57,13 +57,11 @@ def calculate_meta_loss(learner, task, task_idx, loss_func):
         task.re_initialize_iterator('val')
         batch = next(task.val_data_loader_iter)
 
-    preds, batch_targets = process_batch_and_predict(learner, batch, task_idx.item())
-    eval_loss = loss_func(preds, batch_targets)
-    eval_loss = eval_loss.mean()
+    eval_loss = predict_on_batch_and_return_loss(learner, batch, task_idx.item(), loss_func)
     
     return eval_loss 
 
-@profile
+# @profile
 def meta_train(maml_model,
           meta_task_data_loader: MetaTaskDataLoader,
           epoch: int,
@@ -101,8 +99,7 @@ def meta_train(maml_model,
         
         for task in tqdm(meta_train_batch):
             learner = maml_model.clone()
-            curr_task_mask = torch.Tensor(task.get_task_mask()) # Bit vector for current task
-            curr_task_target_idx = torch.argmax(curr_task_mask)
+            curr_task_target_idx = get_task_idx(task)
             
             fast_adapt(learner, task, curr_task_target_idx, loss_func, args.num_inner_gradient_steps)
             eval_loss = calculate_meta_loss(learner, task, curr_task_target_idx, loss_func)
