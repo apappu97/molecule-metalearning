@@ -134,11 +134,11 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     info("Meta testing on task: {}".format(task.assay_name))    
     learner = maml_model.clone()
     curr_task_target_idx = get_task_idx(task)
-    
+
     best_val_loss = float('inf')
     best_epoch = 0
     # save the best performing model in case it occurred at 0 epochs 
-    save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'), learner, scaler=None, features_scaler=None, args=args)
+    save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)), learner, scaler=None, features_scaler=None, args=args)
 
     for epoch in trange(meta_test_epochs):
         # train model for one epoch
@@ -170,7 +170,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     # Now that early stopping has identified the best model, calculate test loss
     model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
     results = _eval_trained_model(model, task.test_data_loader, task.get_targets('test'), metric_func, dataset_type, logger)
-    pdb.set_trace() # look at NVIDIA memory usage here 
+    # pdb.set_trace() # look at NVIDIA memory usage here 
     return results, best_epoch
 
 def meta_test(maml_model,
@@ -193,7 +193,7 @@ def meta_test(maml_model,
     best_epochs = []
     for meta_test_batch in tqdm(meta_task_data_loader.tasks(), total=len(meta_task_data_loader)):
         for task in tqdm(meta_test_batch):
-            pdb.set_trace() # look at NVIDIA memory usage here
+            # pdb.set_trace() # look at NVIDIA memory usage here
             results, best_epoch = _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_func, dataset_type, args, save_dir, logger)
             best_epochs.append(best_epoch)
             test_task_results.append(results)

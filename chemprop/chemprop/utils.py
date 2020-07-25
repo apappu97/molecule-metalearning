@@ -19,6 +19,8 @@ from chemprop.data import StandardScaler, MoleculeDataset
 from chemprop.models import MoleculeModel
 from chemprop.nn_utils import NoamLR
 import wandb
+import pdb
+import learn2learn as l2l
 
 def makedirs(path: str, isfile: bool = False):
     """
@@ -94,10 +96,16 @@ def save_checkpoint(path: str,
     # Convert args to namespace for backwards compatibility
     if args is not None:
         args = Namespace(**args.as_dict())
+    if type(model) is MoleculeModel:
+        state_dict = model.state_dict()
+    elif type(model) is l2l.algorithms.maml.MAML:
+        state_dict = model.module.state_dict()
+    else:
+        raise ValueError("Don't recognize and therefore don't know how to process model type")
 
     state = {
         'args': args,
-        'state_dict': model.state_dict(),
+        'state_dict': state_dict,
         'data_scaler': {
             'means': scaler.means,
             'stds': scaler.stds

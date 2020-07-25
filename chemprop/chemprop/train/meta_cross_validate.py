@@ -8,7 +8,7 @@ from .run_meta_training import run_meta_training
 from chemprop.args import TrainArgs
 from chemprop.data.utils import get_task_names
 from chemprop.utils import makedirs, save_results
-
+import pdb
 
 def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float]:
     """k-fold cross validation"""
@@ -48,11 +48,15 @@ def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, 
     mean_score, std_score = np.nanmean(avg_scores), np.nanstd(avg_scores)
     info(f'Overall test {args.metric} = {mean_score:.6f} +/- {std_score:.6f}')
 
+    pdb.set_trace()
     # Save results for later analysis
-    save_results(all_scores, all_best_epochs, task_names, args)
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_test_task_split.pickle', 'rb') as handle:
+        T_test = pickle.load(handle)
+    test_task_names = [task_names[idx] for idx in np.nonzero(T_test)[0]]
+    save_results(all_scores, all_best_epochs, test_task_names, args)
 
     if args.show_individual_scores:
-        for task_num, task_name in enumerate(task_names):
+        for task_num, task_name in enumerate(test_task_names):
             info(f'Overall test {task_name} {args.metric} = '
                  f'{np.nanmean(all_scores[:, task_num]):.6f} +/- {np.nanstd(all_scores[:, task_num]):.6f}')
 

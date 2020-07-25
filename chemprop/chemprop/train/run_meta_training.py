@@ -272,7 +272,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             args=args,
             logger=logger)
     info('Took {} seconds to complete meta testing'.format(time.time() - start_time))
-    pdb.set_trace()
+    # pdb.set_trace()
     # Average test score
     avg_test_score = np.nanmean(test_scores)
     info(f'Model test {args.metric} = {avg_test_score:.6f}')
