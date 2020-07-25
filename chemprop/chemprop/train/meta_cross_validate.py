@@ -9,6 +9,7 @@ from chemprop.args import TrainArgs
 from chemprop.data.utils import get_task_names
 from chemprop.utils import makedirs, save_results
 import pdb
+import pickle
 
 def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float]:
     """k-fold cross validation"""
