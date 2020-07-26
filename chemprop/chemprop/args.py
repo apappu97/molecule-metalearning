@@ -156,7 +156,7 @@ class TrainArgs(CommonArgs):
     ensemble_size: int = 1  # Number of models in ensemble
 
     # Training arguments
-    epochs: int = 10  # Number of META epochs to run
+    epochs: int = 20  # Number of META epochs to run
     warmup_epochs: float = 2.0  # Number of epochs during which learning rate increases linearly from init_lr to max_lr. Afterwards, learning rate decreases exponentially from max_lr to final_lr.
     init_lr: float = 1e-4  # Initial learning rate
     max_lr: float = 1e-3  # Maximum learning rate
@@ -167,7 +167,7 @@ class TrainArgs(CommonArgs):
     chembl_assay_metadata_pickle_path: str  = None # Path to ChEMBL pickle files that store assay metadata
     dummy: bool = False # dummy for faking tasks during debug
     num_inner_gradient_steps: int = 2 # Number of inner gradient steps per task during inner loop of meta learning
-    meta_batch_size: int = 3 # Num tasks in meta batches
+    meta_batch_size: int = 32 # Num tasks in meta batches
     meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.2, 0)
     meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
     meta_learning: bool = False # Whether the model is meta learning

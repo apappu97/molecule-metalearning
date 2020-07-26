@@ -9,6 +9,7 @@ import numpy as np
 import math
 from tqdm import tqdm
 from memory_profiler import profile
+import pdb
 
 class TaskDataLoader:
     """ 
@@ -95,6 +96,8 @@ class TaskDataLoader:
                 test = None
             else:
                 test = 'Not None'
+            # if assay_name == "CHEMBL1243965":
+            #     pdb.set_trace()
             train_data, val_data, test_data = scaffold_split(self.data, sizes=sizes, balanced=True, seed=args.seed, logger=logger)
 
         if args.features_scaling:
@@ -225,7 +228,7 @@ class MetaTaskDataLoader:
 
         task_data_loaders = []
         meta_task_names = []
-        for idx in tqdm(np.nonzero(tasks)[0]):
+        for idx in np.nonzero(tasks)[0]:
             task_mask = [0] * len(tasks)
             task_mask[idx] = 1
             task_name = task_names[idx]

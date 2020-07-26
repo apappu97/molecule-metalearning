@@ -110,7 +110,6 @@ def meta_train(maml_model,
 
         # Now that we are done with meta batch of tasks, perform meta update.
         # Zero out the meta opt gradient for new meta batch
-        # pdb.set_trace()
         meta_optimizer.zero_grad()
         task_evaluation_loss.backward()
         meta_optimizer.step()
@@ -120,5 +119,5 @@ def meta_train(maml_model,
             avg_meta_loss = task_evaluation_loss.item()
         pnorm = compute_pnorm(maml_model)
         gnorm = compute_gnorm(maml_model)
-        debug(f'Meta loss = {avg_meta_loss:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
+        debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
         wandb.log({'batch_meta_loss': avg_meta_loss, 'PNorm': pnorm, 'GNorm': gnorm})

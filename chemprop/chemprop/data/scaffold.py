@@ -9,7 +9,7 @@ from tqdm import tqdm
 import numpy as np
 
 from .data import MoleculeDataset
-
+import pdb
 def generate_scaffold(mol: Union[str, Chem.Mol], include_chirality: bool = False) -> str:
     """
     Compute the Bemis-Murcko scaffold for a SMILES string.
@@ -81,7 +81,7 @@ def scaffold_split(data: MoleculeDataset,
         big_index_sets = []
         small_index_sets = []
         for index_set in index_sets:
-            if len(index_set) > val_size / 2 or len(index_set) > test_size / 2:
+            if (val_size != 0 and len(index_set) > val_size / 2) or (test_size != 0 and len(index_set) > test_size / 2):
                 big_index_sets.append(index_set)
             else:
                 small_index_sets.append(index_set)
@@ -93,12 +93,11 @@ def scaffold_split(data: MoleculeDataset,
         index_sets = sorted(list(scaffold_to_indices.values()),
                             key=lambda index_set: len(index_set),
                             reverse=True)
-
-    for index_set in index_sets:
+    for index_set in index_sets:        
         if len(train) + len(index_set) <= train_size:
             train += index_set
             train_scaffold_count += 1
-        elif len(val) + len(index_set) <= val_size:
+        elif len(val) + len(index_set) <= val_size or test_size == 0:
             val += index_set
             val_scaffold_count += 1
         else:

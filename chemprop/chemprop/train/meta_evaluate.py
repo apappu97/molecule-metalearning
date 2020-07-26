@@ -143,7 +143,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     for epoch in trange(meta_test_epochs):
         # train model for one epoch
         task_adaptation_loss = _train_epoch(learner, task, curr_task_target_idx, loss_func)
-        wandb.log({'meta_test_{}_epoch_adaptation_loss'.format(task.assay_name): task_adaptation_loss})
+        # wandb.log({'meta_test_{}_epoch_adaptation_loss'.format(task.assay_name): task_adaptation_loss})
         
         # validate model  
         task_val_loss = 0.0
