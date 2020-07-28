@@ -165,6 +165,9 @@ class TaskDataLoader:
         return self._test_data_loader_iterator
     
     def get_targets(self, split):
+        """
+        Return list of targets for THIS task for relevant split
+        """
         assert split in ['train', 'val', 'test']
         if split == 'train':
             data_loader = self._train_data_loader
@@ -172,7 +175,11 @@ class TaskDataLoader:
             data_loader = self._val_data_loader
         else:
             data_loader = self._test_data_loader
-        return data_loader.targets()
+        all_targets = data_loader.targets()
+        targets = []
+        for t in all_targets:
+            targets.append([t[self.task_idx]])
+        return targets
     
     def re_initialize_iterator(self, split):
         """

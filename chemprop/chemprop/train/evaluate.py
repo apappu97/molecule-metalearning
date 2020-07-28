@@ -24,6 +24,8 @@ def evaluate_predictions(preds: List[List[float]],
     :param logger: Logger.
     :return: A list with the score for each task based on `metric_func`.
     """
+    # Sanity check to make sure number of preds == number of targets 
+    assert len(preds[0]) == len(targets[0])
     info = logger.info if logger is not None else print
 
     if len(preds) == 0:

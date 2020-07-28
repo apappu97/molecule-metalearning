@@ -84,50 +84,61 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Set up MetaTaskDataLoaders, which takes care of task splits under the hood 
     # Set up task splits into T_tr, T_val, T_test
 
-    if not args.dummy:
-        """ 
-        Load ChEMBL task splits. Same in spirit as GSK implementation of task splits.
-        We have 5 Task types remaining
-        ADME (A)
-        Toxicity (T)
-        Unassigned (U) 
-        Binding (B)
-        Functional (F)
-        resulting in 902 tasks.
-        """
+    """ 
+    Load ChEMBL task splits. Same in spirit as GSK implementation of task splits.
+    We have 5 Task types remaining
+    ADME (A)
+    Toxicity (T)
+    Unassigned (U) 
+    Binding (B)
+    Functional (F)
+    resulting in 902 tasks.
+    """
 
-        assert args.chembl_assay_metadata_pickle_path is not None
-        with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_assay_type_to_names.pickle', 'rb') as handle:
-            chembl_1024_assay_type_to_names = pickle.load(handle)
-        with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_assay_name_to_type.pickle', 'rb') as handle:
-            chembl_1024_assay_name_to_type = pickle.load(handle)
+    assert args.chembl_assay_metadata_pickle_path is not None
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_assay_type_to_names.pickle', 'rb') as handle:
+        chembl_1024_assay_type_to_names = pickle.load(handle)
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_assay_name_to_type.pickle', 'rb') as handle:
+        chembl_1024_assay_name_to_type = pickle.load(handle)
 
-        chembl_id_to_idx = {chembl_id: idx for idx, chembl_id in enumerate(args.task_names)}
-        with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_train_task_split.pickle', 'rb') as handle:
-            T_tr = pickle.load(handle)
-        with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_val_task_split.pickle', 'rb') as handle:
-            T_val = pickle.load(handle)
-        with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_test_task_split.pickle', 'rb') as handle:
-            T_test = pickle.load(handle)
+    chembl_id_to_idx = {chembl_id: idx for idx, chembl_id in enumerate(args.task_names)}
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_train_task_split.pickle', 'rb') as handle:
+        T_tr = pickle.load(handle)
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_val_task_split.pickle', 'rb') as handle:
+        T_val = pickle.load(handle)
+    with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_test_task_split.pickle', 'rb') as handle:
+        T_test = pickle.load(handle)
 
-    else:
+    if args.dummy:
         """
         Random task split for testing of *REDUCED* size, hence the 0.005 splits
         """
         print("Running in dummy mode")
         task_indices = list(range(len(args.task_names)))
-        np.random.shuffle(task_indices)
-        train_task_split, val_task_split, test_task_split = 0.005, 0.005, 0.005
-        train_task_cutoff = int(len(task_indices) * train_task_split)
-        val_task_cutoff = train_task_cutoff + int(len(task_indices)*val_task_split)
-        test_task_cutoff = val_task_cutoff + int(len(task_indices) * test_task_split)
+        # np.random.shuffle(task_indices)
+        train_task_split, val_task_split, test_task_split = 0.005, 1, 1 # just use a fraction of the train tasks, but all val and test tasks
+        # train_task_cutoff = int(len(T_tr) * train_task_split)
+        # val_task_cutoff = train_task_cutoff + int(len(task_indices)*val_task_split)
+        # test_task_cutoff = val_task_cutoff + int(len(task_indices) * test_task_split)
+
+        actual_tr_tasks = np.nonzero(T_tr)[0]
+        actual_val_tasks = np.nonzero(T_val)[0]
+        actual_test_tasks = np.nonzero(T_test)[0]
+
         T_tr, T_val, T_test = [0] * len(task_indices), [0] * len(task_indices), [0] * len(task_indices)
-        for idx in task_indices[:train_task_cutoff]:
+        for idx in range(0, int(train_task_split*len(actual_tr_tasks))):
             T_tr[idx] = 1
-        for idx in task_indices[train_task_cutoff:val_task_cutoff]:
+        for idx in range(int(val_task_split * len(actual_val_tasks))):
             T_val[idx] = 1
-        for idx in task_indices[val_task_cutoff:test_task_cutoff]:
+        for idx in range(int(test_task_split * len(actual_test_tasks))):
             T_test[idx] = 1
+
+        # for idx in task_indices[:train_task_cutoff]:
+        #     T_tr[idx] = 1
+        # for idx in task_indices[train_task_cutoff:val_task_cutoff]:
+        #     T_val[idx] = 1
+        # for idx in task_indices[val_task_cutoff:test_task_cutoff]:
+        #     T_test[idx] = 1
 
     train_meta_task_data_loader = MetaTaskDataLoader(
             dataset=data,
@@ -220,7 +231,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         #     scheduler.step()
 
         # meta validation to determine whether to save a new checkpoint 
-        
         val_task_scores = meta_evaluate(
             maml_model=maml_model,
             meta_task_data_loader=val_meta_task_data_loader,
@@ -260,6 +270,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     
     maml_model = _load_maml_model(save_dir, maml_model_name, args)
     # Meta test time -- evaluate with early stopping
+    info('Beginning meta testing')
     start_time = time.time()
     test_scores, best_epochs = meta_test(
             maml_model, 

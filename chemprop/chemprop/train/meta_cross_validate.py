@@ -49,7 +49,6 @@ def meta_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, 
     mean_score, std_score = np.nanmean(avg_scores), np.nanstd(avg_scores)
     info(f'Overall test {args.metric} = {mean_score:.6f} +/- {std_score:.6f}')
 
-    pdb.set_trace()
     # Save results for later analysis
     with open(args.chembl_assay_metadata_pickle_path + 'chembl_1024_meta_test_task_split.pickle', 'rb') as handle:
         T_test = pickle.load(handle)

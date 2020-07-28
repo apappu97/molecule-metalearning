@@ -35,7 +35,6 @@ def _eval_trained_model(learner, task_dataloader, targets, metric_func, dataset_
         data_loader=task_dataloader,
         scaler=None
     )
-
     results = evaluate_predictions(
         preds=preds,
         targets=targets,
