@@ -68,7 +68,7 @@ class CommonArgs(Tap):
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 0  # Number of workers for the parallel data loading (0 means sequential)
-    batch_size: int = 32  # Batch size
+    batch_size: int = 50 # Batch size
 
     @property
     def device(self) -> torch.device:
@@ -156,7 +156,7 @@ class TrainArgs(CommonArgs):
     ensemble_size: int = 1  # Number of models in ensemble
 
     # Training arguments
-    epochs: int = 20  # Number of META epochs to run
+    epochs: int = 30 # Number of META epochs to run
     warmup_epochs: float = 2.0  # Number of epochs during which learning rate increases linearly from init_lr to max_lr. Afterwards, learning rate decreases exponentially from max_lr to final_lr.
     init_lr: float = 1e-4  # Initial learning rate
     max_lr: float = 1e-3  # Maximum learning rate

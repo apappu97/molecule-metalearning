@@ -199,7 +199,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
     maml_model = _setup_maml_model(args)
     # Ensure that model is saved in correct location for evaluation if 0 epochs
-    maml_model_name = 'maml_model.pt'
+    maml_model_name = args.experiment_name + '_maml_model.pt'
     save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, features_scaler=None, args=args)
 
     # Optimizers
@@ -240,7 +240,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             dataset_type=args.dataset_type,
             logger=logger
         )
-        info('Took {} seconds to complete one epoch of meta training and testing'.format(time.time() - start_time))
+        info('Took {} seconds to complete one epoch of meta training and validating'.format(time.time() - start_time))
 
         # Average validation score
         avg_val_score = np.nanmean(val_task_scores)
@@ -257,6 +257,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         if args.minimize_score and avg_val_score < best_score or \
                 not args.minimize_score and avg_val_score > best_score:
             best_score, best_epoch = avg_val_score, epoch
+            info('Found better MAML checkpoint after meta validation, saving now')
             save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, args=args)        
             wandb.save(os.path.join(save_dir, maml_model_name))
     
