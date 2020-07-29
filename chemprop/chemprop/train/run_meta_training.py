@@ -26,6 +26,7 @@ import wandb
 import time
 import pdb
 from memory_profiler import profile
+from collections import deque
 
 # @profile
 def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
@@ -212,6 +213,8 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Run training
     best_score = float('inf') if args.minimize_score else -float('inf')
     best_epoch = 0 
+    # Initializing the loss queue 
+    loss_queue = deque() 
     for epoch in trange(args.epochs):
         debug(f'Epoch {epoch}')
         start_time = time.time()
@@ -220,6 +223,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             meta_task_data_loader=train_meta_task_data_loader,
             epoch=epoch,
             loss_func=loss_func,
+            loss_queue=loss_queue,
             meta_optimizer=meta_opt,
             args=args,
             logger=logger

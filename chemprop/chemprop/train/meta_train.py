@@ -66,6 +66,7 @@ def meta_train(maml_model,
           meta_task_data_loader: MetaTaskDataLoader,
           epoch: int,
           loss_func: Callable,
+          loss_queue,
           meta_optimizer: Optimizer,
           args: TrainArgs,
           logger: logging.Logger = None) -> int:
@@ -117,7 +118,13 @@ def meta_train(maml_model,
         # Compute stats and log to wandb 
         with torch.no_grad():
             avg_meta_loss = task_evaluation_loss.item()
+        
+        if len(loss_queue) >= 1000:
+            loss_queue.popleft()
+        loss_queue.append(avg_meta_loss)
+        curr_loss_average = np.mean(list(loss_queue))
         pnorm = compute_pnorm(maml_model)
         gnorm = compute_gnorm(maml_model)
-        debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
-        wandb.log({'meta_loss': avg_meta_loss, 'PNorm': pnorm, 'GNorm': gnorm})
+        debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, Meta loss averaged over last 1k steps = {curr_loss_average:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
+
+        wandb.log({'meta_loss_batch': avg_meta_loss, 'meta_loss_1000_avg': curr_loss_average, 'PNorm': pnorm, 'GNorm': gnorm})
