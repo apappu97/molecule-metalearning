@@ -106,7 +106,7 @@ def _train_epoch(learner, task, curr_task_target_idx, loss_func):
         # first order=True prevents the computational graph from being retained, c.f. https://github.com/learnables/learn2learn/issues/154
         learner.adapt(adaptation_loss, first_order=True) 
         batch_avg_loss = adaptation_loss.item()
-        wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})
+        # wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})
         task_adaptation_loss += batch_avg_loss
     
     del adaptation_loss
@@ -154,7 +154,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
                 task_val_loss += batch_avg_loss
         
         task_val_loss /= len(task.val_data_loader) # normalize by number of batches to get avg batch loss
-        wandb.log({'meta_test_{}_epoch_val_loss'.format(task.assay_name): task_val_loss})
+        # wandb.log({'meta_test_{}_epoch_val_loss'.format(task.assay_name): task_val_loss})
 
         if task_val_loss < best_val_loss:
             info('New best model for test task {} at epoch {} with val loss {}'.format(task.assay_name, epoch + 1, task_val_loss))

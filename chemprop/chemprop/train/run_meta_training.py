@@ -214,7 +214,6 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     best_epoch = 0 
     for epoch in trange(args.epochs):
         debug(f'Epoch {epoch}')
-        wandb.log({'Epoch': epoch})
         start_time = time.time()
         meta_train(
             maml_model=maml_model,
@@ -245,7 +244,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         # Average validation score
         avg_val_score = np.nanmean(val_task_scores)
         debug(f'Meta validation score {args.metric} = {avg_val_score:.6f}')
-        wandb.log({'meta_val_score': avg_val_score})
+        wandb.log({'meta_val_score': avg_val_score, 'epoch': epoch})
 
         if args.show_individual_scores:
             # Individual validation scores

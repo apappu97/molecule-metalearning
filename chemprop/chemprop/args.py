@@ -68,7 +68,7 @@ class CommonArgs(Tap):
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 0  # Number of workers for the parallel data loading (0 means sequential)
-    batch_size: int = 50 # Batch size
+    batch_size: int = 64 # Batch size
 
     @property
     def device(self) -> torch.device:
@@ -143,11 +143,11 @@ class TrainArgs(CommonArgs):
     bias: bool = False  # Whether to add bias to linear layers
     hidden_size: int = 300  # Dimensionality of hidden layers in MPN
     depth: int = 3  # Number of message passing steps
-    dropout: float = 0.0  # Dropout probability
+    dropout: float = 0.2 # Dropout probability
     activation: Literal['ReLU', 'LeakyReLU', 'PReLU', 'tanh', 'SELU', 'ELU'] = 'ReLU'  # Activation function
     atom_messages: bool = False  # Centers messages on atoms instead of on bonds
     undirected: bool = False  # Undirected edges (always sum the two relevant bond vectors)
-    ffn_hidden_size: int = None  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
+    ffn_hidden_size: int = 400  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
     ffn_num_layers: int = 2  # Number of layers in FFN after MPN encoding
     features_only: bool = False  # Use only the additional features in an FFN, no graph network
     separate_val_features_path: List[str] = None  # Path to file with features for separate val set
@@ -156,7 +156,7 @@ class TrainArgs(CommonArgs):
     ensemble_size: int = 1  # Number of models in ensemble
 
     # Training arguments
-    epochs: int = 30 # Number of META epochs to run
+    epochs: int = 30 # Number of META epochs to run -- 500 corresponds to roughly 10,000 iterations. 60,000 iterations will take way too long.
     warmup_epochs: float = 2.0  # Number of epochs during which learning rate increases linearly from init_lr to max_lr. Afterwards, learning rate decreases exponentially from max_lr to final_lr.
     init_lr: float = 1e-4  # Initial learning rate
     max_lr: float = 1e-3  # Maximum learning rate
@@ -261,7 +261,7 @@ class TrainArgs(CommonArgs):
         # Process and validate metric and loss function
         if self.metric is None:
             if self.dataset_type == 'classification':
-                self.metric = 'auc'
+                self.metric = 'prc-auc' # use prc-auc for imbalanced datasets
             elif self.dataset_type == 'multiclass':
                 self.metric = 'cross_entropy'
             else:
@@ -308,6 +308,10 @@ class TrainArgs(CommonArgs):
         # Test settings
         if self.test:
             self.epochs = 0
+        
+        if self.meta_learning:
+            print('Setting epochs to 500 because we are meta learning, with batch size 32 corresponds to 10k iterations')
+            self.epochs = 500
 
         # Ensure save path exists if meta learning 
         if self.meta_learning and not self.save_dir:
