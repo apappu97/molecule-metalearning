@@ -218,7 +218,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     for epoch in trange(args.epochs):
         debug(f'Epoch {epoch}')
         start_time = time.time()
-        meta_train(
+        meta_train_loss = meta_train(
             maml_model=maml_model,
             meta_task_data_loader=train_meta_task_data_loader,
             epoch=epoch,
@@ -234,7 +234,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         #     scheduler.step()
 
         # meta validation to determine whether to save a new checkpoint 
-        val_task_scores = meta_evaluate(
+        val_task_scores, meta_val_loss = meta_evaluate(
             maml_model=maml_model,
             meta_task_data_loader=val_meta_task_data_loader,
             num_inner_gradient_steps=args.num_inner_gradient_steps,
@@ -248,7 +248,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         # Average validation score
         avg_val_score = np.nanmean(val_task_scores)
         debug(f'Meta validation score {args.metric} = {avg_val_score:.6f}')
-        wandb.log({'meta_val_score': avg_val_score, 'epoch': epoch})
+        wandb.log({'meta_train_epoch_loss': meta_train_loss, 'meta_val_epoch_loss': meta_val_loss, 'meta_val_score': avg_val_score, 'epoch': epoch})
 
         if args.show_individual_scores:
             # Individual validation scores

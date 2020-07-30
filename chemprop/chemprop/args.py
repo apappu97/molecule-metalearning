@@ -174,6 +174,7 @@ class TrainArgs(CommonArgs):
     inner_loop_lr: float = 0.05 # Inner loop learning rate during fast adaptation
     outer_loop_lr: float = 3e-3 # Outer loop learning rate
     meta_test_lr: float = 1e-3
+    loss_queue_window: int = 500 # Size of window to average meta loss over
     meta_test_epochs: int = 30 # Number of epochs to use for each task during meta testing, i.e. epochs of training and validation within each meta test task
     FO_MAML: bool = False # Whether to do First Order MAML
     ANIL: bool = False # Whether to do ANIL
@@ -310,8 +311,8 @@ class TrainArgs(CommonArgs):
             self.epochs = 0
         
         if self.meta_learning:
-            print('Setting epochs to 500 because we are meta learning, with batch size 32 corresponds to 10k iterations')
-            self.epochs = 500
+            print('Setting epochs to 150 because we are meta learning, with batch size 32 corresponds to 30k iterations')
+            self.epochs = 150
 
         # Ensure save path exists if meta learning 
         if self.meta_learning and not self.save_dir:

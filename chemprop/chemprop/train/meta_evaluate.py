@@ -10,7 +10,7 @@ from .predict import predict
 from .evaluate import evaluate_predictions
 from chemprop.data import MoleculeDataLoader, StandardScaler
 from chemprop.data import MetaTaskDataLoader, TaskDataLoader
-from .meta_train import fast_adapt, predict_on_batch_and_return_loss, get_task_idx
+from .meta_train import fast_adapt, predict_on_batch_and_return_loss, get_task_idx, calculate_meta_loss
 from chemprop.utils import save_checkpoint, load_checkpoint
 import wandb
 from memory_profiler import profile
@@ -18,7 +18,7 @@ import pdb
 
 def _eval_trained_model(learner, task_dataloader, targets, metric_func, dataset_type, logger):
     """
-    Takes a trained model and just evaluates predictions on a given dataloader
+    Takes a trained model and just evaluates predictions on the given dataloader
 
     learner: fast adapted model
     task_dataloader: dataloader for desired split to evaluate learner on
@@ -52,6 +52,8 @@ def _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradi
     """
     Fast adapt and evaluate on a single task, used during meta evaluation
 
+    Return the results of the predictions vs targets as well as the loss
+
     maml_model: The MAML wrapped model
     task: TaskDataLoader object
     loss_func: loss function
@@ -62,9 +64,14 @@ def _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradi
     learner = maml_model.clone()
     curr_task_target_idx = get_task_idx(task)
     fast_adapt(learner, task, curr_task_target_idx, loss_func, num_inner_gradient_steps)
-    results = _eval_trained_model(learner, task.val_data_loader, task.get_targets('val'), metric_func, dataset_type, logger)
     
-    return results
+    # After fast adaptation of model, calculate results on entire data loader, as well as loss on sample batch from validation data loader
+    with torch.no_grad():
+        results = _eval_trained_model(learner, task.val_data_loader, task.get_targets('val'), metric_func, dataset_type, logger)
+        task_val_loss = calculate_meta_loss(learner, task, curr_task_target_idx, loss_func)
+        task_val_loss = task_val_loss.item() # Just require the scalar here
+
+    return results, task_val_loss
 
 # @profile
 def meta_evaluate(maml_model,
@@ -79,7 +86,7 @@ def meta_evaluate(maml_model,
 
     For each task, fast adapts, records the metric, and averages the metric over all validation tasks.
 
-    Returns average validation score.
+    Returns average validation score and the validation loss.
 
     :param maml_model: An l2l wrapped model.
     :param data_loader: A MoleculeDataLoader.
@@ -90,13 +97,18 @@ def meta_evaluate(maml_model,
     """
 
     val_task_results = []
+    meta_validation_losses = []
     for meta_val_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
-        meta_task_losses = 0.0
+        running_meta_task_loss = 0.0
+        num_tasks = 0
         for task in tqdm(meta_val_batch):
-            results = _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradient_steps, dataset_type, logger)
+            results, task_loss = _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradient_steps, dataset_type, logger)
             val_task_results.append(results)
-
-    return val_task_results
+            running_meta_task_loss += task_loss
+            num_tasks += 1
+        meta_validation_losses.append(running_meta_task_loss/num_tasks) # append average validation loss per task
+    avg_meta_validation_loss = sum(meta_validation_losses)/(1. * len(meta_validation_losses))
+    return val_task_results, avg_meta_validation_loss
 
 def _train_epoch(learner, task, curr_task_target_idx, loss_func):
     learner.train()
@@ -168,7 +180,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     
     # Now that early stopping has identified the best model, calculate test loss
     model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
-    results = _eval_trained_model(model, task.test_data_loader, task.get_targets('test'), metric_func, dataset_type, logger)
+    results, _ = _eval_trained_model(model, task.test_data_loader, task.get_targets('test'), metric_func, dataset_type, logger)
     # pdb.set_trace() # look at NVIDIA memory usage here 
     return results, best_epoch
 

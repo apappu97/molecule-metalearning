@@ -94,6 +94,8 @@ def meta_train(maml_model,
     maml_model.train()
     # meta_train_error refers to the fast adaptation error on each task
     # meta_val_error refers to the error on the evaluation sets from each task
+    running_loss = 0.0
+    num_meta_iters = 0
     for meta_train_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
         
         task_evaluation_loss = 0.0
@@ -106,9 +108,10 @@ def meta_train(maml_model,
             eval_loss = calculate_meta_loss(learner, task, curr_task_target_idx, loss_func)
             task_evaluation_loss += eval_loss
 
-        # Should we average over the task evaluation losses?
+        # Average the task evaluation loss over the size of the batch
         task_evaluation_loss = task_evaluation_loss / len(meta_train_batch)
-
+        running_loss += task_evaluation_loss.item() # add average batch loss to running loss
+        num_meta_iters += 1
         # Now that we are done with meta batch of tasks, perform meta update.
         # Zero out the meta opt gradient for new meta batch
         meta_optimizer.zero_grad()
@@ -122,12 +125,14 @@ def meta_train(maml_model,
         with torch.no_grad():
             avg_meta_loss = task_evaluation_loss.item()
         
-        if len(loss_queue) >= 1000:
+        if len(loss_queue) >= args.loss_queue_window:
             loss_queue.popleft()
         loss_queue.append(avg_meta_loss)
         curr_loss_average = np.mean(list(loss_queue))
         pnorm = compute_pnorm(maml_model)
         gnorm = compute_gnorm(maml_model)
-        debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, Meta loss averaged over last 1k steps = {curr_loss_average:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
+        debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, Meta loss averaged over last {args.loss_queue_window} steps = {curr_loss_average:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
 
-        wandb.log({'meta_loss_batch': avg_meta_loss, 'meta_loss_1000_avg': curr_loss_average, 'PNorm': pnorm, 'GNorm': gnorm})
+        wandb.log({'meta_train_batch_loss': avg_meta_loss, 'meta_loss_{}_window_avg'.format(args.loss_queue_window): curr_loss_average, 'PNorm': pnorm, 'GNorm': gnorm})
+    average_loss_across_meta_batches = running_loss/num_meta_iters
+    return average_loss_across_meta_batches
