@@ -1,2 +1,2 @@
 # molecule-metalearning
-Repository for my UCL MSc Thesis, 2020. Metalearning graph molecular features.
+Repository for my UCL MSc Thesis, 2020. Metalearning for molecular property prediction.
