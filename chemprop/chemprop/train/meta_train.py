@@ -114,7 +114,7 @@ def meta_train(maml_model,
         meta_optimizer.zero_grad()
         task_evaluation_loss.backward()
         # gradient clip
-        torch.nn.utils.clip_grad_norm(maml_model.parameters(), 1., norm_type=2)
+        torch.nn.utils.clip_grad_norm_(maml_model.parameters(), 1., norm_type=2)
         # take optimizer step
         meta_optimizer.step()
 
