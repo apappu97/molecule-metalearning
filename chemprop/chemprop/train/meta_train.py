@@ -91,6 +91,7 @@ def meta_train(maml_model,
     """
     debug = logger.debug if logger is not None else print
     maml_model.train()
+
     # meta_train_error refers to the fast adaptation error on each task
     # meta_val_error refers to the error on the evaluation sets from each task
     for meta_train_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
