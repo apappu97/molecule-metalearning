@@ -113,6 +113,9 @@ def meta_train(maml_model,
         # Zero out the meta opt gradient for new meta batch
         meta_optimizer.zero_grad()
         task_evaluation_loss.backward()
+        # gradient clip
+        torch.nn.utils.clip_grad_norm(maml_model.parameters(), 1., norm_type=2)
+        # take optimizer step
         meta_optimizer.step()
 
         # Compute stats and log to wandb 

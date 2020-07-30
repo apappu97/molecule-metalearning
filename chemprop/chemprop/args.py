@@ -68,7 +68,7 @@ class CommonArgs(Tap):
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 0  # Number of workers for the parallel data loading (0 means sequential)
-    batch_size: int = 64 # Batch size
+    batch_size: int = 32 # Batch size
 
     @property
     def device(self) -> torch.device:
