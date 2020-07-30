@@ -109,7 +109,7 @@ def _train_epoch(learner, task, curr_task_target_idx, loss_func):
         # first order=True prevents the computational graph from being retained, c.f. https://github.com/learnables/learn2learn/issues/154 to save memory as we were OOM'ing at meta test time
         learner.adapt(adaptation_loss, first_order=True) 
         batch_avg_loss = adaptation_loss.item()
-        wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})
+        # wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})
         task_adaptation_loss += batch_avg_loss
     
     del adaptation_loss
@@ -157,7 +157,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
                 task_val_loss += batch_avg_loss
         
         task_val_loss /= len(task.val_data_loader) # normalize by number of batches to get avg batch loss
-        wandb.log({'meta_test_{}_epoch_val_loss'.format(task.assay_name): task_val_loss})
+        # wandb.log({'meta_test_{}_epoch_val_loss'.format(task.assay_name): task_val_loss})
 
         if task_val_loss < best_val_loss:
             info('New best model for test task {} at epoch {} with val loss {}'.format(task.assay_name, epoch + 1, task_val_loss))
@@ -170,7 +170,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     info('Finished early stopping for task {}, beginning testing'.format(task.assay_name))
     
     # Now that early stopping has identified the best model, calculate test loss
-    model = j(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
+    model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
     results = _eval_trained_model(model, task.test_data_loader, task.get_targets('test'), metric_func, dataset_type, logger)
     # pdb.set_trace() # look at NVIDIA memory usage here 
     return results, best_epoch

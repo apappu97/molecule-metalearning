@@ -47,7 +47,7 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
 
         adaptation_loss = predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func)
         learner.adapt(adaptation_loss)
-        wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
+        # wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
 
 def calculate_meta_loss(learner, task, task_idx, loss_func):
     # After inner adaptation steps, calculate evaluation loss and return 
@@ -121,4 +121,4 @@ def meta_train(maml_model,
         pnorm = compute_pnorm(maml_model)
         gnorm = compute_gnorm(maml_model)
         debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
-        wandb.log({'batch_meta_loss': avg_meta_loss, 'PNorm': pnorm, 'GNorm': gnorm})
+        wandb.log({'meta_loss_batch': avg_meta_loss, 'PNorm': pnorm, 'GNorm': gnorm})

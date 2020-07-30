@@ -167,11 +167,11 @@ class ANILMoleculeModel(nn.Module):
         """
         return ANILMoleculeModel(molecule_model=self.molecule_model, classifier = self.classifier.clone())
     
-    def adapt(self, loss):
+    def adapt(self, loss, first_order=False):
         """
         Simply call the underlying MAML-wrapped head's adapt method for fast adaptation
         """
-        self.classifier.adapt(loss)
+        self.classifier.adapt(loss, first_order=first_order)
 
     def parameters(self):
         """

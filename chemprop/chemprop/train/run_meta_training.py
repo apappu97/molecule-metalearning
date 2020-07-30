@@ -116,7 +116,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         print("Running in dummy mode")
         task_indices = list(range(len(args.task_names)))
         # np.random.shuffle(task_indices)
-        train_task_split, val_task_split, test_task_split = 0.005, 1, 1 # just use a fraction of the train tasks, but all val and test tasks
+        train_task_split, val_task_split, test_task_split = 0.005, .1, 1 # just use a fraction of the available tasks
         # train_task_cutoff = int(len(T_tr) * train_task_split)
         # val_task_cutoff = train_task_cutoff + int(len(task_indices)*val_task_split)
         # test_task_cutoff = val_task_cutoff + int(len(task_indices) * test_task_split)

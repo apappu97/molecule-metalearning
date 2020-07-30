@@ -68,7 +68,7 @@ class CommonArgs(Tap):
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 0  # Number of workers for the parallel data loading (0 means sequential)
-    batch_size: int = 50 # Batch size
+    batch_size: int = 32 # Batch size
 
     @property
     def device(self) -> torch.device:
@@ -261,7 +261,7 @@ class TrainArgs(CommonArgs):
         # Process and validate metric and loss function
         if self.metric is None:
             if self.dataset_type == 'classification':
-                self.metric = 'auc'
+                self.metric = 'prc-auc'
             elif self.dataset_type == 'multiclass':
                 self.metric = 'cross_entropy'
             else:
