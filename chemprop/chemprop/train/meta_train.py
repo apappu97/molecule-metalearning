@@ -5,11 +5,12 @@ import torch
 import torch.nn as nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
+from torch.data.utils import DataLoader
 from tqdm import tqdm, trange
 import numpy as np
 
 from chemprop.args import TrainArgs
-from chemprop.data import MoleculeDataLoader, MoleculeDataset, MetaTaskDataLoader, TaskDataLoader
+from chemprop.data import MoleculeDataLoader, MoleculeDataset, TaskDataLoader
 from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
 import wandb
 from memory_profiler import profile
@@ -59,7 +60,7 @@ def calculate_meta_loss(learner, task, task_idx, loss_func):
 
 # @profile
 def meta_train(maml_model,
-          meta_task_data_loader: MetaTaskDataLoader,
+          meta_task_data_loader: DataLoader,
           epoch: int,
           loss_func: Callable,
           loss_queue,
@@ -78,7 +79,7 @@ def meta_train(maml_model,
     The epoch concludes once all task batches have been cycled through.
 
     :param maml_model: l2L maml Model.
-    :param meta_task_data_loader: A MetaTaskDataLoader.
+    :param meta_task_data_loader: A DataLoader over tasks.
     :param epoch: The current epoch -- used to skip batches of data for each task we've already seen while preserving the iterator interface
     :param loss_func: Loss function.
     :param meta_optimizer: An Optimizer.

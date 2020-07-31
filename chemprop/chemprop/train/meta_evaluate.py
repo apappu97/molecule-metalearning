@@ -3,13 +3,14 @@ import logging
 from typing import Callable, List
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader
 from tqdm import tqdm, trange
 import numpy as np
 
 from .predict import predict
 from .evaluate import evaluate_predictions
 from chemprop.data import MoleculeDataLoader, StandardScaler
-from chemprop.data import MetaTaskDataLoader, TaskDataLoader
+from chemprop.data import TaskDataLoader
 from .meta_train import fast_adapt, predict_on_batch_and_return_loss, get_task_idx, calculate_meta_loss
 from chemprop.utils import save_checkpoint, load_checkpoint
 import wandb
@@ -75,7 +76,7 @@ def _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradi
 
 # @profile
 def meta_evaluate(maml_model,
-             meta_task_data_loader: MetaTaskDataLoader,
+             meta_task_data_loader: DataLoader,
              num_inner_gradient_steps: int,
              metric_func: Callable,
              loss_func: Callable,
@@ -186,7 +187,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     return results, best_epoch
 
 def meta_test(maml_model,
-            meta_task_data_loader: MetaTaskDataLoader,
+            meta_task_data_loader: DataLoader,
             metric_func: Callable,
             loss_func: Callable,
             dataset_type: str,
