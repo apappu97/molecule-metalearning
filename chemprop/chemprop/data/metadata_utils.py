@@ -267,10 +267,10 @@ class MetaTaskDataLoader:
         random.shuffle(indices)
 
         task_data_loaders = [self.task_data_loaders[i] for i in indices]
-        task_names = [self.task_names[i] for i in indices]
+        meta_task_names = [self.meta_task_names[i] for i in indices]
 
         self.task_data_loaders = task_data_loaders
-        self.task_names = task_names
+        self.meta_task_names = meta_task_names
     
         for i in range(0, len(self.task_data_loaders), self.meta_batch_size):
             yield self.task_data_loaders[i:i+self.meta_batch_size]
