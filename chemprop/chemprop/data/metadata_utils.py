@@ -10,6 +10,7 @@ import math
 from tqdm import tqdm
 from memory_profiler import profile
 import pdb
+import random
 
 class TaskDataLoader:
     """ 
@@ -258,6 +259,19 @@ class MetaTaskDataLoader:
         """
         Generator for iterating through tasks
         """
+
+        """
+        Shuffle order of tasks first before batching tasks
+        """
+        indices = list(range(len(self.task_data_loaders)))
+        random.shuffle(indices)
+
+        task_data_loaders = [self.task_data_loaders[i] for i in indices]
+        task_names = [self.task_names[i] for i in indices]
+
+        self.task_data_loaders = task_data_loaders
+        self.task_names = task_names
+    
         for i in range(0, len(self.task_data_loaders), self.meta_batch_size):
             yield self.task_data_loaders[i:i+self.meta_batch_size]
 
