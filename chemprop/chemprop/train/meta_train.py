@@ -38,12 +38,11 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     # pdb.set_trace()
     # Fast adapt learner over batches of this task
     learner.train()
+
+    # Calling iter effectively shuffles the data so that we get a new ordering of batches, effectively a sample of two new batches
+    train_data_loader_iterator = iter(task.train_data_loader)
     for step in range(num_inner_steps):
-        try:
-            batch = next(task.train_data_loader_iter)
-        except StopIteration:
-            task.re_initialize_iterator('train')
-            batch = next(task.train_data_loader_iter)
+        batch = next(train_data_loader_iterator)
 
         adaptation_loss = predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func)
         learner.adapt(adaptation_loss)
@@ -51,12 +50,9 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
 
 def calculate_meta_loss(learner, task, task_idx, loss_func):
     # After inner adaptation steps, calculate evaluation loss and return 
-    try:
-        batch = next(task.val_data_loader_iter)
-    except StopIteration:
-        task.re_initialize_iterator('val')
-        batch = next(task.val_data_loader_iter)
 
+    # Calling iter effectively allows us to fetch a random sample from the val data loader since the val data loader always has shuffle=True
+    batch = next(iter(task.val_data_loader))
     eval_loss = predict_on_batch_and_return_loss(learner, batch, task_idx.item(), loss_func)
     
     return eval_loss 

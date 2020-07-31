@@ -16,7 +16,7 @@ from .meta_evaluate import meta_evaluate, meta_test
 from .predict import predict
 from .meta_train import meta_train
 from chemprop.args import TrainArgs
-from chemprop.data import StandardScaler, MoleculeDataLoader, MetaTaskDataLoader
+from chemprop.data import StandardScaler, MoleculeDataLoader, create_meta_data_loader
 from chemprop.data.utils import get_class_sizes, get_data, get_task_names, split_data
 from chemprop.models import MoleculeModel
 from chemprop.nn_utils import param_count
@@ -53,8 +53,12 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     # Save args
     args.save(os.path.join(args.save_dir, 'args.json'))
 
-    # Set pytorch seed for random initial weights
-    torch.manual_seed(args.pytorch_seed)
+    # TODO -- should this change every fold, i.e. by using args.seed? args.pytorch_seed never changes! So different folds use the same weight initialisation.
+    # Set pytorch and numpy seeds for random initial weights
+    # torch.manual_seed(args.pytorch_seed)
+    # TODO -- for now, using the args seed which *also* changes on each fold, leading to a new torch initialisation of the architecture.
+    # For initial experiments this is no big deal, as we only run with num folds 1, so it's effectively the same as the above line.
+    torch.manual_seed(args.seed)
 
     # Get data
     debug('Loading data')
@@ -141,33 +145,61 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         # for idx in task_indices[val_task_cutoff:test_task_cutoff]:
         #     T_test[idx] = 1
 
-    train_meta_task_data_loader = MetaTaskDataLoader(
-            dataset=data,
-            tasks=T_tr,
-            task_names=args.task_names,
-            meta_batch_size=args.meta_batch_size,
-            num_workers=args.num_workers,
-            sizes=args.meta_train_split_sizes,
-            args=args,
-            logger=logger)
-    val_meta_task_data_loader = MetaTaskDataLoader(
-            dataset=data,
-            tasks=T_val,
-            task_names=args.task_names,
-            meta_batch_size=args.meta_batch_size,
-            num_workers=args.num_workers,
-            sizes=args.meta_train_split_sizes,
-            args=args,
-            logger=logger)
-    test_meta_task_data_loader = MetaTaskDataLoader(
-            dataset=data,
-            tasks=T_test,
-            task_names=args.task_names,
-            meta_batch_size=1,
-            num_workers=args.num_workers,
-            sizes=args.meta_test_split_sizes,
-            args=args,
-            logger=logger)
+    train_meta_task_data_loader = create_meta_data_loader(
+        dataset=data,
+        tasks=T_tr,
+        task_names=args.task_names,
+        meta_batch_size=args.meta_batch_size,
+        sizes=args.meta_train_split_sizes,
+        args=args,
+        logger=logger)
+    # train_meta_task_data_loader = MetaTaskDataLoader(
+    #         dataset=data,
+    #         tasks=T_tr,
+    #         task_names=args.task_names,
+    #         meta_batch_size=args.meta_batch_size,
+    #         num_workers=args.num_workers,
+    #         sizes=args.meta_train_split_sizes,
+    #         args=args,
+    #         logger=logger)
+
+    val_meta_task_data_loader = create_meta_data_loader(
+        dataset=data,
+        tasks=T_val,
+        task_names=args.task_names,
+        meta_batch_size=args.meta_batch_size,
+        sizes=args.meta_train_split_sizes,
+        args=args,
+        logger=logger)
+
+    # val_meta_task_data_loader = MetaTaskDataLoader(
+    #         dataset=data,
+    #         tasks=T_val,
+    #         task_names=args.task_names,
+    #         meta_batch_size=args.meta_batch_size,
+    #         num_workers=args.num_workers,
+    #         sizes=args.meta_train_split_sizes,
+    #         args=args,
+    #         logger=logger)
+
+    test_meta_task_data_loader = create_meta_data_loader(
+        dataset=data,
+        tasks=T_test,
+        task_names=args.task_names,
+        meta_batch_size=1, # so that we can yield one test task at a time during testing
+        sizes=args.meta_test_split_sizes,
+        args=args,
+        logger=logger)
+
+    # test_meta_task_data_loader = MetaTaskDataLoader(
+    #         dataset=data,
+    #         tasks=T_test,
+    #         task_names=args.task_names,
+    #         meta_batch_size=1,
+    #         num_workers=args.num_workers,
+    #         sizes=args.meta_test_split_sizes,
+    #         args=args,
+    #         logger=logger)
 
     # Initialize scaler and scale training targets by subtracting mean and dividing standard deviation (regression only)
     if args.dataset_type == 'regression':
@@ -196,6 +228,12 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         if args.cuda:
             debug('Moving maml model to cuda')
         maml_model = maml_model.to(args.device)
+
+        if type(maml_model) is l2l.algorithms.MAML:
+            wandb.watch(maml_model.module, log='all')
+        else:
+            raise ValueError("Wandb doesn't know how to watch this type of model")
+
         return maml_model
 
     maml_model = _setup_maml_model(args)

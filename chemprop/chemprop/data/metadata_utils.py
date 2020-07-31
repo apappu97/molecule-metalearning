@@ -2,7 +2,8 @@ from .data import MoleculeDatapoint, MoleculeDataset, MoleculeDataLoader
 from .utils import split_data
 from .scaffold import scaffold_split
 from typing import Callable, Dict, Iterator, List, Union, Tuple
-import torch #type: ignore
+import torch
+from torch.utils.data import DataLoader, Dataset
 from logging import Logger
 from chemprop.args import TrainArgs
 import numpy as np
@@ -60,15 +61,14 @@ class TaskDataLoader:
         # missing data
         targets = dataset.targets()
         task_dataset = []
-        # Verify that the dataset[i].mol.targets() has the same output as
-        # targets[i] for ordering purposes
+
+        # Comb through dataset and grab the MoleculeDatapoints that have a hit for this task
         for i in range(len(dataset)):
             if targets[i][task_idx] is not None:
                 task_dataset.append(dataset[i])
 	
         self.data = MoleculeDataset(task_dataset)
         # Now that we have relevant items, split accordingly
-        # import pdb; pdb.set_trace()
         if split_type == 'random':
             self.data.shuffle(seed=args.seed)
             train_size = int(sizes[0] * len(self.data))
@@ -112,6 +112,10 @@ class TaskDataLoader:
 
         self.features_scaler = features_scaler
 
+        # Shuffle both the train and validation data loaders as when we are in meta learning, we need to be able to sample 
+        # a batch at a time across loops called at different phases of training. This is most easily implemented if we can just
+        # call next(iter(DataLoader)) for the number of batches required, which requires that shuffle be set to True,
+        # so that on each creation of a new Iterator, the order is shuffled.
         self._train_data_loader = MoleculeDataLoader(
                 dataset=train_data,
                 batch_size=args.batch_size,
@@ -120,25 +124,25 @@ class TaskDataLoader:
                 class_balance=args.class_balance,
                 shuffle=True,
                 seed=args.seed)
-        self._train_data_loader_iterator = iter(self._train_data_loader)
 
         self._val_data_loader = MoleculeDataLoader(
                 dataset=val_data,
                 batch_size=args.batch_size,
                 num_workers=num_workers,
-                cache=cache)
-        self._val_data_loader_iterator = iter(self._val_data_loader)
+                cache=cache,
+                shuffle=True,
+                seed=args.seed)
 
+        # No need to shuffle the test data as we will only ever use it to evaluate, i.e., we will only ever perform full loops 
+        # through the data
         if test is not None:
             self._test_data_loader = MoleculeDataLoader(
                 dataset=test_data,
                 batch_size=args.batch_size,
                 num_workers=num_workers,
                 cache=cache)
-            self._test_data_iterator = iter(self._test_data_loader)
         else:
             self._test_data_loader = None 
-            self._test_data_iterator = None 
 
     @property 
     def train_data_loader(self):
@@ -152,19 +156,6 @@ class TaskDataLoader:
     def test_data_loader(self):
         return self._test_data_loader
 
-    @property
-    def train_data_loader_iter(self):
-        return self._train_data_loader_iterator
-
-    @property
-    def val_data_loader_iter(self):
-        # Note, this may be none
-        return self._val_data_loader_iterator
-
-    @property
-    def test_data_loader_iter(self):
-        return self._test_data_loader_iterator
-    
     def get_targets(self, split):
         """
         Return list of targets for THIS task for relevant split
@@ -182,17 +173,17 @@ class TaskDataLoader:
             targets.append([t[self.task_idx]])
         return targets
     
-    def re_initialize_iterator(self, split):
-        """
-        A bit hacky, re initializes the iterator when it's been exhausted
-        """
-        assert split in ['train', 'val', 'test']
-        if split == 'train':
-            self._train_data_loader_iterator = iter(self._train_data_loader)
-        elif split == 'val':
-            self._val_data_loader_iterator = iter(self._val_data_loader)
-        else:
-            self._test_data_loader_iterator = iter(self._test_data_loader)
+    # def re_initialize_iterator(self, split):
+    #     """
+    #     A bit hacky, re initializes the iterator when it's been exhausted
+    #     """
+    #     assert split in ['train', 'val', 'test']
+    #     if split == 'train':
+    #         self._train_data_loader_iterator = iter(self._train_data_loader)
+    #     elif split == 'val':
+    #         self._val_data_loader_iterator = iter(self._val_data_loader)
+    #     else:
+    #         self._test_data_loader_iterator = iter(self._test_data_loader)
 
     @property
     def assay_name(self) -> str:
@@ -201,82 +192,149 @@ class TaskDataLoader:
     def get_task_mask(self) -> torch.Tensor:
         return self.task_mask
 
-class MetaTaskDataLoader:
+class MetaTaskDataset(Dataset):
     """
-    A wrapper for a set of tasks, possibly representing a meta train task
-    split, val task split, etc.
+    A dataset wrapper for a MetaTaskDataset, which under the hood just consists of a list of TaskDataLoaders.
 
     """
     def __init__(self,
-            dataset: MoleculeDataset,
-            tasks: List[int],
-            task_names: List[str],
-            meta_batch_size: int,
-            num_workers: int,
-            sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
-            cache: bool = False,
-            args: TrainArgs = None,
-            logger: Logger = None):
-        """
-        Initializes a MetaTaskDataLoader
-
-        :param dataset: A MoleculeDataset
-        :param split_type: type of split
-        :param sizes: tuple for size of splits
-        :param tasks: Bit vector with 1s for all tasks in this split
-        :param num_works: Number of workers used to build batches
-        :param cache: Whether to cache the graph featurizations of molecules
-        for faster processing
-        :param args: TrainArgs
-        :param logger: logger for logging
-        """
-        if len(tasks) != dataset.num_tasks():
-            raise ValueError("Length of tasks must equal dataset.num_tasks()")
-        self.meta_batch_size = meta_batch_size
-
-        task_data_loaders = []
-        meta_task_names = []
-        for idx in np.nonzero(tasks)[0]:
-            task_mask = [0] * len(tasks)
-            task_mask[idx] = 1
-            task_name = task_names[idx]
-            meta_task_names.append(task_name)
-            task_data_loader = TaskDataLoader(
-                    dataset=dataset,
-                    assay_name=task_name,
-                    task_mask=task_mask,
-                    num_workers=num_workers,
-                    split_type=args.split_type,
-                    sizes=sizes,
-                    cache=cache,
-                    args=args,
-                    logger=logger)
-            task_data_loaders.append(task_data_loader)
-        self.task_data_loaders = task_data_loaders
-        self.meta_task_names = meta_task_names
-
-    def tasks(self) -> Iterator[TaskDataLoader]:
-        """
-        Generator for iterating through tasks
-        """
-
-        """
-        Shuffle order of tasks first before batching tasks
-        """
-        indices = list(range(len(self.task_data_loaders)))
-        random.shuffle(indices)
-
-        task_data_loaders = [self.task_data_loaders[i] for i in indices]
-        meta_task_names = [self.meta_task_names[i] for i in indices]
-
-        self.task_data_loaders = task_data_loaders
-        self.meta_task_names = meta_task_names
+                data: List[TaskDataLoader]):
+        self.data = data
     
-        for i in range(0, len(self.task_data_loaders), self.meta_batch_size):
-            yield self.task_data_loaders[i:i+self.meta_batch_size]
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, index):
+        return self.data[index]
 
-    def __len__(self) -> int:
-        """ 
-        Returns number of task batches
+def create_meta_data_loader(dataset, tasks, task_names, meta_batch_size, sizes, cache, args, logger):
+    """
+    Creates a data loader over TaskDataLoaders for all tasks in a particular meta split, specified by the bit vector tasks.
+
+    This function takes care of:
+    a) Creating the individual Task Data Loader objects
+    b) Defining the necessary custom collate_fn for batching
+    c) Returning a PyTorch DataLoader over this list
+
+    Parameters
+    ------------
+    :param dataset: A MoleculeDataset
+    :param tasks: Bit vector with 1s for all tasks in this split
+    :param task_names: List of task names in *entire* dataset (not just this meta split)
+    :param split_type: type of split for within each task
+    :param sizes: tuple for size of splits
+    :param num_workerss: Number of workers used to build batches
+    :param cache: Whether to cache the graph featurizations of molecules
+    for faster processing
+    :param args: TrainArgs
+    :param logger: logger for logging
+    """
+    def custom_collate_fn(data):
         """
-        return math.ceil(len(self.task_data_loaders) * 1.0 / self.meta_batch_size)
+        We just need PyTorch to return the list of TaskDataLoaders as a list and not attempt to batch tensors together (as this will fail for custom datatypes)
+        """
+        return data
+
+    if len(tasks) != dataset.num_tasks():
+        raise ValueError("Length of tasks must equal dataset.num_tasks()")
+
+    task_data_loaders = []
+    for idx in np.nonzero(tasks)[0]:
+        task_mask = [0] * len(tasks)
+        task_mask[idx] = 1
+        task_name = task_names[idx]
+        task_data_loader = TaskDataLoader(
+                dataset=dataset,
+                assay_name=task_name,
+                task_mask=task_mask,
+                num_workers=args.num_workers,
+                split_type=args.split_type,
+                sizes=sizes,
+                cache=cache,
+                args=args,
+                logger=logger)
+        task_data_loaders.append(task_data_loader)
+    
+    # Create the MetaTaskDataset object
+    task_dataset = MetaTaskDataset(task_data_loaders)
+    # Now that we have created all of the task data loaders, create the MetaTask Pytorch Dataloader and return 
+    meta_data_loader = DataLoader(task_dataset, batch_size=meta_batch_size, shuffle=True, num_workers=args.num_workers)
+    return meta_data_loader
+
+"""
+Old unnecessary ipmlementation below
+"""
+# class MetaTaskDataLoader:
+#     """
+#     A wrapper for a set of tasks, possibly representing a meta train task
+#     split, val task split, etc.
+
+#     """
+#     def __init__(self,
+#             dataset: MoleculeDataset,
+#             tasks: List[int],
+#             task_names: List[str],
+#             meta_batch_size: int,
+#             num_workers: int,
+#             sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
+#             cache: bool = False,
+#             args: TrainArgs = None,
+#             logger: Logger = None):
+#         """
+#         Initializes a MetaTaskDataLoader
+
+#         :param dataset: A MoleculeDataset
+#         :param split_type: type of split
+#         :param sizes: tuple for size of splits
+#         :param tasks: Bit vector with 1s for all tasks in this split
+#         :param num_works: Number of workers used to build batches
+#         :param cache: Whether to cache the graph featurizations of molecules
+#         for faster processing
+#         :param args: TrainArgs
+#         :param logger: logger for logging
+#         """
+#         if len(tasks) != dataset.num_tasks():
+#             raise ValueError("Length of tasks must equal dataset.num_tasks()")
+#         self.meta_batch_size = meta_batch_size
+
+#         task_data_loaders = []
+#         meta_task_names = []
+#         for idx in np.nonzero(tasks)[0]:
+#             task_mask = [0] * len(tasks)
+#             task_mask[idx] = 1
+#             task_data_loader = TaskDataLoader(
+#                     dataset=dataset,
+#                     assay_name=task_name,
+#                     task_mask=task_mask,
+#                     num_workers=num_workers,
+#                     split_type=args.split_type,
+#                     sizes=sizes,
+#                     cache=cache,
+#                     args=args,
+#                     logger=logger)
+#             task_data_loaders.append(task_data_loader)
+#         self.task_data_loaders = task_data_loaders
+
+#     def tasks(self) -> Iterator[TaskDataLoader]:
+#         """
+#         Generator for iterating through tasks
+#         """
+
+#         """
+#         Shuffle order of tasks first before batching tasks
+#         """
+#         indices = list(range(len(self.task_data_loaders)))
+#         random.shuffle(indices)
+
+#         task_data_loaders = [self.task_data_loaders[i] for i in indices]
+
+#         self.task_data_loaders = task_data_loaders
+    
+#         for i in range(0, len(self.task_data_loaders), self.meta_batch_size):
+#             yield self.task_data_loaders[i:i+self.meta_batch_size]
+
+#     def __len__(self) -> int:
+#         """ 
+#         Returns number of task batches
+#         """
+#         return math.ceil(len(self.task_data_loaders) * 1.0 / self.meta_batch_size)
