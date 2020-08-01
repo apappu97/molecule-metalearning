@@ -151,6 +151,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         task_names=args.task_names,
         meta_batch_size=args.meta_batch_size,
         sizes=args.meta_train_split_sizes,
+        cache=cache,
         args=args,
         logger=logger)
     # train_meta_task_data_loader = MetaTaskDataLoader(
@@ -169,6 +170,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         task_names=args.task_names,
         meta_batch_size=args.meta_batch_size,
         sizes=args.meta_train_split_sizes,
+        cache=cache,
         args=args,
         logger=logger)
 
@@ -188,6 +190,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         task_names=args.task_names,
         meta_batch_size=1, # so that we can yield one test task at a time during testing
         sizes=args.meta_test_split_sizes,
+        cache=cache,
         args=args,
         logger=logger)
 
@@ -285,7 +288,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
         # Average validation score
         avg_val_score = np.nanmean(val_task_scores)
-        debug(f'Meta validation score {args.metric} = {avg_val_score:.6f}')
+        debug(f'Meta validation {args.metric} = {avg_val_score:.6f}')
         wandb.log({'meta_train_epoch_loss': meta_train_loss, 'meta_val_epoch_loss': meta_val_loss, 'meta_val_score': avg_val_score, 'epoch': epoch})
 
         if args.show_individual_scores:

@@ -255,63 +255,66 @@ class MoleculeDataset(Dataset):
         return self._data[item]
 
 
-class MoleculeSampler(Sampler):
-    """A Sampler for MoleculeDataLoaders."""
+"""
+We do not need the MoleculeSampler as we just use PyTorch's default random sampling
+"""
+# class MoleculeSampler(Sampler):
+#     """A Sampler for MoleculeDataLoaders."""
 
-    def __init__(self,
-                 dataset: MoleculeDataset,
-                 class_balance: bool = False,
-                 shuffle: bool = False,
-                 seed: int = 0):
-        """
-        Initializes the MoleculeSampler.
+#     def __init__(self,
+#                  dataset: MoleculeDataset,
+#                  class_balance: bool = False,
+#                  shuffle: bool = False,
+#                  seed: int = 0):
+#         """
+#         Initializes the MoleculeSampler.
 
-        :param class_balance: Whether to perform class balancing (i.e. use an equal number of positive and negative molecules).
-                              Class balance is only available for single task classification datasets.
-                              Set shuffle to True in order to get a random subset of the larger class.
-        :param shuffle: Whether to shuffle the data.
-        :param seed: Random seed. Only needed if shuffle is True.
-        """
-        super(Sampler, self).__init__()
+#         :param class_balance: Whether to perform class balancing (i.e. use an equal number of positive and negative molecules).
+#                               Class balance is only available for single task classification datasets.
+#                               Set shuffle to True in order to get a random subset of the larger class.
+#         :param shuffle: Whether to shuffle the data.
+#         :param seed: Random seed. Only needed if shuffle is True.
+#         """
+#         super(Sampler, self).__init__()
 
-        self.dataset = dataset
-        self.class_balance = class_balance
-        self.shuffle = shuffle
+#         self.dataset = dataset
+#         self.class_balance = class_balance
+#         self.shuffle = shuffle
 
-        self._random = Random(seed)
+#         self._random = Random(seed)
 
-        if self.class_balance:
-            if self.dataset.num_tasks() != 1:
-                raise ValueError('Class balance can only be used on single-task classification datasets.')
+#         if self.class_balance:
+#             if self.dataset.num_tasks() != 1:
+#                 raise ValueError('Class balance can only be used on single-task classification datasets.')
 
-            self.positive_indices = [index for index, datapoint in enumerate(dataset) if datapoint.targets[0] == 1]
-            self.negative_indices = [index for index, datapoint in enumerate(dataset) if datapoint.targets[0] == 0]
+#             self.positive_indices = [index for index, datapoint in enumerate(dataset) if datapoint.targets[0] == 1]
+#             self.negative_indices = [index for index, datapoint in enumerate(dataset) if datapoint.targets[0] == 0]
 
-            self.length = 2 * min(len(self.positive_indices), len(self.negative_indices))
-        else:
-            self.positive_indices = self.negative_indices = None
+#             self.length = 2 * min(len(self.positive_indices), len(self.negative_indices))
+#         else:
+#             self.positive_indices = self.negative_indices = None
 
-            self.length = len(self.dataset)
+#             self.length = len(self.dataset)
 
-    def __iter__(self) -> Iterator[int]:
-        """Creates an iterator over indices to sample."""
-        if self.class_balance:
-            if self.shuffle:
-                self._random.shuffle(self.positive_indices)
-                self._random.shuffle(self.negative_indices)
+#     def __iter__(self) -> Iterator[int]:
+#         """Creates an iterator over indices to sample."""
+#         if self.class_balance:
+#             if self.shuffle:
+#                 self._random.shuffle(self.positive_indices)
+#                 self._random.shuffle(self.negative_indices)
 
-            indices = [index for pair in zip(self.positive_indices, self.negative_indices) for index in pair]
-        else:
-            indices = list(range(len(self.dataset)))
+#             indices = [index for pair in zip(self.positive_indices, self.negative_indices) for index in pair]
+#         else:
+#             indices = list(range(len(self.dataset)))
 
-            if self.shuffle:
-                self._random.shuffle(indices)
+#             if self.shuffle:
+#                 self._random.shuffle(indices)
 
-        return iter(indices)
+#         return iter(indices)
 
-    def __len__(self) -> int:
-        """Returns the number of indices that will be sampled."""
-        return self.length
+#     def __len__(self) -> int:
+#         """Returns the number of indices that will be sampled."""
+#         return self.length
 
 
 class MoleculeDataLoader(DataLoader):
@@ -335,7 +338,7 @@ class MoleculeDataLoader(DataLoader):
         :param class_balance: Whether to perform class balancing (i.e. use an equal number of positive and negative molecules).
                               Class balance is only available for single task classification datasets.
                               Set shuffle to True in order to get a random subset of the larger class.
-        :param shuffle: Whether to shuffle the data.
+        :param shuffle: Whether to shuffle the data. Passed to the super() constructor called.
         :param seed: Random seed. Only needed if shuffle is True.
         """
         self._dataset = dataset
@@ -346,12 +349,12 @@ class MoleculeDataLoader(DataLoader):
         self._shuffle = shuffle
         self._seed = seed
 
-        self._sampler = MoleculeSampler(
-            dataset=self._dataset,
-            class_balance=self._class_balance,
-            shuffle=self._shuffle,
-            seed=self._seed
-        )
+        # self._sampler = MoleculeSampler(
+        #     dataset=self._dataset,
+        #     class_balance=self._class_balance,
+        #     shuffle=self._shuffle,
+        #     seed=self._seed
+        # )
 
         def construct_molecule_batch(data: List[MoleculeDatapoint]) -> MoleculeDataset:
             """
@@ -368,9 +371,9 @@ class MoleculeDataLoader(DataLoader):
         super(MoleculeDataLoader, self).__init__(
             dataset=self._dataset,
             batch_size=self._batch_size,
-            sampler=self._sampler,
             num_workers=self._num_workers,
-            collate_fn=construct_molecule_batch
+            collate_fn=construct_molecule_batch,
+            shuffle=self._shuffle
         )
 
     def targets(self) -> List[List[float]]:

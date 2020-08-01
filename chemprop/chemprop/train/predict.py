@@ -10,7 +10,9 @@ from chemprop.data import MoleculeDataLoader, MoleculeDataset, StandardScaler
 def predict(model: nn.Module,
             data_loader: MoleculeDataLoader,
             disable_progress_bar: bool = False,
-            scaler: StandardScaler = None) -> List[List[float]]:
+            scaler: StandardScaler = None,
+            return_targets: bool = False,
+            task_idx: int = None) -> List[List[float]]:
     """
     Makes predictions on a dataset using an ensemble of models.
 
@@ -21,14 +23,22 @@ def predict(model: nn.Module,
     :return: A list of lists of predictions. The outer list is examples
     while the inner list is tasks.
     """
+    if return_targets and not task_idx:
+        raise ValueError("If targets are desired must pass in task index")
     model.eval()
 
     preds = []
-
+    if return_targets:
+        targets = []
+    import pdb; pdb.set_trace()
     for batch in tqdm(data_loader, disable=disable_progress_bar):
         # Prepare batch
         batch: MoleculeDataset
         mol_batch, features_batch = batch.batch_graph(), batch.features()
+        if return_targets:
+            targets_batch = batch.targets()
+            for t in targets_batch:
+                targets.append([t[task_idx]])
 
         # Make predictions
         with torch.no_grad():
@@ -44,4 +54,8 @@ def predict(model: nn.Module,
         batch_preds = batch_preds.tolist()
         preds.extend(batch_preds)
 
-    return preds
+    if return_targets:
+        return preds, targets 
+    else:
+        return preds
+    

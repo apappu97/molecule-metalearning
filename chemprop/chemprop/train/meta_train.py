@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
-from torch.data.utils import DataLoader
+from torch.utils.data import DataLoader
 from tqdm import tqdm, trange
 import numpy as np
 
@@ -36,17 +36,19 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     """
     Takes care of logic for fast adapting the learner
     """
-    # pdb.set_trace()
+    
     # Fast adapt learner over batches of this task
     learner.train()
 
     # Calling iter effectively shuffles the data so that we get a new ordering of batches, effectively a sample of two new batches
+    if task.assay_name == 'CHEMBL1613955':
+        import pdb; pdb.set_trace() # paranoia -- make sure this returns a new batch on the next cycle for the task! best to choose a task name and then revise this pdb import
     train_data_loader_iterator = iter(task.train_data_loader)
     for step in range(num_inner_steps):
         batch = next(train_data_loader_iterator)
 
         adaptation_loss = predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func)
-        learner.adapt(adaptation_loss)
+        learner.adapt(adaptation_loss) # see if any weights change
         # wandb.log({'{}_adaptation_loss'.format(task.assay_name): adaptation_loss})
 
 def calculate_meta_loss(learner, task, task_idx, loss_func):
@@ -93,7 +95,7 @@ def meta_train(maml_model,
     # meta_val_error refers to the error on the evaluation sets from each task
     running_loss = 0.0
     num_meta_iters = 0
-    for meta_train_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
+    for meta_train_batch in tqdm(meta_task_data_loader, total = len(meta_task_data_loader)):
         
         task_evaluation_loss = 0.0
         

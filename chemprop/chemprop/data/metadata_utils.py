@@ -258,7 +258,7 @@ def create_meta_data_loader(dataset, tasks, task_names, meta_batch_size, sizes, 
     # Create the MetaTaskDataset object
     task_dataset = MetaTaskDataset(task_data_loaders)
     # Now that we have created all of the task data loaders, create the MetaTask Pytorch Dataloader and return 
-    meta_data_loader = DataLoader(task_dataset, batch_size=meta_batch_size, shuffle=True, num_workers=args.num_workers)
+    meta_data_loader = DataLoader(task_dataset, batch_size=meta_batch_size, shuffle=True, num_workers=args.num_workers, collate_fn=custom_collate_fn)
     return meta_data_loader
 
 """

@@ -17,13 +17,13 @@ import wandb
 from memory_profiler import profile
 import pdb
 
-def _eval_trained_model(learner, task_dataloader, targets, metric_func, dataset_type, logger):
+def _eval_trained_model(learner, task_dataloader, task_idx, metric_func, dataset_type, logger):
     """
     Takes a trained model and just evaluates predictions on the given dataloader
 
     learner: fast adapted model
     task_dataloader: dataloader for desired split to evaluate learner on
-    targets: targets for this dataloader 
+    task_idx: index for current task
     metric_func: metric func
     dataset_type: dataset type
     logger: logger
@@ -31,10 +31,12 @@ def _eval_trained_model(learner, task_dataloader, targets, metric_func, dataset_
 
     # Evaluate predictions now 
     learner.eval()
-    preds = predict(
+    preds, targets = predict(
         model=learner,
         data_loader=task_dataloader,
-        scaler=None
+        scaler=None,
+        return_targets=True,
+        task_idx=task_idx
     )
     results = evaluate_predictions(
         preds=preds,
@@ -68,7 +70,7 @@ def _meta_eval_on_task(maml_model, task, loss_func, metric_func, num_inner_gradi
     
     # After fast adaptation of model, calculate results on entire data loader, as well as loss on sample batch from validation data loader
     with torch.no_grad():
-        results = _eval_trained_model(learner, task.val_data_loader, task.get_targets('val'), metric_func, dataset_type, logger)
+        results = _eval_trained_model(learner, task.val_data_loader, curr_task_target_idx, metric_func, dataset_type, logger)
         task_val_loss = calculate_meta_loss(learner, task, curr_task_target_idx, loss_func)
         task_val_loss = task_val_loss.item() # Just require the scalar here
 
@@ -99,7 +101,7 @@ def meta_evaluate(maml_model,
 
     val_task_results = []
     meta_validation_losses = []
-    for meta_val_batch in tqdm(meta_task_data_loader.tasks(), total = len(meta_task_data_loader)):
+    for meta_val_batch in tqdm(meta_task_data_loader, total = len(meta_task_data_loader)):
         running_meta_task_loss = 0.0
         num_tasks = 0
         for task in tqdm(meta_val_batch):
@@ -182,7 +184,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     
     # Now that early stopping has identified the best model, calculate test loss
     model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
-    results, _ = _eval_trained_model(model, task.test_data_loader, task.get_targets('test'), metric_func, dataset_type, logger)
+    results = _eval_trained_model(model, task.test_data_loader, curr_task_target_idx, metric_func, dataset_type, logger)
     # pdb.set_trace() # look at NVIDIA memory usage here 
     return results, best_epoch
 
@@ -204,7 +206,7 @@ def meta_test(maml_model,
     test_task_results = []
     
     best_epochs = []
-    for meta_test_batch in tqdm(meta_task_data_loader.tasks(), total=len(meta_task_data_loader)):
+    for meta_test_batch in tqdm(meta_task_data_loader, total=len(meta_task_data_loader)):
         for task in tqdm(meta_test_batch):
             # pdb.set_trace() # look at NVIDIA memory usage here
             results, best_epoch = _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_func, dataset_type, args, save_dir, logger)
