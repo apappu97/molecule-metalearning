@@ -74,7 +74,7 @@ def get_activation_function(activation: str) -> nn.Module:
         raise ValueError(f'Activation "{activation}" not supported.')
 
 
-def initialize_weights(model: nn.Module):
+def initialize_weights(model: nn.Module, kaiming=False):
     """
     Initializes the weights of a model in place.
 
@@ -83,6 +83,8 @@ def initialize_weights(model: nn.Module):
     for param in model.parameters():
         if param.dim() == 1:
             nn.init.constant_(param, 0)
+        elif kaiming:
+            nn.init.kaiming_uniform_(param)
         else:
             nn.init.xavier_normal_(param)
 

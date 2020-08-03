@@ -30,7 +30,7 @@ def predict(model: nn.Module,
     preds = []
     if return_targets:
         targets = []
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     for batch in tqdm(data_loader, disable=disable_progress_bar):
         # Prepare batch
         batch: MoleculeDataset

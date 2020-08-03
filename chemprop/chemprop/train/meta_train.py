@@ -41,8 +41,8 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     learner.train()
 
     # Calling iter effectively shuffles the data so that we get a new ordering of batches, effectively a sample of two new batches
-    if task.assay_name == 'CHEMBL1613955':
-        import pdb; pdb.set_trace() # paranoia -- make sure this returns a new batch on the next cycle for the task! best to choose a task name and then revise this pdb import
+    # if task.assay_name == 'CHEMBL1613955':
+    #     import pdb; pdb.set_trace() # paranoia -- make sure this returns a new batch on the next cycle for the task! best to choose a task name and then revise this pdb import
     train_data_loader_iterator = iter(task.train_data_loader)
     for step in range(num_inner_steps):
         batch = next(train_data_loader_iterator)

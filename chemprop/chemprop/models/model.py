@@ -41,7 +41,7 @@ class MoleculeModel(nn.Module):
         self.create_encoder(args)
         self.create_ffn(args)
 
-        initialize_weights(self)
+        initialize_weights(self, args.kaiming)
 
     def create_encoder(self, args: TrainArgs):
         """
