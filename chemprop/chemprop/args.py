@@ -178,6 +178,7 @@ class TrainArgs(CommonArgs):
     meta_test_epochs: int = 30 # Number of epochs to use for each task during meta testing, i.e. epochs of training and validation within each meta test task
     FO_MAML: bool = False # Whether to do First Order MAML
     ANIL: bool = False # Whether to do ANIL
+    kaiming: bool = False
     results_save_dir: str # Where to save the pickled dictionary of results
     experiment_name: str
 

@@ -119,7 +119,6 @@ def _train_epoch(learner, task, curr_task_target_idx, loss_func):
     for batch in task.train_data_loader:
         adaptation_loss = predict_on_batch_and_return_loss(learner, batch, curr_task_target_idx, loss_func)
         # first order=True prevents the computational graph from being retained, c.f. https://github.com/learnables/learn2learn/issues/154
-        import pdb; pdb.set_trace() # Check that this still adapts the model weights as we would expect
         learner.adapt(adaptation_loss, first_order=True) 
         batch_avg_loss = adaptation_loss.item()
         # wandb.log({'meta_test_{}_adaptation_loss'.format(task.assay_name): batch_avg_loss})

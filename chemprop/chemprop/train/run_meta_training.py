@@ -26,7 +26,7 @@ import wandb
 import time
 import pdb
 from memory_profiler import profile
-from collections import deque
+from collections import deque, defaultdict
 
 # @profile
 def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
@@ -240,6 +240,28 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         return maml_model
 
     maml_model = _setup_maml_model(args)
+    activations = defaultdict(list)
+    hooks = {}
+
+    def get_activations(name):
+        def hook_fn(module, layer_in, output):
+            activations[name].append(output.detach().flatten().cpu().numpy())
+        return hook_fn 
+
+
+    # Register necessary hooks
+    # Encoder hooks
+    # hooks['W_i'] = maml_model.module.encoder.encoder.W_i.register_forward_hook(get_activations('W_i'))
+    # hooks['W_o'] = maml_model.module.encoder.encoder.W_o.register_forward_hook(get_activations('W_o'))
+    # hooks['W_h'] = maml_model.module.encoder.encoder.W_h.register_forward_hook(get_activations('W_h'))
+    hooks['act_func'] = maml_model.module.encoder.encoder.act_func.register_forward_hook(get_activations('act_func'))
+
+    # FFN hooks
+    for name, module in maml_model.module.ffn.named_modules():
+        if name and 'Dropout' not in name: 
+            write_name = name + '_' + str(module)
+            hooks[write_name] = module.register_forward_hook(get_activations(write_name))
+    
     # Ensure that model is saved in correct location for evaluation if 0 epochs
     maml_model_name = args.experiment_name + '_maml_model.pt'
     save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, features_scaler=None, args=args)
@@ -256,6 +278,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
     best_epoch = 0 
     # Initializing the loss queue 
     loss_queue = deque() 
+    global_counter = [0]
     for epoch in trange(args.epochs):
         debug(f'Epoch {epoch}')
         start_time = time.time()
@@ -267,13 +290,15 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             loss_queue=loss_queue,
             meta_optimizer=meta_opt,
             args=args,
-            logger=logger
+            logger=logger,
+            global_counter=global_counter,
+            activations=activations
         )
         info('Took {} seconds to complete one epoch of meta training'.format(time.time() - start_time))
         # No annealing / stepping as we are using a fixed learning rate for inner and outer loop
         # if isinstance(scheduler, ExponentialLR):
         #     scheduler.step()
-
+        
         # meta validation to determine whether to save a new checkpoint 
         val_task_scores, meta_val_loss = meta_evaluate(
             maml_model=maml_model,

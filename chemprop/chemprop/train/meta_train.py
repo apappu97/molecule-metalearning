@@ -1,5 +1,5 @@
 import logging
-from typing import Callable
+from typing import Callable, Dict
 
 import torch
 import torch.nn as nn
@@ -15,6 +15,8 @@ from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
 import wandb
 from memory_profiler import profile
 import pdb
+import os 
+import pickle
 
 def predict_on_batch_and_return_loss(learner, batch, task_idx, loss_func):
     mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
@@ -41,8 +43,8 @@ def fast_adapt(learner, task, task_idx, loss_func, num_inner_steps):
     learner.train()
 
     # Calling iter effectively shuffles the data so that we get a new ordering of batches, effectively a sample of two new batches
-    if task.assay_name == 'CHEMBL1613955':
-        import pdb; pdb.set_trace() # paranoia -- make sure this returns a new batch on the next cycle for the task! best to choose a task name and then revise this pdb import
+    # if task.assay_name == 'CHEMBL1613955':
+        # import pdb; pdb.set_trace() # paranoia -- make sure this returns a new batch on the next cycle for the task! best to choose a task name and then revise this pdb import
     train_data_loader_iterator = iter(task.train_data_loader)
     for step in range(num_inner_steps):
         batch = next(train_data_loader_iterator)
@@ -68,7 +70,9 @@ def meta_train(maml_model,
           loss_queue,
           meta_optimizer: Optimizer,
           args: TrainArgs,
-          logger: logging.Logger = None) -> int:
+          logger: logging.Logger = None,
+          global_counter = None,
+          activations = None) -> int:
     """
     Trains a model for an epoch on TASKS.
     We define an epoch as a loop over all batches of tasks.
@@ -111,14 +115,48 @@ def meta_train(maml_model,
         task_evaluation_loss = task_evaluation_loss / len(meta_train_batch)
         running_loss += task_evaluation_loss.item() # add average batch loss to running loss
         num_meta_iters += 1
+        global_counter[0] += 1
         # Now that we are done with meta batch of tasks, perform meta update.
         # Zero out the meta opt gradient for new meta batch
         meta_optimizer.zero_grad()
         task_evaluation_loss.backward()
-        # gradient clip
+        # # gradient clip
         torch.nn.utils.clip_grad_norm_(maml_model.parameters(), 1., norm_type=2)
+
+        # # Before optimising, store the parameters and calculate the weight of the parameters before 
+        # # import pdb; pdb.set_trace()
+        # weights_before = []
+        # for name, param in maml_model.named_parameters():
+        #     if 'cached_zero_vector' in name: continue
+        #     weights_before.append((name, param.clone().detach()))
         # take optimizer step
         meta_optimizer.step()
+
+        # # After optimising, calculate norm of difference to get value of update 
+
+        # # Also get gradients for each matrix
+        # weights_after = []
+        # grads = []
+        # for name, param in maml_model.named_parameters():
+        #     if 'cached_zero_vector' in name: continue
+
+        #     weights_after.append((name, param.clone().detach()))
+        #     if param.grad is not None:
+        #         grads.append((name, param.grad.flatten().cpu()))
+
+        # # Assert that update norm isn't 0, and log ratio of update/weights before. 
+        # # We hope this is ~1e-3.
+        # differences = []
+        # # Save ratios list for later appending
+        # ratios = []
+        # for (name1, param1), (name2, param2) in zip(weights_before, weights_after):
+        #     if 'cached_zero_vector' in name1: continue
+
+        #     assert(name1 == name2)
+        #     # print((param1 != param2).any()) # check that no parameters are the same otherwise we might have a grad issue
+        #     difference = (param2 - param1).norm()
+        #     update_weight_ratio = difference/param1.norm()
+        #     ratios.append((name1, update_weight_ratio))
 
         # Compute stats and log to wandb 
         with torch.no_grad():
@@ -131,7 +169,26 @@ def meta_train(maml_model,
         pnorm = compute_pnorm(maml_model)
         gnorm = compute_gnorm(maml_model)
         debug(f'Meta loss on this task batch = {avg_meta_loss:.4e}, Meta loss averaged over last {args.loss_queue_window} steps = {curr_loss_average:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}')
+        stats_to_log = {'meta_train_batch_loss': avg_meta_loss, 
+            'meta_loss_{}_window_avg'.format(args.loss_queue_window): curr_loss_average, 
+            'PNorm': pnorm, 
+            'GNorm': gnorm}
+        # for (name, ratio) in ratios:
+        #     if 'cached_zero_vector' not in name:
+        #         stats_to_log[name + '_update_weight_ratio'] = ratio
+        # for (name, grad) in grads:
+        #     if 'cached_zero_vector' not in name:
+        #         stats_to_log[name + '_gradient'] = wandb.Histogram(grad)
+        
+        wandb.log(stats_to_log)
 
-        wandb.log({'meta_train_batch_loss': avg_meta_loss, 'meta_loss_{}_window_avg'.format(args.loss_queue_window): curr_loss_average, 'PNorm': pnorm, 'GNorm': gnorm})
+        # write current activations to dict and clear that listchrome
+        for key in activations.keys():
+            # import pdb; pdb.set_trace()
+            dir_name = '/home/ec2-user/molecule-metalearning/histogram_output/' + str(key) + '/'
+            if not os.path.isdir(dir_name): os.makedirs(dir_name)
+            with open(dir_name + str(global_counter[0]) + '.pickle', 'wb') as handle:
+                pickle.dump(activations[key], handle)
+            activations[key] = []
     average_loss_across_meta_batches = running_loss/num_meta_iters
     return average_loss_across_meta_batches
