@@ -90,6 +90,12 @@ class MoleculeModel(nn.Module):
         # Create FFN model
         self.ffn = nn.Sequential(*ffn)
 
+    def re_initialize_ffn(self, num_output, args):
+        """
+        Re-initializes the last layer of the feed forward network for finetuning
+        """
+        self.ffn[-1] = nn.Linear(args.ffn_hidden_size, num_output)
+
     def featurize(self, *input):
         """
         Computes feature vectors of the input by leaving out the last layer.

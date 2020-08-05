@@ -69,10 +69,6 @@ class CommonArgs(Tap):
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 8   # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
-    # MetaLearning parameters
-    meta_batch_size: int = 32 # Num tasks in meta batches
-    meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
-    meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0, 0.2)
 
     @property
     def device(self) -> torch.device:
@@ -127,7 +123,6 @@ class TrainArgs(CommonArgs):
     separate_test_path: str = None  # Path to separate test set, optional
     split_type: Literal['random', 'scaffold_balanced', 'predetermined', 'crossval', 'index_predetermined'] = 'random'  # Method of splitting the data into train/val/test
     split_sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1)  # Split proportions for train/validation/test sets
-    meta_split_sizes_BF: Tuple[int, int] = (10, 10) # Number of B and F tasks to split into T_val and T_test
     num_folds: int = 1  # Number of folds when performing cross validation
     folds_file: str = None  # Optional file of fold labels
     val_fold_index: int = None  # Which fold to use as val for leave-one-out cross val
@@ -136,7 +131,7 @@ class TrainArgs(CommonArgs):
     crossval_index_file: str = None  # Indices of files to use as train/val/test. Overrides --num_folds and --seed.
     seed: int = 0  # Random seed to use when splitting data into train/val/test sets. When `num_folds` > 1, the first fold uses this seed and all subsequent folds add 1 to the seed.
     pytorch_seed: int = 0  # Seed for PyTorch randomness (e.g. random initial weights)
-    metric: Literal['auc', 'prc-auc', 'rmse', 'mae', 'mse', 'r2', 'accuracy', 'cross_entropy'] = None  # Metric to use during evaluation. Defaults to "auc" for classification and "rmse" for regression.
+    metric: Literal['auc', 'prc-auc', 'rmse', 'mae', 'mse', 'r2', 'accuracy', 'cross_entropy'] = None  # Metric to use during evaluation. Defaults to "prc-auc" for classification and "rmse" for regression.
     save_dir: str = None  # Directory where model checkpoints will be saved
     save_smiles_splits: bool = False  # Save smiles for each train/val/test splits for prediction convenience later
     test: bool = False  # Whether to skip training and only test the model
@@ -144,17 +139,16 @@ class TrainArgs(CommonArgs):
     log_frequency: int = 10  # The number of batches between each logging of the training loss
     show_individual_scores: bool = False  # Show all scores for individual targets, not just average, at the end
     cache_cutoff: int = 10000  # Maximum number of molecules in dataset to allow caching. Below this number, caching is used and data loading is sequential. Above this number, caching is not used and data loading is parallel.
-    chembl_assay_metadata_pickle_path: str  = None # Path to ChEMBL pickle files that store assay metadata
 
     # Model arguments
     bias: bool = False  # Whether to add bias to linear layers
     hidden_size: int = 300  # Dimensionality of hidden layers in MPN
     depth: int = 3  # Number of message passing steps
-    dropout: float = 0.0  # Dropout probability
+    dropout: float = 0.2  # Dropout probability
     activation: Literal['ReLU', 'LeakyReLU', 'PReLU', 'tanh', 'SELU', 'ELU'] = 'ReLU'  # Activation function
     atom_messages: bool = False  # Centers messages on atoms instead of on bonds
     undirected: bool = False  # Undirected edges (always sum the two relevant bond vectors)
-    ffn_hidden_size: int = None  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
+    ffn_hidden_size: int = 400  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
     ffn_num_layers: int = 2  # Number of layers in FFN after MPN encoding
     features_only: bool = False  # Use only the additional features in an FFN, no graph network
     separate_val_features_path: List[str] = None  # Path to file with features for separate val set
@@ -163,12 +157,15 @@ class TrainArgs(CommonArgs):
     ensemble_size: int = 1  # Number of models in ensemble
 
     # Training arguments
-    epochs: int = 30  # Number of epochs to run
+    epochs: int = 32  # Number of epochs to run, corresponds to 60,000 steps
     warmup_epochs: float = 2.0  # Number of epochs during which learning rate increases linearly from init_lr to max_lr. Afterwards, learning rate decreases exponentially from max_lr to final_lr.
     init_lr: float = 1e-4  # Initial learning rate
     max_lr: float = 1e-3  # Maximum learning rate
     final_lr: float = 1e-4  # Final learning rate
     class_balance: bool = False  # Trains with an equal number of positives and negatives in each batch (only for single task classification)
+    experiment_name: str # Name for this experiment, used for naming saved checkpoints
+    results_save_dir: str # Where to save pickle files for experiment
+    test_time_lr: float = 1e-4
 
     def __init__(self, *args, **kwargs) -> None:
         super(TrainArgs, self).__init__(*args, **kwargs)
@@ -251,7 +248,7 @@ class TrainArgs(CommonArgs):
         # Process and validate metric and loss function
         if self.metric is None:
             if self.dataset_type == 'classification':
-                self.metric = 'auc'
+                self.metric = 'prc-auc' # default of prc-auc for all experiments
             elif self.dataset_type == 'multiclass':
                 self.metric = 'cross_entropy'
             else:

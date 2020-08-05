@@ -14,14 +14,15 @@ from chemprop.nn_utils import compute_gnorm, compute_pnorm, NoamLR
 
 
 def train(model: nn.Module,
-          data_loader: MoleculeDataLoader,
-          loss_func: Callable,
-          optimizer: Optimizer,
-          scheduler: _LRScheduler,
-          args: TrainArgs,
-          n_iter: int = 0,
-          logger: logging.Logger = None,
-          writer: SummaryWriter = None) -> int:
+            data_loader: MoleculeDataLoader,
+            loss_func: Callable,
+            optimizer: Optimizer,
+            args: TrainArgs,
+            scheduler: _LRScheduler = None,
+            n_iter: int = 0,
+            logger: logging.Logger = None,
+            writer: SummaryWriter = None,
+            finetuning: bool = False) -> int:
     """
     Trains a model for an epoch.
 
@@ -34,15 +35,16 @@ def train(model: nn.Module,
     :param n_iter: The number of iterations (training examples) trained on so far.
     :param logger: A logger for printing intermediate results.
     :param writer: A tensorboardX SummaryWriter.
+    :param finetuning: bool flag, if true, use constant learning rate used at test time
     :return: The total number of iterations (training examples) trained on so far.
     """
     debug = logger.debug if logger is not None else print
     
     model.train()
     loss_sum, iter_count = 0, 0
-
     for batch in tqdm(data_loader, total=len(data_loader)):
         # Prepare batch
+        
         batch: MoleculeDataset
         mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
         mask = torch.Tensor([[x is not None for x in tb] for tb in target_batch])
@@ -69,15 +71,19 @@ def train(model: nn.Module,
 
         loss.backward()
         optimizer.step()
-
-        if isinstance(scheduler, NoamLR):
-            scheduler.step()
+        
+        if not finetuning:
+            if isinstance(scheduler, NoamLR):
+                scheduler.step()
 
         n_iter += len(batch)
 
         # Log and/or add to tensorboard
         if (n_iter // args.batch_size) % args.log_frequency == 0:
-            lrs = scheduler.get_lr()
+            if not finetuning:
+                lrs = scheduler.get_lr()
+            else:
+                lrs = [args.test_time_lr]
             pnorm = compute_pnorm(model)
             gnorm = compute_gnorm(model)
             loss_avg = loss_sum / iter_count
@@ -85,12 +91,5 @@ def train(model: nn.Module,
 
             lrs_str = ', '.join(f'lr_{i} = {lr:.4e}' for i, lr in enumerate(lrs))
             debug(f'Loss = {loss_avg:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}, {lrs_str}')
-
-            if writer is not None:
-                writer.add_scalar('train_loss', loss_avg, n_iter)
-                writer.add_scalar('param_norm', pnorm, n_iter)
-                writer.add_scalar('gradient_norm', gnorm, n_iter)
-                for i, lr in enumerate(lrs):
-                    writer.add_scalar(f'learning_rate_{i}', lr, n_iter)
 
     return n_iter

@@ -82,7 +82,7 @@ def scaffold_split(data: MoleculeDataset,
         big_index_sets = []
         small_index_sets = []
         for index_set in index_sets:
-            if len(index_set) > val_size / 2 or len(index_set) > test_size / 2:
+            if len(index_set) > val_size / 2 or (test_size != 0 and len(index_set) > test_size / 2):
                 big_index_sets.append(index_set)
             else:
                 small_index_sets.append(index_set)
@@ -99,7 +99,7 @@ def scaffold_split(data: MoleculeDataset,
         if len(train) + len(index_set) <= train_size:
             train += index_set
             train_scaffold_count += 1
-        elif len(val) + len(index_set) <= val_size:
+        elif len(val) + len(index_set) <= val_size or test_size == 0:
             val += index_set
             val_scaffold_count += 1
         else:
