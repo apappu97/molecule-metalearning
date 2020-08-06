@@ -16,7 +16,7 @@ from torch.optim.lr_scheduler import _LRScheduler
 
 from chemprop.args import TrainArgs
 from chemprop.data import StandardScaler, MoleculeDataset
-from chemprop.models import MoleculeModel
+from chemprop.models import MoleculeModel, ANILMoleculeModel
 from chemprop.nn_utils import NoamLR
 import wandb
 import pdb
@@ -80,7 +80,7 @@ def setup_wandb(args):
     wandb.config.meta_batch_size = args.meta_batch_size
 
 def save_checkpoint(path: str,
-                    model: MoleculeModel,
+                    model,
                     scaler: StandardScaler = None,
                     features_scaler: StandardScaler = None,
                     args: TrainArgs = None):
@@ -100,6 +100,8 @@ def save_checkpoint(path: str,
         state_dict = model.state_dict()
     elif type(model) is l2l.algorithms.maml.MAML:
         state_dict = model.module.state_dict()
+    elif type(model) is ANILMoleculeModel:
+        state_dict = model.molecule_model.state_dict()
     else:
         raise ValueError("Don't recognize and therefore don't know how to process model type")
 

@@ -178,7 +178,7 @@ class TrainArgs(CommonArgs):
     meta_test_epochs: int = 30 # Number of epochs to use for each task during meta testing, i.e. epochs of training and validation within each meta test task
     FO_MAML: bool = False # Whether to do First Order MAML
     ANIL: bool = False # Whether to do ANIL
-    kaiming: bool = False # Whether to use Kaiming Uniform initialisation
+    kaiming: bool = True # Whether to use Kaiming Uniform initialisation
     results_save_dir: str # Where to save the pickled dictionary of results
     experiment_name: str
 
@@ -318,6 +318,8 @@ class TrainArgs(CommonArgs):
         # Ensure save path exists if meta learning 
         if self.meta_learning and not self.save_dir:
             raise ValueError('If meta learning, must have save dir to save model checkpoints for later')
+            if self.FO_MAML and self.ANIL:
+                raise ValueError("Cannot run FO MAML and ANIL mode at the same time")
 
 class PredictArgs(CommonArgs):
     """PredictArgs includes CommonArgs along with additional arguments used for predicting with a chemprop model."""

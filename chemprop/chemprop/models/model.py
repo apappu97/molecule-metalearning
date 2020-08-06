@@ -4,6 +4,8 @@ from .mpn import MPN
 from chemprop.args import TrainArgs
 from chemprop.nn_utils import get_activation_function, initialize_weights
 
+import learn2learn as l2l 
+import pdb
 
 class MoleculeModel(nn.Module):
     """A MoleculeModel is a model which contains a message passing network following by feed-forward layers."""
@@ -132,3 +134,71 @@ class MoleculeModel(nn.Module):
                 output = self.multiclass_softmax(output)  # to get probabilities during evaluation, but not during training as we're using CrossEntropyLoss
 
         return output
+
+class ANILMoleculeModel(nn.Module):
+    """ Wrapper class just used for setting up separation of featurizer and classifier in the molecule model """
+
+    def __init__(self, molecule_model: MoleculeModel, fast_lr = None, classifier = None):
+        """
+        Inits the ANIL model by storing the gnn featurizer and classifier separately and MAML wrapping the head
+        :param molecule_model: MoleculeModel
+        :param fast_lr: adaptation learning rage
+        """
+        super(ANILMoleculeModel, self).__init__()
+
+        if fast_lr and classifier:
+            raise ValueError("There can only be one of fast lr and classifier, as the classifier, if passed in, is pre loaded with a fast lr")
+        if not fast_lr and not classifier:
+            raise ValueError("At least one of fast lr and classifier must be passed into the ANIL constructor")
+
+        self.molecule_model = molecule_model
+        self.gnn_featurizer = molecule_model.encoder
+
+        # Just wrap the classifier with the MAML wrapper
+        if classifier:
+            self.classifier = classifier
+        else:
+            self.classifier = l2l.algorithms.MAML(molecule_model.ffn, lr=fast_lr)
+
+    def clone(self):
+        """
+        Return a new ANILMoleculeModel object that creates a clone of the classifier, but points to the original molecule model, 
+        so that the featurizer is not cloned.
+        """
+        return ANILMoleculeModel(molecule_model=self.molecule_model, classifier = self.classifier.clone())
+
+    def adapt(self, loss, first_order=False):
+        """
+        Simply call the underlying MAML-wrapped head's adapt method for fast adaptation
+        """
+        self.classifier.adapt(loss, first_order=first_order)
+
+    def parameters(self):
+        """
+        Wrapper which returns the parameters of the maml wrapped classifier and the gnn featurizer
+        """
+        all_parameters = list(self.classifier.parameters()) + list(self.gnn_featurizer.parameters())
+        return all_parameters
+
+    def forward(self, *input):
+        """
+        Run the ANIL-wrapped molecule model on input
+        :param input: Molecular input.
+        :return: The output of the MoleculeModel. Either property predictions
+                 or molecule features if self.featurizer is True.
+        """
+
+        if self.molecule_model.featurizer:
+            return self.molecule_model.featurize(*input)
+
+        output = self.classifier(self.gnn_featurizer(*input))
+
+        # Don't apply sigmoid during training b/c using BCEWithLogitsLoss
+        if self.molecule_model.classification and not self.training:
+            output = self.molecule_model.sigmoid(output)
+        if self.molecule_model.multiclass:
+            output = output.reshape((output.size(0), -1, self.num_classes))  # batch size x num targets x num classes per target
+            if not self.training:
+                output = self.multiclass_softmax(output)  # to get probabilities during evaluation, but not during training as we're using CrossEntropyLoss
+
+        return output 

@@ -18,7 +18,7 @@ from .meta_train import meta_train
 from chemprop.args import TrainArgs
 from chemprop.data import StandardScaler, MoleculeDataLoader, create_meta_data_loader
 from chemprop.data.utils import get_class_sizes, get_data, get_task_names, split_data
-from chemprop.models import MoleculeModel
+from chemprop.models import MoleculeModel, ANILMoleculeModel
 from chemprop.nn_utils import param_count
 from chemprop.utils import build_optimizer, build_lr_scheduler, get_loss_func, get_metric_func, load_checkpoint,\
     makedirs, save_checkpoint, save_smiles_splits
@@ -121,7 +121,7 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
         print("Running in dummy mode")
         task_indices = list(range(len(args.task_names)))
         # np.random.shuffle(task_indices)
-        train_task_split, val_task_split, test_task_split = 0.005, 1, 1 # just use a fraction of the train tasks, but all val and test tasks
+        train_task_split, val_task_split, test_task_split = 0.005, .1, .1 # just use a fraction of all the tasks
         # train_task_cutoff = int(len(T_tr) * train_task_split)
         # val_task_cutoff = train_task_cutoff + int(len(task_indices)*val_task_split)
         # test_task_cutoff = val_task_cutoff + int(len(task_indices) * test_task_split)
@@ -225,7 +225,10 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
             model = MoleculeModel(args)
 
         # Keep it simple, we are using fixed outer and inner loop LRs and ADAM optimizer. 
-        maml_model = l2l.algorithms.MAML(model, lr=args.inner_loop_lr, first_order=args.FO_MAML, allow_nograd=True)
+        if args.ANIL:
+            maml_model = ANILMoleculeModel(model, fast_lr=args.inner_loop_lr)
+        else:
+            maml_model = l2l.algorithms.MAML(model, lr=args.inner_loop_lr, first_order=args.FO_MAML, allow_nograd=True)
         debug(f'Number of parameters = {param_count(maml_model):,}')
         debug(maml_model)
         if args.cuda:
@@ -234,6 +237,8 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
         if type(maml_model) is l2l.algorithms.MAML:
             wandb.watch(maml_model.module, log='all')
+        elif type(maml_model) is ANILMoleculeModel:
+            wandb.watch(maml_model.molecule_model, log = 'all')
         else:
             raise ValueError("Wandb doesn't know how to watch this type of model")
 
@@ -241,7 +246,10 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
     maml_model = _setup_maml_model(args)
     # Ensure that model is saved in correct location for evaluation if 0 epochs
-    maml_model_name = args.experiment_name + '_maml_model.pt'
+    if args.ANIL:
+        maml_model_name = args.experiment_name + '_anil_model.pt'
+    else:
+        maml_model_name = args.experiment_name + '_maml_model.pt'
     save_checkpoint(os.path.join(save_dir, maml_model_name), maml_model, scaler=scaler, features_scaler=None, args=args)
 
     # Optimizers
@@ -310,7 +318,10 @@ def run_meta_training(args: TrainArgs, logger: Logger = None) -> List[float]:
 
     def _load_maml_model(save_dir, maml_model_name, args):
         model = load_checkpoint(os.path.join(save_dir, maml_model_name), device=args.device, logger=logger)
-        maml_model = l2l.algorithms.MAML(model, lr=args.meta_test_lr, first_order=args.FO_MAML, allow_nograd=True)
+        if args.ANIL:
+            maml_model = ANILMoleculeModel(model, fast_lr=args.meta_test_lr)
+        else:
+            maml_model = l2l.algorithms.MAML(model, lr=args.meta_test_lr, first_order=args.FO_MAML, allow_nograd=True)
         return maml_model
     
     maml_model = _load_maml_model(save_dir, maml_model_name, args)

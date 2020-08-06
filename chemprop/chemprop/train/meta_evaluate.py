@@ -114,11 +114,14 @@ def meta_evaluate(maml_model,
     return val_task_results, avg_meta_validation_loss
 
 def _train_epoch(learner, task, curr_task_target_idx, loss_func):
+    """
+    This function should only be used at meta test time
+    """
     learner.train()
     task_adaptation_loss = 0.0
     for batch in task.train_data_loader:
         adaptation_loss = predict_on_batch_and_return_loss(learner, batch, curr_task_target_idx, loss_func)
-        # first order=True prevents the computational graph from being retained, c.f. https://github.com/learnables/learn2learn/issues/154
+        # first order=True prevents the computational graph from being retained, c.f. https://github.com/learnables/learn2learn/issues/154, to save memory as we were OOM'ing at meta test time
         # import pdb; pdb.set_trace() # Check that this still adapts the model weights as we would expect
         learner.adapt(adaptation_loss, first_order=True) 
         batch_avg_loss = adaptation_loss.item()

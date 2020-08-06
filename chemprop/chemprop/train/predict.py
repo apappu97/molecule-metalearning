@@ -23,7 +23,7 @@ def predict(model: nn.Module,
     :return: A list of lists of predictions. The outer list is examples
     while the inner list is tasks.
     """
-    if return_targets and not task_idx:
+    if return_targets and task_idx is None:
         raise ValueError("If targets are desired must pass in task index")
     model.eval()
 
