@@ -172,8 +172,8 @@ class TrainArgs(CommonArgs):
     meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
     meta_learning: bool = False # Whether the model is meta learning
     inner_loop_lr: float = 0.05 # Inner loop learning rate during fast adaptation
-    outer_loop_lr: float = 3e-3 # Outer loop learning rate
-    meta_test_lr: float = 1e-3
+    outer_loop_lr: float = 1.5e-3 # Outer loop learning rate
+    meta_test_lr: float = 1e-4
     loss_queue_window: int = 500 # Size of window to average meta loss over
     meta_test_epochs: int = 30 # Number of epochs to use for each task during meta testing, i.e. epochs of training and validation within each meta test task
     FO_MAML: bool = False # Whether to do First Order MAML
