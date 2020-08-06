@@ -11,7 +11,7 @@ if __name__ == '__main__':
     args = TrainArgs().parse_args()
     print("Setting args.meta_learning to True as we are meta learning")
     args.meta_learning = True
-    wandb.init(name=args.experiment_name)
+    wandb.init(project='molecule-metalearning', name=args.experiment_name)
     setup_wandb(args)
     start_time = time.time()
     logger = create_logger(name='train', save_dir=args.save_dir, quiet=args.quiet)

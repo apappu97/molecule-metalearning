@@ -312,8 +312,9 @@ class TrainArgs(CommonArgs):
             self.epochs = 0
         
         if self.meta_learning:
-            print('Setting epochs to 150 because we are meta learning, with batch size 32 corresponds to 30k iterations')
-            self.epochs = 150
+            #  each epoch is 20 steps as 600 train tasks / 32 tasks per batch = roughly 20. 20ksteps/20steps per epoch = 1000 epochs. 1000 epochs * 3min/epoch * 1hr/60mins = 50 hours.
+            print('Setting epochs to 1000 because we are meta learning, with batch size 32 tasks, corresponds to 20k iterations')
+            self.epochs = 1000
 
         # Ensure save path exists if meta learning 
         if self.meta_learning and not self.save_dir:
