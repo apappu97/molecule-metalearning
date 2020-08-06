@@ -69,10 +69,10 @@ class CommonArgs(Tap):
     max_data_size: int = None  # Maximum number of data points to load
     num_workers: int = 8   # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
-    # MetaLearning parameters
-    meta_batch_size: int = 32 # Num tasks in meta batches
-    meta_train_split_sizes: Tuple[int, int, int] = (0.8, 0.1, 0.1)
-    meta_test_split_sizes: Tuple[int, int, int] = (0.8, 0, 0.2)
+
+    # Extra parameters
+    results_save_dir: str # where to save results to
+    experiment_name: str # what this experiment should be called for wandb logging purposes
 
     @property
     def device(self) -> torch.device:
@@ -154,7 +154,7 @@ class TrainArgs(CommonArgs):
     activation: Literal['ReLU', 'LeakyReLU', 'PReLU', 'tanh', 'SELU', 'ELU'] = 'ReLU'  # Activation function
     atom_messages: bool = False  # Centers messages on atoms instead of on bonds
     undirected: bool = False  # Undirected edges (always sum the two relevant bond vectors)
-    ffn_hidden_size: int = None  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
+    ffn_hidden_size: int = 400  # Hidden dim for higher-capacity FFN (defaults to hidden_size)
     ffn_num_layers: int = 2  # Number of layers in FFN after MPN encoding
     features_only: bool = False  # Use only the additional features in an FFN, no graph network
     separate_val_features_path: List[str] = None  # Path to file with features for separate val set

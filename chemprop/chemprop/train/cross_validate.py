@@ -7,8 +7,8 @@ import numpy as np
 from .run_training import run_training
 from chemprop.args import TrainArgs
 from chemprop.data.utils import get_task_names
-from chemprop.utils import makedirs
-
+from chemprop.utils import makedirs, save_results
+import wandb
 
 def cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float]:
     """k-fold cross validation"""
@@ -45,6 +45,10 @@ def cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float
     avg_scores = np.nanmean(all_scores, axis=1)  # average score for each model across tasks
     mean_score, std_score = np.nanmean(avg_scores), np.nanstd(avg_scores)
     info(f'Overall test {args.metric} = {mean_score:.6f} +/- {std_score:.6f}')
+    wandb.log({'test_{}_mean'.format(args.metric): mean_score, 'test_{}_std'.format(args.metric): std_score})
+
+    # save results
+    save_results(all_scores, [], task_names, args)
 
     if args.show_individual_scores:
         for task_num, task_name in enumerate(task_names):

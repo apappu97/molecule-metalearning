@@ -17,7 +17,7 @@ from chemprop.args import TrainArgs
 from chemprop.data import StandardScaler, MoleculeDataset
 from chemprop.models import MoleculeModel
 from chemprop.nn_utils import NoamLR
-
+import numpy as np
 
 def makedirs(path: str, isfile: bool = False):
     """
@@ -34,6 +34,28 @@ def makedirs(path: str, isfile: bool = False):
     if path != '':
         os.makedirs(path, exist_ok=True)
 
+def save_results(all_scores, best_epochs, task_names, args):
+    avg_scores = np.nanmean(all_scores, axis=1)
+    mean_score, std_score = np.nanmean(avg_scores), np.nanstd(avg_scores)
+
+    results_dict = {}
+    results_dict['all_scores'] = all_scores
+    results_dict['avg_score'] = mean_score
+    results_dict['std'] = std_score
+    results_dict['best_epochs'] = best_epochs
+
+    for task_num, task_name in enumerate(task_names):
+        results_dict[task_name] = {}
+        results_dict[task_name]['avg_score'] = np.nanmean(all_scores[:, task_num])
+        results_dict[task_name]['std'] = np.nanstd(all_scores[:, task_num])
+
+    # Create results_save_dir if doesn't exist
+    if not os.path.exists(args.results_save_dir):
+        os.makedirs(args.results_save_dir)
+    save_filename = os.getcwd() +'/' + args.results_save_dir + args.experiment_name + ".pickle"
+
+    with open(save_filename, 'wb') as handle:
+        pickle.dump(results_dict, handle)
 
 def save_checkpoint(path: str,
                     model: MoleculeModel,
