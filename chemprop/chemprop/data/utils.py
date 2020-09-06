@@ -164,9 +164,8 @@ def get_data(path: str,
                 continue
 
             targets = [float(row[column]) if row[column] != '' else None for column in target_columns]
-            num_none = sum([1 for x in targets if x is None])
-            if num_none == len(targets):
-                continue # skip examples where all of the target columns are none -- meaningless prediction task
+            if all(x is None for x in targets):
+                continue # irrelevant example
 
             all_smiles.append(smiles)
             all_targets.append(targets)

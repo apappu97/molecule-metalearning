@@ -6,5 +6,6 @@ from .make_predictions import make_predictions
 from .predict import predict
 from .run_training import run_training
 from .run_meta_training import run_meta_training
+from .run_meta_testing import run_meta_testing
 from .train import train
 

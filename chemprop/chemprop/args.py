@@ -129,6 +129,7 @@ class TrainArgs(CommonArgs):
     crossval_index_dir: str = None  # Directory in which to find cross validation index files
     crossval_index_file: str = None  # Indices of files to use as train/val/test. Overrides --num_folds and --seed.
     seed: int = 0  # Random seed to use when splitting data into train/val/test sets. When `num_folds` > 1, the first fold uses this seed and all subsequent folds add 1 to the seed.
+    seeds: List[int] = None # List of seeds, if provided, are used as seeds instead of incrementing the init seed
     pytorch_seed: int = 0  # Seed for PyTorch randomness (e.g. random initial weights)
     metric: Literal['auc', 'prc-auc', 'rmse', 'mae', 'mse', 'r2', 'accuracy', 'cross_entropy'] = None  # Metric to use during evaluation. Defaults to "auc" for classification and "rmse" for regression.
     save_dir: str = None  # Directory where model checkpoints will be saved
@@ -181,6 +182,8 @@ class TrainArgs(CommonArgs):
     kaiming: bool = True # Whether to use Kaiming Uniform initialisation
     results_save_dir: str # Where to save the pickled dictionary of results
     experiment_name: str
+    meta_test: bool = False # Whether to run in meta testing mode, i.e., just finetune on test tasks
+    meta_test_task: str = None # The meta test task to test on if running meta test
 
     def __init__(self, *args, **kwargs) -> None:
         super(TrainArgs, self).__init__(*args, **kwargs)
