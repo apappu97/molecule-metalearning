@@ -21,9 +21,15 @@ def cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[float, float
 
     # Run training on different random seeds for each fold
     all_scores = []
+    if args.seeds and (len(args.seeds) != args.num_folds):
+        raise ValueError("Num seeds provided must match the number of folds required")
+        
     for fold_num in range(args.num_folds):
         info(f'Fold {fold_num}')
-        args.seed = init_seed + fold_num
+        if args.seeds:
+            args.seed = args.seeds[fold_num]
+        else:
+            args.seed = init_seed + fold_num
         args.save_dir = os.path.join(save_dir, f'fold_{fold_num}')
         makedirs(args.save_dir)
         model_scores = run_training(args, logger)

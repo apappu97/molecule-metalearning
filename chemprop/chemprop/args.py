@@ -67,7 +67,7 @@ class CommonArgs(Tap):
     features_path: List[str] = None  # Path(s) to features to use in FNN (instead of features_generator)
     no_features_scaling: bool = False  # Turn off scaling of features
     max_data_size: int = None  # Maximum number of data points to load
-    num_workers: int = 8   # Number of workers for the parallel data loading (0 means sequential)
+    num_workers: int = 0   # Number of workers for the parallel data loading (0 means sequential)
     batch_size: int = 50  # Batch size
 
     # Extra parameters
@@ -136,6 +136,7 @@ class TrainArgs(CommonArgs):
     crossval_index_file: str = None  # Indices of files to use as train/val/test. Overrides --num_folds and --seed.
     seed: int = 0  # Random seed to use when splitting data into train/val/test sets. When `num_folds` > 1, the first fold uses this seed and all subsequent folds add 1 to the seed.
     pytorch_seed: int = 0  # Seed for PyTorch randomness (e.g. random initial weights)
+    seeds: List[int] = None # if pre specified seeds are specified, use these for the folds
     metric: Literal['auc', 'prc-auc', 'rmse', 'mae', 'mse', 'r2', 'accuracy', 'cross_entropy'] = None  # Metric to use during evaluation. Defaults to "auc" for classification and "rmse" for regression.
     save_dir: str = None  # Directory where model checkpoints will be saved
     save_smiles_splits: bool = False  # Save smiles for each train/val/test splits for prediction convenience later
