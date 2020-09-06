@@ -14,6 +14,8 @@ def finetune_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[flo
     """k-fold cross validation"""
     info = logger.info if logger is not None else print
 
+    if args.seeds and (args.num_folds != len(args.seeds)):
+        raise ValueError("Num seeds doesn't match num folds")
     # Initialize relevant variables
     init_seed = args.seed
     save_dir = args.save_dir
@@ -24,7 +26,10 @@ def finetune_cross_validate(args: TrainArgs, logger: Logger = None) -> Tuple[flo
     best_epochs = []
     for fold_num in range(args.num_folds):
         info(f'Fold {fold_num}')
-        args.seed = init_seed + fold_num
+        if args.seeds:
+            args.seed = args.seeds[fold_num]
+        else:
+            args.seed = init_seed + fold_num
         args.save_dir = os.path.join(save_dir, f'fold_{fold_num}')
         makedirs(args.save_dir)
         model_scores, best_epoch = run_finetuning(args, logger) # best VALIDATION scores

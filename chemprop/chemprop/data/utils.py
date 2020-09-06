@@ -174,7 +174,7 @@ def get_data(path: str,
 
             if len(all_smiles) >= max_data_size:
                 break
-
+        debug('Number of examples remaining: {}'.format(len(all_targets)))
         data = MoleculeDataset([
             MoleculeDatapoint(
                 smiles=smiles,
