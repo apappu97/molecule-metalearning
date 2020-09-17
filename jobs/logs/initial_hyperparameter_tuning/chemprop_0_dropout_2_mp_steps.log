@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "chemprop/train.py", line 3, in <module>
+    from chemprop.args import TrainArgs
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/__init__.py", line 1, in <module>
+    import chemprop.data
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/data/__init__.py", line 1, in <module>
+    from .data import MoleculeDatapoint, MoleculeDataset, MoleculeDataLoader
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/data/data.py", line 5, in <module>
+    import numpy as np
+  File "/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/__init__.py", line 145, in <module>
+    from . import lib
+  File "/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/lib/__init__.py", line 27, in <module>
+    from .index_tricks import *
+  File "/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/lib/index_tricks.py", line 18, in <module>
+    from numpy.lib.stride_tricks import as_strided
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 674, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 764, in get_code
+  File "<frozen importlib._bootstrap_external>", line 833, in get_data
+KeyboardInterrupt

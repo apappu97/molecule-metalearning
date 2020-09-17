@@ -1,0 +1,1980 @@
+wandb: Tracking run with wandb version 0.9.3
+wandb: Wandb version 0.9.4 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Run data is saved locally in wandb/run-20200807_195247-1bc81qkl
+wandb: Syncing run CHEMBL1909092
+wandb: ⭐️ View project at https://app.wandb.ai/apappu97/molecule-metalearning
+wandb: 🚀 View run at https://app.wandb.ai/apappu97/molecule-metalearning/runs/1bc81qkl
+wandb: Run `wandb off` to turn off syncing.
+
+Fold 0
+Command line
+python /home/apappu/thesis/molecule-metalearning/chemprop/train.py --data_path /home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv --target_columns CHEMBL1909092 --dataset_type classification --metric prc-auc --split_type scaffold_balanced --features_only --features_generator morgan --dropout 0.2 --ffn_hidden_size 400 --num_folds 5 --epochs 30 --num_workers 0 --results_save_dir results/ecfp_single_task_on_test_tasks/ --experiment_name CHEMBL1909092
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': '/home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'CHEMBL1909092',
+ 'features_generator': ['morgan'],
+ 'features_only': True,
+ 'features_path': None,
+ 'features_size': None,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'prc-auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 5,
+ 'num_lrs': 1,
+ 'num_tasks': None,
+ 'num_workers': 0,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/ecfp_single_task_on_test_tasks/',
+ 'save_dir': '/tmp/2323266.1.gpu.q/tmp03gzvx1s/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 0,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'scaffold_balanced',
+ 'target_columns': ['CHEMBL1909092'],
+ 'task_names': None,
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': None,
+ 'undirected': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]488it [00:00, 4876.54it/s]1259it [00:00, 5480.19it/s]2180it [00:00, 6237.06it/s]3148it [00:00, 6981.47it/s]4118it [00:00, 7621.90it/s]5103it [00:00, 8175.31it/s]6096it [00:00, 8632.73it/s]7053it [00:00, 8891.67it/s]8041it [00:00, 9164.81it/s]9048it [00:01, 9416.84it/s]10156it [00:01, 9860.45it/s]11263it [00:01, 10193.15it/s]12363it [00:01, 10421.26it/s]13464it [00:01, 10589.30it/s]14558it [00:01, 10690.76it/s]15655it [00:01, 10770.52it/s]16753it [00:01, 10830.80it/s]17839it [00:01, 10700.52it/s]18948it [00:01, 10811.70it/s]20057it [00:02, 10891.45it/s]21160it [00:02, 10931.90it/s]22262it [00:02, 10956.51it/s]23371it [00:02, 10994.25it/s]24478it [00:02, 11015.55it/s]25585it [00:02, 11030.58it/s]26692it [00:02, 11042.01it/s]27801it [00:02, 11053.53it/s]28909it [00:02, 11058.82it/s]30015it [00:02, 11056.38it/s]31121it [00:03, 11047.32it/s]32226it [00:03, 11038.49it/s]33330it [00:03, 10976.72it/s]34428it [00:03, 10923.80it/s]35521it [00:03, 10894.17it/s]36611it [00:03, 10869.47it/s]37699it [00:03, 10863.64it/s]38786it [00:03, 10856.02it/s]39872it [00:03, 10487.13it/s]40924it [00:03, 10234.91it/s]41995it [00:04, 10371.21it/s]43099it [00:04, 10560.76it/s]44177it [00:04, 10624.11it/s]45275it [00:04, 10728.24it/s]46380it [00:04, 10819.63it/s]47485it [00:04, 10885.87it/s]48588it [00:04, 10926.46it/s]49695it [00:04, 10969.01it/s]50801it [00:04, 10994.96it/s]51904it [00:04, 11004.99it/s]53007it [00:05, 11011.89it/s]54109it [00:05, 10966.59it/s]55206it [00:05, 10923.69it/s]56300it [00:05, 10927.66it/s]57403it [00:05, 10957.92it/s]58503it [00:05, 10968.92it/s]59606it [00:05, 10985.03it/s]60711it [00:05, 11003.85it/s]61815it [00:05, 11014.06it/s]61865it [00:05, 10591.15it/s]
+  0% 0/838 [00:00<?, ?it/s] 21% 174/838 [00:00<00:00, 1735.87it/s] 41% 347/838 [00:00<00:00, 1733.06it/s] 61% 514/838 [00:00<00:00, 1713.27it/s] 77% 648/838 [00:00<00:00, 1579.21it/s] 96% 802/838 [00:00<00:00, 1565.47it/s]100% 838/838 [00:00<00:00, 1576.48it/s]
+  0% 0/838 [00:00<?, ?it/s]100% 838/838 [00:00<00:00, 340485.01it/s]
+Number of tasks = 1
+Splitting data with seed 0
+  0% 0/838 [00:00<?, ?it/s] 65% 543/838 [00:00<00:00, 5407.20it/s]100% 836/838 [00:00<00:00, 4281.19it/s]100% 838/838 [00:00<00:00, 4134.73it/s]
+Total scaffolds = 491 | train scaffolds = 376 | val scaffolds = 53 | test scaffolds = 62
+Label averages per scaffold, in decreasing order of scaffold frequency,capped at 10 scaffolds and 20 labels: [(array([0.07216495]), array([97])), (array([0.]), array([55])), (array([0.]), array([3])), (array([0.]), array([1])), (array([1.]), array([1])), (array([0.]), array([2])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1]))]
+Class sizes
+CHEMBL1909092 0: 97.14%, 1: 2.86%
+Total size = 838 | train size = 670 | val size = 83 | test size = 85
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder()
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=2048, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+Number of parameters = 820,001
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/14 [00:00<?, ?it/s][A
+  7% 1/14 [00:00<00:02,  4.41it/s][A
+ 21% 3/14 [00:00<00:01,  5.70it/s][A
+ 36% 5/14 [00:00<00:01,  7.10it/s][A
+ 50% 7/14 [00:00<00:00,  8.74it/s][A
+ 64% 9/14 [00:00<00:00,  7.84it/s][ALoss = 2.2086e-02, PNorm = 25.9351, GNorm = 9.2746, lr_0 = 4.8077e-04
+
+ 79% 11/14 [00:01<00:00,  9.20it/s][A
+ 93% 13/14 [00:01<00:00, 10.67it/s][A100% 14/14 [00:01<00:00, 12.20it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 19.97it/s]
+Validation prc-auc = 0.026316
+  3% 1/30 [00:01<00:37,  1.29s/it]Epoch 1
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.4044e-03, PNorm = 26.2030, GNorm = 3.4417, lr_0 = 8.6154e-04
+
+ 64% 9/14 [00:00<00:00, 89.84it/s][A100% 14/14 [00:00<00:00, 94.86it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 92.60it/s]
+Validation prc-auc = 0.031250
+  7% 2/30 [00:01<00:27,  1.04it/s]Epoch 2
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.0545e-04, PNorm = 26.6132, GNorm = 0.6347, lr_0 = 9.5669e-04
+
+ 57% 8/14 [00:00<00:00, 73.54it/s][ALoss = 5.3328e-04, PNorm = 26.8188, GNorm = 0.7481, lr_0 = 8.9804e-04
+100% 14/14 [00:00<00:00, 79.27it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.65it/s]
+Validation prc-auc = 0.033333
+ 10% 3/30 [00:01<00:20,  1.34it/s]Epoch 3
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 86.43it/s][ALoss = 3.7204e-04, PNorm = 26.9058, GNorm = 0.1482, lr_0 = 8.4299e-04
+100% 14/14 [00:00<00:00, 92.18it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.79it/s]
+Validation prc-auc = 0.033333
+ 13% 4/30 [00:01<00:14,  1.75it/s]Epoch 4
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.4384e-04, PNorm = 26.9491, GNorm = 0.0556, lr_0 = 7.8633e-04
+
+ 71% 10/14 [00:00<00:00, 92.44it/s][A100% 14/14 [00:00<00:00, 95.69it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 114.75it/s]
+Validation prc-auc = 0.045455
+ 17% 5/30 [00:02<00:13,  1.92it/s]Epoch 5
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.6532e-05, PNorm = 26.9732, GNorm = 0.0313, lr_0 = 7.3813e-04
+
+ 71% 10/14 [00:00<00:00, 91.38it/s][ALoss = 1.7774e-04, PNorm = 26.9959, GNorm = 0.2370, lr_0 = 6.9288e-04
+Loss = 2.7622e-04, PNorm = 26.9979, GNorm = 0.2263, lr_0 = 6.8851e-04
+100% 14/14 [00:00<00:00, 95.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.82it/s]
+Validation prc-auc = 0.045455
+ 20% 6/30 [00:02<00:09,  2.41it/s]Epoch 6
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.4733e-04, PNorm = 27.0095, GNorm = 0.0657, lr_0 = 6.4631e-04
+
+ 71% 10/14 [00:00<00:00, 93.75it/s][A100% 14/14 [00:00<00:00, 98.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.76it/s]
+Validation prc-auc = 0.041667
+ 23% 7/30 [00:02<00:07,  2.96it/s]Epoch 7
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.7413e-05, PNorm = 27.0195, GNorm = 0.0374, lr_0 = 6.0286e-04
+
+ 71% 10/14 [00:00<00:00, 94.98it/s][A100% 14/14 [00:00<00:00, 98.33it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.85it/s]
+Validation prc-auc = 0.041667
+ 27% 8/30 [00:02<00:06,  3.51it/s]Epoch 8
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.3509e-04, PNorm = 27.0306, GNorm = 0.1155, lr_0 = 5.6591e-04
+
+ 71% 10/14 [00:00<00:00, 93.39it/s][ALoss = 6.8518e-05, PNorm = 27.0428, GNorm = 0.0373, lr_0 = 5.3122e-04
+Loss = 8.6897e-05, PNorm = 27.0439, GNorm = 0.0403, lr_0 = 5.2787e-04
+100% 14/14 [00:00<00:00, 97.13it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.74it/s]
+Validation prc-auc = 0.041667
+ 30% 9/30 [00:02<00:05,  4.03it/s]Epoch 9
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.0813e-04, PNorm = 27.0470, GNorm = 0.0510, lr_0 = 4.9551e-04
+
+ 71% 10/14 [00:00<00:00, 95.30it/s][A100% 14/14 [00:00<00:00, 98.42it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.66it/s]
+Validation prc-auc = 0.041667
+ 33% 10/30 [00:03<00:04,  4.51it/s]Epoch 10
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.8546e-05, PNorm = 27.0526, GNorm = 0.0277, lr_0 = 4.6514e-04
+
+ 71% 10/14 [00:00<00:00, 95.59it/s][A100% 14/14 [00:00<00:00, 98.53it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.98it/s]
+Validation prc-auc = 0.045455
+ 37% 11/30 [00:03<00:03,  4.93it/s]Epoch 11
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.1914e-04, PNorm = 27.0569, GNorm = 0.0171, lr_0 = 4.3387e-04
+
+ 71% 10/14 [00:00<00:00, 93.41it/s][ALoss = 8.5877e-05, PNorm = 27.0619, GNorm = 0.1251, lr_0 = 4.0728e-04
+Loss = 1.1061e-04, PNorm = 27.0624, GNorm = 0.0481, lr_0 = 4.0471e-04
+100% 14/14 [00:00<00:00, 96.79it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.73it/s]
+Validation prc-auc = 0.038462
+ 40% 12/30 [00:03<00:03,  5.24it/s]Epoch 12
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.7099e-05, PNorm = 27.0689, GNorm = 0.0309, lr_0 = 3.7990e-04
+
+ 71% 10/14 [00:00<00:00, 92.15it/s][A100% 14/14 [00:00<00:00, 96.62it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.00it/s]
+Validation prc-auc = 0.038462
+ 43% 13/30 [00:03<00:03,  5.48it/s]Epoch 13
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.2495e-04, PNorm = 27.0754, GNorm = 0.4806, lr_0 = 3.5661e-04
+
+ 71% 10/14 [00:00<00:00, 93.88it/s][A100% 14/14 [00:00<00:00, 98.07it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.68it/s]
+Validation prc-auc = 0.038462
+ 47% 14/30 [00:03<00:02,  5.68it/s]Epoch 14
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.4883e-05, PNorm = 27.0839, GNorm = 0.0296, lr_0 = 3.3264e-04
+
+ 64% 9/14 [00:00<00:00, 85.89it/s][ALoss = 6.7630e-05, PNorm = 27.0900, GNorm = 0.0807, lr_0 = 3.1225e-04
+100% 14/14 [00:00<00:00, 91.89it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.53it/s]
+Validation prc-auc = 0.035714
+ 50% 15/30 [00:03<00:02,  5.74it/s]Epoch 15
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 9.3792e-05, PNorm = 27.0930, GNorm = 0.3887, lr_0 = 2.9311e-04
+
+ 71% 10/14 [00:00<00:00, 92.30it/s][A
+100% 14/14 [00:00<00:00, 54.36it/s][A100% 14/14 [00:00<00:00, 55.41it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.56it/s]
+Validation prc-auc = 0.035714
+ 53% 16/30 [00:04<00:02,  4.92it/s]Epoch 16
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.9133e-05, PNorm = 27.0995, GNorm = 0.0397, lr_0 = 2.7341e-04
+
+ 71% 10/14 [00:00<00:00, 93.02it/s][A100% 14/14 [00:00<00:00, 95.87it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 122.53it/s]
+Validation prc-auc = 0.035714
+ 57% 17/30 [00:04<00:02,  5.21it/s]Epoch 17
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.5381e-05, PNorm = 27.1072, GNorm = 0.0287, lr_0 = 2.5503e-04
+
+ 71% 10/14 [00:00<00:00, 94.24it/s][ALoss = 3.6953e-05, PNorm = 27.1125, GNorm = 0.0431, lr_0 = 2.3940e-04
+100% 14/14 [00:00<00:00, 95.71it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.36it/s]
+Validation prc-auc = 0.033333
+ 60% 18/30 [00:04<00:02,  5.44it/s]Epoch 18
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.6644e-05, PNorm = 27.1164, GNorm = 0.0199, lr_0 = 2.2472e-04
+
+ 71% 10/14 [00:00<00:00, 94.58it/s][A100% 14/14 [00:00<00:00, 98.40it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.24it/s]
+Validation prc-auc = 0.035714
+ 63% 19/30 [00:04<00:01,  5.66it/s]Epoch 19
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.9445e-05, PNorm = 27.1198, GNorm = 0.1845, lr_0 = 2.0962e-04
+
+ 71% 10/14 [00:00<00:00, 97.25it/s][A100% 14/14 [00:00<00:00, 96.99it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.70it/s]
+Validation prc-auc = 0.035714
+ 67% 20/30 [00:04<00:01,  5.80it/s]Epoch 20
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.8819e-05, PNorm = 27.1210, GNorm = 0.0210, lr_0 = 1.9677e-04
+
+ 71% 10/14 [00:00<00:00, 92.37it/s][ALoss = 5.7078e-05, PNorm = 27.1226, GNorm = 0.0217, lr_0 = 1.8471e-04
+100% 14/14 [00:00<00:00, 97.13it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.23it/s]
+Validation prc-auc = 0.038462
+ 70% 21/30 [00:05<00:01,  5.91it/s]Epoch 21
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.1236e-05, PNorm = 27.1250, GNorm = 0.0257, lr_0 = 1.7229e-04
+
+ 71% 10/14 [00:00<00:00, 93.68it/s][A100% 14/14 [00:00<00:00, 98.18it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 124.69it/s]
+Validation prc-auc = 0.038462
+ 73% 22/30 [00:05<00:01,  6.00it/s]Epoch 22
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.2180e-05, PNorm = 27.1275, GNorm = 0.0504, lr_0 = 1.6071e-04
+
+ 71% 10/14 [00:00<00:00, 90.11it/s][A100% 14/14 [00:00<00:00, 92.78it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.11it/s]
+Validation prc-auc = 0.038462
+ 77% 23/30 [00:05<00:01,  5.95it/s]Epoch 23
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.2421e-05, PNorm = 27.1317, GNorm = 0.0202, lr_0 = 1.5086e-04
+
+ 71% 10/14 [00:00<00:00, 90.86it/s][ALoss = 2.9393e-05, PNorm = 27.1357, GNorm = 0.0269, lr_0 = 1.4161e-04
+100% 14/14 [00:00<00:00, 93.20it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 122.23it/s]
+Validation prc-auc = 0.035714
+ 80% 24/30 [00:05<00:01,  5.94it/s]Epoch 24
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.5680e-05, PNorm = 27.1384, GNorm = 0.0407, lr_0 = 1.3209e-04
+
+ 71% 10/14 [00:00<00:00, 95.39it/s][A100% 14/14 [00:00<00:00, 97.33it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.23it/s]
+Validation prc-auc = 0.038462
+ 83% 25/30 [00:05<00:00,  6.01it/s]Epoch 25
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.0155e-05, PNorm = 27.1403, GNorm = 0.0146, lr_0 = 1.2400e-04
+
+ 71% 10/14 [00:00<00:00, 92.93it/s][A100% 14/14 [00:00<00:00, 90.02it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.11it/s]
+Validation prc-auc = 0.038462
+ 87% 26/30 [00:05<00:00,  5.93it/s]Epoch 26
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.0361e-05, PNorm = 27.1429, GNorm = 0.0179, lr_0 = 1.1566e-04
+
+ 71% 10/14 [00:00<00:00, 93.88it/s][ALoss = 4.1803e-05, PNorm = 27.1449, GNorm = 0.0523, lr_0 = 1.0857e-04
+100% 14/14 [00:00<00:00, 96.30it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 122.87it/s]
+Validation prc-auc = 0.038462
+ 90% 27/30 [00:06<00:00,  5.98it/s]Epoch 27
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.3671e-05, PNorm = 27.1475, GNorm = 0.0264, lr_0 = 1.0127e-04
+
+ 64% 9/14 [00:00<00:00, 89.99it/s][A
+100% 14/14 [00:00<00:00, 46.97it/s][A100% 14/14 [00:00<00:00, 43.03it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 123.93it/s]
+Validation prc-auc = 0.038462
+ 93% 28/30 [00:06<00:00,  4.55it/s]Epoch 28
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.2454e-05, PNorm = 27.1491, GNorm = 0.0121, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 94.54it/s][A100% 14/14 [00:00<00:00, 98.20it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.87it/s]
+Validation prc-auc = 0.035714
+ 97% 29/30 [00:06<00:00,  4.95it/s]Epoch 29
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.6953e-05, PNorm = 27.1515, GNorm = 0.0098, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 94.60it/s][ALoss = 2.6919e-05, PNorm = 27.1531, GNorm = 0.0398, lr_0 = 1.0000e-04
+100% 14/14 [00:00<00:00, 97.25it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.31it/s]
+Validation prc-auc = 0.035714
+100% 30/30 [00:06<00:00,  5.27it/s]100% 30/30 [00:06<00:00,  4.49it/s]
+Model 0 best validation prc-auc = 0.045455 on epoch 4
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/2 [00:00<?, ?it/s]100% 2/2 [00:00<00:00, 18.08it/s]100% 2/2 [00:00<00:00, 18.04it/s]
+Model 0 test prc-auc = 0.083333
+Ensemble test prc-auc = 0.083333
+Fold 1
+Command line
+python /home/apappu/thesis/molecule-metalearning/chemprop/train.py --data_path /home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv --target_columns CHEMBL1909092 --dataset_type classification --metric prc-auc --split_type scaffold_balanced --features_only --features_generator morgan --dropout 0.2 --ffn_hidden_size 400 --num_folds 5 --epochs 30 --num_workers 0 --results_save_dir results/ecfp_single_task_on_test_tasks/ --experiment_name CHEMBL1909092
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': '/home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'CHEMBL1909092',
+ 'features_generator': ['morgan'],
+ 'features_only': True,
+ 'features_path': None,
+ 'features_size': 2048,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'prc-auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 5,
+ 'num_lrs': 1,
+ 'num_tasks': 1,
+ 'num_workers': 0,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/ecfp_single_task_on_test_tasks/',
+ 'save_dir': '/tmp/2323266.1.gpu.q/tmp03gzvx1s/fold_1',
+ 'save_smiles_splits': False,
+ 'seed': 1,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'scaffold_balanced',
+ 'target_columns': ['CHEMBL1909092'],
+ 'task_names': ['CHEMBL1909092'],
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': 670,
+ 'undirected': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]465it [00:00, 4645.82it/s]1193it [00:00, 5210.62it/s]2140it [00:00, 6022.42it/s]3055it [00:00, 6709.67it/s]4021it [00:00, 7384.79it/s]4992it [00:00, 7955.86it/s]5949it [00:00, 8379.85it/s]6901it [00:00, 8690.45it/s]7848it [00:00, 8910.39it/s]8833it [00:01, 9170.80it/s]9936it [00:01, 9658.81it/s]11038it [00:01, 10030.36it/s]12137it [00:01, 10299.74it/s]13212it [00:01, 10429.24it/s]14298it [00:01, 10553.07it/s]15378it [00:01, 10623.21it/s]16467it [00:01, 10701.35it/s]17567it [00:01, 10787.68it/s]18670it [00:01, 10859.23it/s]19774it [00:02, 10911.30it/s]20881it [00:02, 10956.51it/s]21978it [00:02, 10699.86it/s]23086it [00:02, 10810.07it/s]24189it [00:02, 10874.53it/s]25292it [00:02, 10918.49it/s]26396it [00:02, 10951.81it/s]27500it [00:02, 10975.71it/s]28599it [00:02, 10978.32it/s]29703it [00:02, 10996.57it/s]30803it [00:03, 10964.48it/s]31900it [00:03, 10948.42it/s]33004it [00:03, 10974.78it/s]34110it [00:03, 10998.44it/s]35216it [00:03, 11016.10it/s]36322it [00:03, 11027.99it/s]37427it [00:03, 11034.50it/s]38539it [00:03, 11057.89it/s]39647it [00:03, 11063.73it/s]40757it [00:03, 11073.61it/s]41865it [00:04, 10975.75it/s]42963it [00:04, 10634.52it/s]44029it [00:04, 10405.42it/s]45073it [00:04, 10291.64it/s]46173it [00:04, 10491.91it/s]47273it [00:04, 10638.33it/s]48371it [00:04, 10736.39it/s]49470it [00:04, 10811.11it/s]50569it [00:04, 10863.56it/s]51668it [00:04, 10899.91it/s]52772it [00:05, 10940.44it/s]53867it [00:05, 10911.00it/s]54959it [00:05, 10899.13it/s]56050it [00:05, 10896.05it/s]57148it [00:05, 10920.91it/s]58255it [00:05, 10962.42it/s]59362it [00:05, 10993.87it/s]60469it [00:05, 11014.27it/s]61577it [00:05, 11032.08it/s]61865it [00:05, 10548.17it/s]
+  0% 0/838 [00:00<?, ?it/s] 10% 84/838 [00:00<00:00, 832.17it/s] 26% 216/838 [00:00<00:00, 935.56it/s] 45% 373/838 [00:00<00:00, 1064.12it/s] 63% 528/838 [00:00<00:00, 1173.61it/s] 78% 652/838 [00:00<00:00, 1192.49it/s] 95% 793/838 [00:00<00:00, 1245.37it/s]100% 838/838 [00:00<00:00, 1300.60it/s]
+  0% 0/838 [00:00<?, ?it/s]100% 838/838 [00:00<00:00, 295985.41it/s]
+Number of tasks = 1
+Splitting data with seed 1
+  0% 0/838 [00:00<?, ?it/s] 59% 492/838 [00:00<00:00, 4910.12it/s] 97% 809/838 [00:00<00:00, 4145.88it/s]100% 838/838 [00:00<00:00, 3777.74it/s]
+Total scaffolds = 491 | train scaffolds = 374 | val scaffolds = 62 | test scaffolds = 55
+Label averages per scaffold, in decreasing order of scaffold frequency,capped at 10 scaffolds and 20 labels: [(array([0.]), array([55])), (array([0.07216495]), array([97])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([3])), (array([0.]), array([1])), (array([0.]), array([1]))]
+Class sizes
+CHEMBL1909092 0: 97.14%, 1: 2.86%
+Total size = 838 | train size = 670 | val size = 83 | test size = 85
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder()
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=2048, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+Number of parameters = 820,001
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.0566e-02, PNorm = 25.9369, GNorm = 8.7587, lr_0 = 4.8077e-04
+
+ 71% 10/14 [00:00<00:00, 94.57it/s][A100% 14/14 [00:00<00:00, 96.06it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.34it/s]
+Warning: Found a task with targets all 0s or all 1s
+/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/train/run_training.py:220: RuntimeWarning: Mean of empty slice
+  avg_val_score = np.nanmean(val_scores)
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+  3% 1/30 [00:00<00:04,  6.07it/s]Epoch 1
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.2588e-03, PNorm = 26.2138, GNorm = 2.8723, lr_0 = 8.6154e-04
+
+ 71% 10/14 [00:00<00:00, 91.84it/s][A100% 14/14 [00:00<00:00, 96.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.94it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+  7% 2/30 [00:00<00:04,  6.07it/s]Epoch 2
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.2277e-04, PNorm = 26.6338, GNorm = 0.7397, lr_0 = 9.5669e-04
+
+ 71% 10/14 [00:00<00:00, 90.95it/s][ALoss = 4.8000e-04, PNorm = 26.8374, GNorm = 0.2083, lr_0 = 8.9804e-04
+100% 14/14 [00:00<00:00, 96.02it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.29it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 10% 3/30 [00:00<00:04,  6.07it/s]Epoch 3
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.8905e-04, PNorm = 26.9346, GNorm = 0.5917, lr_0 = 8.4299e-04
+
+ 71% 10/14 [00:00<00:00, 93.68it/s][A100% 14/14 [00:00<00:00, 97.42it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 120.38it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 13% 4/30 [00:00<00:04,  6.09it/s]Epoch 4
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.9099e-04, PNorm = 26.9823, GNorm = 0.5340, lr_0 = 7.8633e-04
+
+ 71% 10/14 [00:00<00:00, 96.30it/s][A100% 14/14 [00:00<00:00, 97.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.15it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 17% 5/30 [00:00<00:04,  6.11it/s]Epoch 5
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.8895e-04, PNorm = 27.0060, GNorm = 0.6732, lr_0 = 7.3813e-04
+
+ 71% 10/14 [00:00<00:00, 91.62it/s][ALoss = 1.2868e-04, PNorm = 27.0148, GNorm = 0.1031, lr_0 = 6.9288e-04
+Loss = 1.9828e-04, PNorm = 27.0154, GNorm = 0.1247, lr_0 = 6.8851e-04
+100% 14/14 [00:00<00:00, 96.05it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.88it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 20% 6/30 [00:00<00:03,  6.10it/s]Epoch 6
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.9103e-05, PNorm = 27.0228, GNorm = 0.0634, lr_0 = 6.4631e-04
+
+ 71% 10/14 [00:00<00:00, 94.15it/s][A100% 14/14 [00:00<00:00, 97.44it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.30it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 23% 7/30 [00:01<00:03,  6.12it/s]Epoch 7
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.0907e-05, PNorm = 27.0330, GNorm = 0.0249, lr_0 = 6.0286e-04
+
+ 64% 9/14 [00:00<00:00, 34.18it/s][A100% 14/14 [00:00<00:00, 44.86it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.96it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 27% 8/30 [00:01<00:04,  4.67it/s]Epoch 8
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.7021e-05, PNorm = 27.0425, GNorm = 0.0315, lr_0 = 5.6591e-04
+
+ 71% 10/14 [00:00<00:00, 92.59it/s][ALoss = 9.6498e-05, PNorm = 27.0519, GNorm = 0.0537, lr_0 = 5.3122e-04
+Loss = 1.0343e-04, PNorm = 27.0527, GNorm = 0.0595, lr_0 = 5.2787e-04
+100% 14/14 [00:00<00:00, 94.64it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.95it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 30% 9/30 [00:01<00:04,  5.00it/s]Epoch 9
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.9740e-05, PNorm = 27.0602, GNorm = 0.0390, lr_0 = 4.9551e-04
+
+ 71% 10/14 [00:00<00:00, 93.07it/s][A100% 14/14 [00:00<00:00, 96.41it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.40it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 33% 10/30 [00:01<00:03,  5.29it/s]Epoch 10
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.4904e-04, PNorm = 27.0656, GNorm = 0.0328, lr_0 = 4.6514e-04
+
+ 57% 8/14 [00:00<00:00, 78.75it/s][A100% 14/14 [00:00<00:00, 87.93it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.63it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 37% 11/30 [00:01<00:03,  5.38it/s]Epoch 11
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.9045e-05, PNorm = 27.0746, GNorm = 0.1196, lr_0 = 4.3387e-04
+
+ 71% 10/14 [00:00<00:00, 92.64it/s][ALoss = 6.0100e-05, PNorm = 27.0837, GNorm = 0.0397, lr_0 = 4.0728e-04
+Loss = 7.4336e-05, PNorm = 27.0845, GNorm = 0.0272, lr_0 = 4.0471e-04
+100% 14/14 [00:00<00:00, 94.74it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.19it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 40% 12/30 [00:02<00:03,  5.55it/s]Epoch 12
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.8021e-05, PNorm = 27.0928, GNorm = 0.0351, lr_0 = 3.7990e-04
+
+ 71% 10/14 [00:00<00:00, 90.51it/s][A100% 14/14 [00:00<00:00, 95.07it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.57it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 43% 13/30 [00:02<00:02,  5.68it/s]Epoch 13
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.1693e-05, PNorm = 27.1003, GNorm = 0.0322, lr_0 = 3.5661e-04
+
+ 71% 10/14 [00:00<00:00, 93.25it/s][A100% 14/14 [00:00<00:00, 96.13it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.92it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 47% 14/30 [00:02<00:02,  5.78it/s]Epoch 14
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.3714e-05, PNorm = 27.1071, GNorm = 0.0579, lr_0 = 3.3264e-04
+
+ 71% 10/14 [00:00<00:00, 91.19it/s][ALoss = 5.5593e-05, PNorm = 27.1103, GNorm = 0.0381, lr_0 = 3.1225e-04
+100% 14/14 [00:00<00:00, 95.23it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.52it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 50% 15/30 [00:02<00:02,  5.85it/s]Epoch 15
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.0703e-05, PNorm = 27.1145, GNorm = 0.4089, lr_0 = 2.9311e-04
+
+ 71% 10/14 [00:00<00:00, 94.02it/s][A100% 14/14 [00:00<00:00, 96.35it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.68it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 53% 16/30 [00:02<00:02,  5.92it/s]Epoch 16
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.2417e-05, PNorm = 27.1169, GNorm = 0.1022, lr_0 = 2.7341e-04
+
+ 71% 10/14 [00:00<00:00, 93.30it/s][A100% 14/14 [00:00<00:00, 95.79it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.50it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 57% 17/30 [00:02<00:02,  5.96it/s]Epoch 17
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.5646e-05, PNorm = 27.1227, GNorm = 0.0397, lr_0 = 2.5503e-04
+
+ 71% 10/14 [00:00<00:00, 92.43it/s][ALoss = 5.7200e-05, PNorm = 27.1281, GNorm = 0.0371, lr_0 = 2.3940e-04
+100% 14/14 [00:00<00:00, 95.23it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.61it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 60% 18/30 [00:03<00:02,  5.97it/s]Epoch 18
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.4049e-05, PNorm = 27.1324, GNorm = 0.0411, lr_0 = 2.2472e-04
+
+ 71% 10/14 [00:00<00:00, 94.26it/s][A100% 14/14 [00:00<00:00, 96.27it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.71it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 63% 19/30 [00:03<00:01,  6.01it/s]Epoch 19
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.1762e-05, PNorm = 27.1360, GNorm = 0.0232, lr_0 = 2.0962e-04
+
+ 71% 10/14 [00:00<00:00, 91.55it/s][A100% 14/14 [00:00<00:00, 96.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.03it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 67% 20/30 [00:03<00:01,  6.02it/s]Epoch 20
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.1278e-05, PNorm = 27.1394, GNorm = 0.0391, lr_0 = 1.9677e-04
+
+ 71% 10/14 [00:00<00:00, 91.58it/s][ALoss = 4.7641e-05, PNorm = 27.1436, GNorm = 0.0253, lr_0 = 1.8471e-04
+
+ 93% 13/14 [00:00<00:00, 44.71it/s][A100% 14/14 [00:00<00:00, 53.41it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.97it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 70% 21/30 [00:03<00:01,  4.98it/s]Epoch 21
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.8074e-05, PNorm = 27.1481, GNorm = 0.0178, lr_0 = 1.7229e-04
+
+ 64% 9/14 [00:00<00:00, 88.81it/s][A100% 14/14 [00:00<00:00, 88.68it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.89it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 73% 22/30 [00:03<00:01,  5.17it/s]Epoch 22
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.7837e-05, PNorm = 27.1515, GNorm = 0.0593, lr_0 = 1.6071e-04
+
+ 71% 10/14 [00:00<00:00, 92.17it/s][A100% 14/14 [00:00<00:00, 96.06it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.93it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 77% 23/30 [00:04<00:01,  5.41it/s]Epoch 23
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.6251e-05, PNorm = 27.1543, GNorm = 0.0220, lr_0 = 1.5086e-04
+
+ 71% 10/14 [00:00<00:00, 92.39it/s][ALoss = 2.3638e-05, PNorm = 27.1567, GNorm = 0.0195, lr_0 = 1.4161e-04
+100% 14/14 [00:00<00:00, 95.25it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.39it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 80% 24/30 [00:04<00:01,  5.56it/s]Epoch 24
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.4603e-05, PNorm = 27.1591, GNorm = 0.0138, lr_0 = 1.3209e-04
+
+ 71% 10/14 [00:00<00:00, 92.28it/s][A100% 14/14 [00:00<00:00, 96.01it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.24it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 83% 25/30 [00:04<00:00,  5.70it/s]Epoch 25
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.9748e-05, PNorm = 27.1612, GNorm = 0.0135, lr_0 = 1.2400e-04
+
+ 64% 9/14 [00:00<00:00, 89.75it/s][A100% 14/14 [00:00<00:00, 95.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.00it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 87% 26/30 [00:04<00:00,  5.80it/s]Epoch 26
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.9767e-05, PNorm = 27.1621, GNorm = 0.0256, lr_0 = 1.1566e-04
+
+ 71% 10/14 [00:00<00:00, 93.77it/s][ALoss = 4.8779e-05, PNorm = 27.1635, GNorm = 0.0182, lr_0 = 1.0857e-04
+100% 14/14 [00:00<00:00, 95.36it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.14it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 90% 27/30 [00:04<00:00,  5.87it/s]Epoch 27
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.6373e-05, PNorm = 27.1655, GNorm = 0.1478, lr_0 = 1.0127e-04
+
+ 71% 10/14 [00:00<00:00, 91.72it/s][A100% 14/14 [00:00<00:00, 95.89it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.48it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 93% 28/30 [00:04<00:00,  5.92it/s]Epoch 28
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.0965e-05, PNorm = 27.1673, GNorm = 0.0197, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 93.06it/s][A100% 14/14 [00:00<00:00, 96.18it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.22it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 97% 29/30 [00:05<00:00,  5.96it/s]Epoch 29
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.9931e-05, PNorm = 27.1695, GNorm = 0.0198, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 92.72it/s][ALoss = 3.7598e-05, PNorm = 27.1712, GNorm = 0.0112, lr_0 = 1.0000e-04
+100% 14/14 [00:00<00:00, 95.42it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.54it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+100% 30/30 [00:05<00:00,  5.98it/s]100% 30/30 [00:05<00:00,  5.70it/s]
+Model 0 best validation prc-auc = -inf on epoch 0
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/2 [00:00<?, ?it/s]100% 2/2 [00:00<00:00, 113.98it/s]
+Model 0 test prc-auc = 0.015152
+Ensemble test prc-auc = 0.015152
+Fold 2
+Command line
+python /home/apappu/thesis/molecule-metalearning/chemprop/train.py --data_path /home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv --target_columns CHEMBL1909092 --dataset_type classification --metric prc-auc --split_type scaffold_balanced --features_only --features_generator morgan --dropout 0.2 --ffn_hidden_size 400 --num_folds 5 --epochs 30 --num_workers 0 --results_save_dir results/ecfp_single_task_on_test_tasks/ --experiment_name CHEMBL1909092
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': '/home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'CHEMBL1909092',
+ 'features_generator': ['morgan'],
+ 'features_only': True,
+ 'features_path': None,
+ 'features_size': 2048,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'prc-auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 5,
+ 'num_lrs': 1,
+ 'num_tasks': 1,
+ 'num_workers': 0,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/ecfp_single_task_on_test_tasks/',
+ 'save_dir': '/tmp/2323266.1.gpu.q/tmp03gzvx1s/fold_2',
+ 'save_smiles_splits': False,
+ 'seed': 2,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'scaffold_balanced',
+ 'target_columns': ['CHEMBL1909092'],
+ 'task_names': ['CHEMBL1909092'],
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': 670,
+ 'undirected': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]1011it [00:00, 10107.84it/s]2056it [00:00, 10205.46it/s]3050it [00:00, 10124.20it/s]4076it [00:00, 10163.82it/s]5128it [00:00, 10266.06it/s]6189it [00:00, 10365.38it/s]7245it [00:00, 10420.79it/s]8253it [00:00, 10314.08it/s]9310it [00:00, 10389.08it/s]10389it [00:01, 10503.98it/s]11449it [00:01, 10530.33it/s]12511it [00:01, 10557.07it/s]13580it [00:01, 10595.01it/s]14656it [00:01, 10643.88it/s]15728it [00:01, 10664.89it/s]16790it [00:01, 10613.77it/s]17849it [00:01, 10319.64it/s]18915it [00:01, 10417.50it/s]19981it [00:01, 10488.41it/s]21050it [00:02, 10547.82it/s]22131it [00:02, 10623.34it/s]23212it [00:02, 10677.01it/s]24280it [00:02, 10670.26it/s]25348it [00:02, 10657.30it/s]26414it [00:02, 10633.18it/s]27481it [00:02, 10643.46it/s]28546it [00:02, 10641.75it/s]29619it [00:02, 10667.49it/s]30689it [00:02, 10676.46it/s]31761it [00:03, 10686.69it/s]32841it [00:03, 10720.19it/s]33914it [00:03, 10578.17it/s]34992it [00:03, 10635.59it/s]36071it [00:03, 10681.02it/s]37150it [00:03, 10711.61it/s]38230it [00:03, 10737.20it/s]39304it [00:03, 10704.69it/s]40389it [00:03, 10745.77it/s]41470it [00:03, 10764.34it/s]42547it [00:04, 10765.02it/s]43624it [00:04, 10604.95it/s]44700it [00:04, 10650.39it/s]45771it [00:04, 10666.87it/s]46841it [00:04, 10676.24it/s]47910it [00:04, 10677.93it/s]48978it [00:04, 10669.26it/s]50056it [00:04, 10700.82it/s]51127it [00:04, 10658.85it/s]52212it [00:04, 10713.54it/s]53284it [00:05, 10705.87it/s]54355it [00:05, 10676.72it/s]55423it [00:05, 10672.65it/s]56491it [00:05, 10504.57it/s]57557it [00:05, 10550.65it/s]58626it [00:05, 10592.06it/s]59694it [00:05, 10616.42it/s]60764it [00:05, 10640.88it/s]61834it [00:05, 10658.02it/s]61865it [00:05, 10599.61it/s]
+  0% 0/838 [00:00<?, ?it/s] 21% 172/838 [00:00<00:00, 1719.97it/s] 41% 344/838 [00:00<00:00, 1717.70it/s] 61% 511/838 [00:00<00:00, 1702.16it/s] 79% 665/838 [00:00<00:00, 1649.79it/s] 97% 811/838 [00:00<00:00, 1584.57it/s]100% 838/838 [00:00<00:00, 1604.45it/s]
+  0% 0/838 [00:00<?, ?it/s]100% 838/838 [00:00<00:00, 321664.39it/s]
+Number of tasks = 1
+Splitting data with seed 2
+  0% 0/838 [00:00<?, ?it/s] 65% 546/838 [00:00<00:00, 5451.71it/s]100% 836/838 [00:00<00:00, 4294.13it/s]100% 838/838 [00:00<00:00, 4154.66it/s]
+Total scaffolds = 491 | train scaffolds = 357 | val scaffolds = 71 | test scaffolds = 63
+Label averages per scaffold, in decreasing order of scaffold frequency,capped at 10 scaffolds and 20 labels: [(array([0.]), array([55])), (array([0.07216495]), array([97])), (array([0.]), array([1])), (array([0.]), array([4])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([4])), (array([1.]), array([1])), (array([0.]), array([1])), (array([0.]), array([6]))]
+Class sizes
+CHEMBL1909092 0: 97.14%, 1: 2.86%
+Total size = 838 | train size = 670 | val size = 83 | test size = 85
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder()
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=2048, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+Number of parameters = 820,001
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 82.68it/s][ALoss = 2.0929e-02, PNorm = 25.9345, GNorm = 6.9444, lr_0 = 4.8077e-04
+100% 14/14 [00:00<00:00, 87.41it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.07it/s]
+Validation prc-auc = 0.115036
+  3% 1/30 [00:00<00:06,  4.65it/s]Epoch 1
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.6864e-03, PNorm = 26.2094, GNorm = 1.9029, lr_0 = 8.6154e-04
+
+ 71% 10/14 [00:00<00:00, 92.94it/s][A100% 14/14 [00:00<00:00, 97.68it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 129.43it/s]
+Validation prc-auc = 0.176190
+  7% 2/30 [00:00<00:05,  4.77it/s]Epoch 2
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 9.0822e-04, PNorm = 26.6231, GNorm = 1.0077, lr_0 = 9.5669e-04
+
+ 36% 5/14 [00:00<00:00, 19.49it/s][ALoss = 7.7248e-04, PNorm = 26.8289, GNorm = 0.3835, lr_0 = 8.9804e-04
+100% 14/14 [00:00<00:00, 40.49it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.03it/s]
+Validation prc-auc = 0.223214
+ 10% 3/30 [00:00<00:07,  3.75it/s]Epoch 3
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.4581e-04, PNorm = 26.9275, GNorm = 0.1210, lr_0 = 8.4299e-04
+
+ 71% 10/14 [00:00<00:00, 93.70it/s][A100% 14/14 [00:00<00:00, 96.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 127.29it/s]
+Validation prc-auc = 0.211806
+ 13% 4/30 [00:00<00:06,  4.25it/s]Epoch 4
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 9.4332e-05, PNorm = 26.9779, GNorm = 0.0483, lr_0 = 7.8633e-04
+
+ 71% 10/14 [00:00<00:00, 93.23it/s][A100% 14/14 [00:00<00:00, 97.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.35it/s]
+Validation prc-auc = 0.202778
+ 17% 5/30 [00:01<00:05,  4.68it/s]Epoch 5
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.5433e-04, PNorm = 27.0050, GNorm = 0.4960, lr_0 = 7.3813e-04
+
+ 71% 10/14 [00:00<00:00, 92.84it/s][ALoss = 1.2185e-04, PNorm = 27.0307, GNorm = 0.2556, lr_0 = 6.9288e-04
+Loss = 5.3903e-05, PNorm = 27.0322, GNorm = 0.0245, lr_0 = 6.8851e-04
+100% 14/14 [00:00<00:00, 94.29it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.46it/s]
+Validation prc-auc = 0.202778
+ 20% 6/30 [00:01<00:04,  5.01it/s]Epoch 6
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 88.22it/s][ALoss = 1.1505e-04, PNorm = 27.0408, GNorm = 0.1415, lr_0 = 6.4631e-04
+100% 14/14 [00:00<00:00, 94.02it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.56it/s]
+Validation prc-auc = 0.223214
+ 23% 7/30 [00:01<00:04,  5.26it/s]Epoch 7
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.4595e-05, PNorm = 27.0485, GNorm = 0.0352, lr_0 = 6.0286e-04
+
+ 71% 10/14 [00:00<00:00, 94.08it/s][A100% 14/14 [00:00<00:00, 96.81it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.45it/s]
+Validation prc-auc = 0.223214
+ 27% 8/30 [00:01<00:04,  5.50it/s]Epoch 8
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 9.1266e-05, PNorm = 27.0569, GNorm = 0.0254, lr_0 = 5.6591e-04
+
+ 71% 10/14 [00:00<00:00, 92.45it/s][ALoss = 9.0777e-05, PNorm = 27.0685, GNorm = 0.0700, lr_0 = 5.3122e-04
+Loss = 8.9880e-05, PNorm = 27.0695, GNorm = 0.0436, lr_0 = 5.2787e-04
+100% 14/14 [00:00<00:00, 92.05it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.75it/s]
+Validation prc-auc = 0.238095
+ 30% 9/30 [00:01<00:03,  5.28it/s]Epoch 9
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.5972e-05, PNorm = 27.0778, GNorm = 0.0428, lr_0 = 4.9551e-04
+
+ 71% 10/14 [00:00<00:00, 92.58it/s][A100% 14/14 [00:00<00:00, 96.90it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.49it/s]
+Validation prc-auc = 0.223214
+ 33% 10/30 [00:02<00:03,  5.52it/s]Epoch 10
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.3565e-05, PNorm = 27.0831, GNorm = 0.6428, lr_0 = 4.6514e-04
+
+ 71% 10/14 [00:00<00:00, 92.72it/s][A100% 14/14 [00:00<00:00, 96.02it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 128.15it/s]
+Validation prc-auc = 0.223214
+ 37% 11/30 [00:02<00:03,  5.68it/s]Epoch 11
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.9480e-05, PNorm = 27.0876, GNorm = 0.0193, lr_0 = 4.3387e-04
+
+ 71% 10/14 [00:00<00:00, 94.91it/s][ALoss = 5.2192e-05, PNorm = 27.0938, GNorm = 0.0778, lr_0 = 4.0728e-04
+Loss = 1.6573e-04, PNorm = 27.0944, GNorm = 0.0920, lr_0 = 4.0471e-04
+100% 14/14 [00:00<00:00, 95.65it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 127.12it/s]
+Validation prc-auc = 0.223214
+ 40% 12/30 [00:02<00:03,  5.79it/s]Epoch 12
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.7639e-05, PNorm = 27.0978, GNorm = 0.1691, lr_0 = 3.7990e-04
+
+ 71% 10/14 [00:00<00:00, 92.30it/s][A100% 14/14 [00:00<00:00, 96.43it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 123.69it/s]
+Validation prc-auc = 0.223214
+ 43% 13/30 [00:02<00:02,  5.88it/s]Epoch 13
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.7141e-04, PNorm = 27.1045, GNorm = 0.2013, lr_0 = 3.5661e-04
+
+ 71% 10/14 [00:00<00:00, 92.10it/s][A100% 14/14 [00:00<00:00, 95.01it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.36it/s]
+Validation prc-auc = 0.223214
+ 47% 14/30 [00:02<00:02,  5.92it/s]Epoch 14
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.6509e-05, PNorm = 27.1080, GNorm = 0.0664, lr_0 = 3.3264e-04
+
+ 71% 10/14 [00:00<00:00, 93.85it/s][ALoss = 3.7241e-05, PNorm = 27.1112, GNorm = 0.1138, lr_0 = 3.1225e-04
+100% 14/14 [00:00<00:00, 96.28it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.71it/s]
+Validation prc-auc = 0.223214
+ 50% 15/30 [00:02<00:02,  5.97it/s]Epoch 15
+
+  0% 0/14 [00:00<?, ?it/s][A
+  7% 1/14 [00:00<00:02,  6.17it/s][ALoss = 1.3083e-04, PNorm = 27.1131, GNorm = 0.0178, lr_0 = 2.9311e-04
+
+ 79% 11/14 [00:00<00:00,  8.58it/s][A100% 14/14 [00:00<00:00, 47.49it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.93it/s]
+Validation prc-auc = 0.223214
+ 53% 16/30 [00:03<00:02,  4.74it/s]Epoch 16
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.0514e-05, PNorm = 27.1140, GNorm = 0.0575, lr_0 = 2.7341e-04
+
+ 71% 10/14 [00:00<00:00, 92.85it/s][A100% 14/14 [00:00<00:00, 97.12it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.99it/s]
+Validation prc-auc = 0.223214
+ 57% 17/30 [00:03<00:02,  5.09it/s]Epoch 17
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.2748e-05, PNorm = 27.1179, GNorm = 0.0184, lr_0 = 2.5503e-04
+
+ 71% 10/14 [00:00<00:00, 94.53it/s][ALoss = 3.4264e-05, PNorm = 27.1220, GNorm = 0.0219, lr_0 = 2.3940e-04
+100% 14/14 [00:00<00:00, 96.28it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.86it/s]
+Validation prc-auc = 0.258333
+ 60% 18/30 [00:03<00:02,  5.06it/s]Epoch 18
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 9.9148e-05, PNorm = 27.1277, GNorm = 0.0190, lr_0 = 2.2472e-04
+
+ 64% 9/14 [00:00<00:00, 89.84it/s][A100% 14/14 [00:00<00:00, 92.18it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.79it/s]
+Validation prc-auc = 0.258333
+ 63% 19/30 [00:03<00:02,  5.27it/s]Epoch 19
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.4447e-05, PNorm = 27.1325, GNorm = 0.0318, lr_0 = 2.0962e-04
+
+ 64% 9/14 [00:00<00:00, 88.91it/s][A100% 14/14 [00:00<00:00, 86.06it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.38it/s]
+Validation prc-auc = 0.258333
+ 67% 20/30 [00:03<00:01,  5.34it/s]Epoch 20
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.7406e-05, PNorm = 27.1376, GNorm = 0.0191, lr_0 = 1.9677e-04
+
+ 71% 10/14 [00:00<00:00, 91.72it/s][ALoss = 4.3544e-05, PNorm = 27.1420, GNorm = 0.0885, lr_0 = 1.8471e-04
+100% 14/14 [00:00<00:00, 95.98it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.93it/s]
+Validation prc-auc = 0.258333
+ 70% 21/30 [00:04<00:01,  5.55it/s]Epoch 21
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.5404e-05, PNorm = 27.1453, GNorm = 0.0159, lr_0 = 1.7229e-04
+
+ 71% 10/14 [00:00<00:00, 93.51it/s][A100% 14/14 [00:00<00:00, 97.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 127.07it/s]
+Validation prc-auc = 0.258333
+ 73% 22/30 [00:04<00:01,  5.71it/s]Epoch 22
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.3237e-05, PNorm = 27.1478, GNorm = 0.0167, lr_0 = 1.6071e-04
+
+ 71% 10/14 [00:00<00:00, 93.98it/s][A100% 14/14 [00:00<00:00, 97.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.76it/s]
+Validation prc-auc = 0.258333
+ 77% 23/30 [00:04<00:01,  5.83it/s]Epoch 23
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.2349e-05, PNorm = 27.1495, GNorm = 0.1301, lr_0 = 1.5086e-04
+
+ 71% 10/14 [00:00<00:00, 93.17it/s][ALoss = 2.9760e-05, PNorm = 27.1520, GNorm = 0.0239, lr_0 = 1.4161e-04
+100% 14/14 [00:00<00:00, 93.82it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.00it/s]
+Validation prc-auc = 0.258333
+ 80% 24/30 [00:04<00:01,  5.87it/s]Epoch 24
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.2451e-05, PNorm = 27.1550, GNorm = 0.0309, lr_0 = 1.3209e-04
+
+ 71% 10/14 [00:00<00:00, 93.42it/s][A100% 14/14 [00:00<00:00, 96.11it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.79it/s]
+Validation prc-auc = 0.258333
+ 83% 25/30 [00:04<00:00,  5.93it/s]Epoch 25
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.6089e-05, PNorm = 27.1574, GNorm = 0.0206, lr_0 = 1.2400e-04
+
+ 71% 10/14 [00:00<00:00, 92.85it/s][A100% 14/14 [00:00<00:00, 96.77it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 127.68it/s]
+Validation prc-auc = 0.258333
+ 87% 26/30 [00:04<00:00,  5.99it/s]Epoch 26
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.1769e-05, PNorm = 27.1594, GNorm = 0.0744, lr_0 = 1.1566e-04
+
+ 71% 10/14 [00:00<00:00, 92.67it/s][ALoss = 5.0885e-05, PNorm = 27.1608, GNorm = 0.0468, lr_0 = 1.0857e-04
+100% 14/14 [00:00<00:00, 95.75it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 126.63it/s]
+Validation prc-auc = 0.258333
+ 90% 27/30 [00:05<00:00,  6.01it/s]Epoch 27
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 36% 5/14 [00:00<00:00, 26.10it/s][ALoss = 3.9938e-05, PNorm = 27.1621, GNorm = 0.0898, lr_0 = 1.0127e-04
+100% 14/14 [00:00<00:00, 48.27it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.32it/s]
+Validation prc-auc = 0.258333
+ 93% 28/30 [00:05<00:00,  4.78it/s]Epoch 28
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.4672e-05, PNorm = 27.1636, GNorm = 0.0225, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 92.69it/s][A100% 14/14 [00:00<00:00, 94.88it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 125.66it/s]
+Validation prc-auc = 0.258333
+ 97% 29/30 [00:05<00:00,  5.09it/s]Epoch 29
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.3729e-05, PNorm = 27.1667, GNorm = 0.0248, lr_0 = 1.0000e-04
+
+ 71% 10/14 [00:00<00:00, 94.49it/s][ALoss = 2.6046e-05, PNorm = 27.1697, GNorm = 0.0167, lr_0 = 1.0000e-04
+100% 14/14 [00:00<00:00, 96.59it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 127.59it/s]
+Validation prc-auc = 0.258333
+100% 30/30 [00:05<00:00,  5.36it/s]100% 30/30 [00:05<00:00,  5.32it/s]
+Model 0 best validation prc-auc = 0.258333 on epoch 17
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/2 [00:00<?, ?it/s]100% 2/2 [00:00<00:00, 100.21it/s]
+Model 0 test prc-auc = 0.200744
+Ensemble test prc-auc = 0.200744
+Fold 3
+Command line
+python /home/apappu/thesis/molecule-metalearning/chemprop/train.py --data_path /home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv --target_columns CHEMBL1909092 --dataset_type classification --metric prc-auc --split_type scaffold_balanced --features_only --features_generator morgan --dropout 0.2 --ffn_hidden_size 400 --num_folds 5 --epochs 30 --num_workers 0 --results_save_dir results/ecfp_single_task_on_test_tasks/ --experiment_name CHEMBL1909092
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': '/home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'CHEMBL1909092',
+ 'features_generator': ['morgan'],
+ 'features_only': True,
+ 'features_path': None,
+ 'features_size': 2048,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'prc-auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 5,
+ 'num_lrs': 1,
+ 'num_tasks': 1,
+ 'num_workers': 0,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/ecfp_single_task_on_test_tasks/',
+ 'save_dir': '/tmp/2323266.1.gpu.q/tmp03gzvx1s/fold_3',
+ 'save_smiles_splits': False,
+ 'seed': 3,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'scaffold_balanced',
+ 'target_columns': ['CHEMBL1909092'],
+ 'task_names': ['CHEMBL1909092'],
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': 670,
+ 'undirected': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]679it [00:00, 6787.89it/s]1640it [00:00, 7443.30it/s]2641it [00:00, 8062.47it/s]3661it [00:00, 8602.85it/s]4703it [00:00, 9077.49it/s]5760it [00:00, 9476.87it/s]6825it [00:00, 9799.58it/s]7903it [00:00, 10072.78it/s]8921it [00:00, 10104.70it/s]10003it [00:01, 10306.93it/s]11036it [00:01, 10311.99it/s]12111it [00:01, 10437.25it/s]13191it [00:01, 10540.81it/s]14267it [00:01, 10605.57it/s]15344it [00:01, 10652.87it/s]16408it [00:01, 10637.30it/s]17479it [00:01, 10657.40it/s]18560it [00:01, 10702.61it/s]19643it [00:01, 10739.48it/s]20728it [00:02, 10771.26it/s]21807it [00:02, 10774.01it/s]22894it [00:02, 10800.21it/s]23979it [00:02, 10813.64it/s]25063it [00:02, 10819.51it/s]26148it [00:02, 10827.45it/s]27231it [00:02, 10780.80it/s]28310it [00:02, 8724.97it/s] 29261it [00:02, 8945.73it/s]30202it [00:02, 8989.27it/s]31133it [00:03, 8868.65it/s]32043it [00:03, 8794.99it/s]32986it [00:03, 8974.76it/s]33946it [00:03, 9151.36it/s]34903it [00:03, 9272.58it/s]35884it [00:03, 9424.78it/s]36940it [00:03, 9737.94it/s]38008it [00:03, 10001.29it/s]39086it [00:03, 10222.73it/s]40165it [00:03, 10384.89it/s]41240it [00:04, 10491.04it/s]42309it [00:04, 10547.28it/s]43386it [00:04, 10611.77it/s]44460it [00:04, 10647.68it/s]45536it [00:04, 10678.95it/s]46605it [00:04, 10655.47it/s]47687it [00:04, 10702.10it/s]48768it [00:04, 10732.72it/s]49842it [00:04, 10714.74it/s]50914it [00:05, 10538.86it/s]51983it [00:05, 10582.78it/s]53059it [00:05, 10634.02it/s]54123it [00:05, 10501.82it/s]55182it [00:05, 10526.50it/s]56239it [00:05, 10537.59it/s]57294it [00:05, 10317.00it/s]58376it [00:05, 10461.99it/s]59460it [00:05, 10571.61it/s]60545it [00:05, 10651.32it/s]61631it [00:06, 10710.25it/s]61865it [00:06, 10241.14it/s]
+  0% 0/838 [00:00<?, ?it/s] 21% 175/838 [00:00<00:00, 1748.64it/s] 42% 352/838 [00:00<00:00, 1754.62it/s] 62% 516/838 [00:00<00:00, 1716.73it/s] 77% 642/838 [00:00<00:00, 1545.85it/s] 95% 793/838 [00:00<00:00, 1531.77it/s]100% 838/838 [00:00<00:00, 1555.14it/s]
+  0% 0/838 [00:00<?, ?it/s]100% 838/838 [00:00<00:00, 302611.00it/s]
+Number of tasks = 1
+Splitting data with seed 3
+  0% 0/838 [00:00<?, ?it/s] 65% 543/838 [00:00<00:00, 5429.32it/s]100% 835/838 [00:00<00:00, 4308.20it/s]100% 838/838 [00:00<00:00, 4126.36it/s]
+Total scaffolds = 491 | train scaffolds = 358 | val scaffolds = 62 | test scaffolds = 71
+Label averages per scaffold, in decreasing order of scaffold frequency,capped at 10 scaffolds and 20 labels: [(array([0.]), array([55])), (array([0.07216495]), array([97])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([3])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([2]))]
+Class sizes
+CHEMBL1909092 0: 97.14%, 1: 2.86%
+Total size = 838 | train size = 670 | val size = 83 | test size = 85
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder()
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=2048, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+Number of parameters = 820,001
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 57% 8/14 [00:00<00:00, 75.55it/s][ALoss = 2.0147e-02, PNorm = 25.9351, GNorm = 6.1057, lr_0 = 4.8077e-04
+100% 14/14 [00:00<00:00, 81.05it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 111.39it/s]
+Validation prc-auc = 0.062500
+  3% 1/30 [00:00<00:06,  4.38it/s]Epoch 1
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.7750e-03, PNorm = 26.2137, GNorm = 2.6673, lr_0 = 8.6154e-04
+
+ 64% 9/14 [00:00<00:00, 83.35it/s][A100% 14/14 [00:00<00:00, 87.99it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 120.34it/s]
+Validation prc-auc = 0.083333
+  7% 2/30 [00:00<00:06,  4.47it/s]Epoch 2
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.5811e-04, PNorm = 26.6437, GNorm = 1.4560, lr_0 = 9.5669e-04
+
+ 64% 9/14 [00:00<00:00, 84.44it/s][ALoss = 9.4629e-04, PNorm = 26.8660, GNorm = 0.1215, lr_0 = 8.9804e-04
+100% 14/14 [00:00<00:00, 87.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.75it/s]
+Validation prc-auc = 0.083333
+ 10% 3/30 [00:00<00:05,  4.76it/s]Epoch 3
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 84.34it/s][ALoss = 2.7077e-04, PNorm = 26.9618, GNorm = 0.4848, lr_0 = 8.4299e-04
+100% 14/14 [00:00<00:00, 88.04it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.66it/s]
+Validation prc-auc = 0.083333
+ 13% 4/30 [00:00<00:05,  4.99it/s]Epoch 4
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.0531e-05, PNorm = 27.0164, GNorm = 0.0922, lr_0 = 7.8633e-04
+
+ 64% 9/14 [00:00<00:00, 85.81it/s][A100% 14/14 [00:00<00:00, 88.17it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.79it/s]
+Validation prc-auc = 0.083333
+ 17% 5/30 [00:00<00:04,  5.17it/s]Epoch 5
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.9329e-04, PNorm = 27.0411, GNorm = 0.0453, lr_0 = 7.3813e-04
+
+ 64% 9/14 [00:00<00:00, 83.19it/s][ALoss = 1.0444e-04, PNorm = 27.0527, GNorm = 0.1249, lr_0 = 6.9288e-04
+Loss = 1.7417e-03, PNorm = 27.0546, GNorm = 1.5522, lr_0 = 6.8851e-04
+100% 14/14 [00:00<00:00, 85.82it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.96it/s]
+Validation prc-auc = 0.083333
+ 20% 6/30 [00:01<00:04,  5.26it/s]Epoch 6
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 82.05it/s][ALoss = 2.1946e-04, PNorm = 27.0653, GNorm = 0.6063, lr_0 = 6.4631e-04
+100% 14/14 [00:00<00:00, 84.40it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.82it/s]
+Validation prc-auc = 0.083333
+ 23% 7/30 [00:01<00:04,  5.30it/s]Epoch 7
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.8735e-05, PNorm = 27.0639, GNorm = 0.0815, lr_0 = 6.0286e-04
+
+ 64% 9/14 [00:00<00:00, 85.09it/s][A100% 14/14 [00:00<00:00, 85.65it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 120.34it/s]
+Validation prc-auc = 0.083333
+ 27% 8/30 [00:01<00:04,  5.36it/s]Epoch 8
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.4457e-05, PNorm = 27.0706, GNorm = 0.1219, lr_0 = 5.6591e-04
+
+ 64% 9/14 [00:00<00:00, 85.12it/s][ALoss = 7.1611e-05, PNorm = 27.0802, GNorm = 0.1389, lr_0 = 5.3122e-04
+Loss = 7.9738e-05, PNorm = 27.0813, GNorm = 0.0346, lr_0 = 5.2787e-04
+100% 14/14 [00:00<00:00, 87.31it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.88it/s]
+Validation prc-auc = 0.083333
+ 30% 9/30 [00:01<00:03,  5.42it/s]Epoch 9
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 83.98it/s][ALoss = 6.8731e-05, PNorm = 27.0929, GNorm = 0.0651, lr_0 = 4.9551e-04
+100% 14/14 [00:00<00:00, 88.19it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 119.61it/s]
+Validation prc-auc = 0.083333
+ 33% 10/30 [00:01<00:03,  5.48it/s]Epoch 10
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 21% 3/14 [00:00<00:00, 11.56it/s][ALoss = 6.8400e-05, PNorm = 27.1021, GNorm = 0.1570, lr_0 = 4.6514e-04
+
+ 86% 12/14 [00:00<00:00, 15.57it/s][A100% 14/14 [00:00<00:00, 36.10it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 115.00it/s]
+Validation prc-auc = 0.083333
+ 37% 11/30 [00:02<00:04,  4.00it/s]Epoch 11
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.3156e-05, PNorm = 27.1109, GNorm = 0.0874, lr_0 = 4.3387e-04
+
+ 64% 9/14 [00:00<00:00, 82.15it/s][ALoss = 5.7477e-05, PNorm = 27.1178, GNorm = 0.1512, lr_0 = 4.0728e-04
+Loss = 7.2891e-05, PNorm = 27.1183, GNorm = 0.0355, lr_0 = 4.0471e-04
+100% 14/14 [00:00<00:00, 85.22it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.80it/s]
+Validation prc-auc = 0.083333
+ 40% 12/30 [00:02<00:04,  4.35it/s]Epoch 12
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 83.49it/s][ALoss = 3.4697e-05, PNorm = 27.1242, GNorm = 0.0200, lr_0 = 3.7990e-04
+100% 14/14 [00:00<00:00, 86.94it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.26it/s]
+Validation prc-auc = 0.083333
+ 43% 13/30 [00:02<00:03,  4.65it/s]Epoch 13
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.4534e-05, PNorm = 27.1328, GNorm = 0.0246, lr_0 = 3.5661e-04
+
+ 64% 9/14 [00:00<00:00, 84.38it/s][A100% 14/14 [00:00<00:00, 86.81it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.88it/s]
+Validation prc-auc = 0.083333
+ 47% 14/30 [00:02<00:03,  4.89it/s]Epoch 14
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.6695e-05, PNorm = 27.1408, GNorm = 0.0192, lr_0 = 3.3264e-04
+
+ 64% 9/14 [00:00<00:00, 83.69it/s][ALoss = 4.7414e-05, PNorm = 27.1441, GNorm = 0.0171, lr_0 = 3.1225e-04
+100% 14/14 [00:00<00:00, 86.27it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.84it/s]
+Validation prc-auc = 0.083333
+ 50% 15/30 [00:03<00:02,  5.06it/s]Epoch 15
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 57% 8/14 [00:00<00:00, 79.60it/s][ALoss = 4.4187e-05, PNorm = 27.1485, GNorm = 0.1109, lr_0 = 2.9311e-04
+100% 14/14 [00:00<00:00, 84.27it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.81it/s]
+Validation prc-auc = 0.083333
+ 53% 16/30 [00:03<00:02,  5.16it/s]Epoch 16
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.6432e-05, PNorm = 27.1535, GNorm = 0.0849, lr_0 = 2.7341e-04
+
+ 64% 9/14 [00:00<00:00, 81.80it/s][A100% 14/14 [00:00<00:00, 86.66it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.78it/s]
+Validation prc-auc = 0.083333
+ 57% 17/30 [00:03<00:02,  5.27it/s]Epoch 17
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.4010e-05, PNorm = 27.1578, GNorm = 0.0130, lr_0 = 2.5503e-04
+
+ 64% 9/14 [00:00<00:00, 84.48it/s][ALoss = 3.1828e-05, PNorm = 27.1620, GNorm = 0.0232, lr_0 = 2.3940e-04
+100% 14/14 [00:00<00:00, 85.11it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.78it/s]
+Validation prc-auc = 0.083333
+ 60% 18/30 [00:03<00:02,  5.32it/s]Epoch 18
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.9024e-05, PNorm = 27.1659, GNorm = 0.0225, lr_0 = 2.2472e-04
+
+ 64% 9/14 [00:00<00:00, 81.14it/s][A100% 14/14 [00:00<00:00, 86.61it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.92it/s]
+Validation prc-auc = 0.083333
+ 63% 19/30 [00:03<00:02,  5.39it/s]Epoch 19
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 7.6577e-05, PNorm = 27.1689, GNorm = 0.0114, lr_0 = 2.0962e-04
+
+ 64% 9/14 [00:00<00:00, 83.56it/s][A100% 14/14 [00:00<00:00, 86.79it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.44it/s]
+Validation prc-auc = 0.083333
+ 67% 20/30 [00:03<00:01,  5.43it/s]Epoch 20
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.2814e-05, PNorm = 27.1717, GNorm = 0.0438, lr_0 = 1.9677e-04
+
+ 64% 9/14 [00:00<00:00, 82.50it/s][ALoss = 3.1428e-05, PNorm = 27.1750, GNorm = 0.0160, lr_0 = 1.8471e-04
+100% 14/14 [00:00<00:00, 86.09it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.79it/s]
+Validation prc-auc = 0.083333
+ 70% 21/30 [00:04<00:01,  5.45it/s]Epoch 21
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.3098e-05, PNorm = 27.1781, GNorm = 0.0206, lr_0 = 1.7229e-04
+
+ 64% 9/14 [00:00<00:00, 83.73it/s][A100% 14/14 [00:00<00:00, 86.76it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.74it/s]
+Validation prc-auc = 0.083333
+ 73% 22/30 [00:04<00:01,  5.48it/s]Epoch 22
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.6278e-04, PNorm = 27.1778, GNorm = 0.0459, lr_0 = 1.6071e-04
+
+ 64% 9/14 [00:00<00:00, 83.44it/s][A100% 14/14 [00:00<00:00, 86.83it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.80it/s]
+Validation prc-auc = 0.083333
+ 77% 23/30 [00:04<00:01,  5.50it/s]Epoch 23
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.1391e-05, PNorm = 27.1775, GNorm = 0.0167, lr_0 = 1.5086e-04
+
+ 43% 6/14 [00:00<00:00, 32.26it/s][ALoss = 4.6950e-05, PNorm = 27.1797, GNorm = 0.0349, lr_0 = 1.4161e-04
+100% 14/14 [00:00<00:00, 50.80it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 116.57it/s]
+Validation prc-auc = 0.083333
+ 80% 24/30 [00:04<00:01,  4.64it/s]Epoch 24
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 6.0324e-05, PNorm = 27.1805, GNorm = 0.0249, lr_0 = 1.3209e-04
+
+ 64% 9/14 [00:00<00:00, 82.73it/s][A100% 14/14 [00:00<00:00, 86.71it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.93it/s]
+Validation prc-auc = 0.083333
+ 83% 25/30 [00:04<00:01,  4.88it/s]Epoch 25
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.3629e-05, PNorm = 27.1821, GNorm = 0.0182, lr_0 = 1.2400e-04
+
+ 64% 9/14 [00:00<00:00, 83.49it/s][A100% 14/14 [00:00<00:00, 81.25it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.14it/s]
+Validation prc-auc = 0.083333
+ 87% 26/30 [00:05<00:00,  4.97it/s]Epoch 26
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.1199e-05, PNorm = 27.1842, GNorm = 0.0485, lr_0 = 1.1566e-04
+
+ 64% 9/14 [00:00<00:00, 84.62it/s][ALoss = 2.4653e-05, PNorm = 27.1858, GNorm = 0.0185, lr_0 = 1.0857e-04
+100% 14/14 [00:00<00:00, 86.03it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.77it/s]
+Validation prc-auc = 0.083333
+ 90% 27/30 [00:05<00:00,  5.12it/s]Epoch 27
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.7534e-05, PNorm = 27.1876, GNorm = 0.0254, lr_0 = 1.0127e-04
+
+ 64% 9/14 [00:00<00:00, 83.85it/s][A100% 14/14 [00:00<00:00, 86.91it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 117.99it/s]
+Validation prc-auc = 0.083333
+ 93% 28/30 [00:05<00:00,  5.23it/s]Epoch 28
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.7655e-05, PNorm = 27.1894, GNorm = 0.1155, lr_0 = 1.0000e-04
+
+ 64% 9/14 [00:00<00:00, 82.36it/s][A100% 14/14 [00:00<00:00, 86.92it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.54it/s]
+Validation prc-auc = 0.083333
+ 97% 29/30 [00:05<00:00,  5.33it/s]Epoch 29
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.3187e-05, PNorm = 27.1899, GNorm = 0.0489, lr_0 = 1.0000e-04
+
+ 64% 9/14 [00:00<00:00, 83.85it/s][ALoss = 3.5416e-05, PNorm = 27.1921, GNorm = 0.0379, lr_0 = 1.0000e-04
+100% 14/14 [00:00<00:00, 86.33it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 118.89it/s]
+Validation prc-auc = 0.083333
+100% 30/30 [00:05<00:00,  5.39it/s]100% 30/30 [00:05<00:00,  5.12it/s]
+Model 0 best validation prc-auc = 0.083333 on epoch 1
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/2 [00:00<?, ?it/s]100% 2/2 [00:00<00:00, 88.15it/s]
+Model 0 test prc-auc = 0.014706
+Ensemble test prc-auc = 0.014706
+Fold 4
+Command line
+python /home/apappu/thesis/molecule-metalearning/chemprop/train.py --data_path /home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv --target_columns CHEMBL1909092 --dataset_type classification --metric prc-auc --split_type scaffold_balanced --features_only --features_generator morgan --dropout 0.2 --ffn_hidden_size 400 --num_folds 5 --epochs 30 --num_workers 0 --results_save_dir results/ecfp_single_task_on_test_tasks/ --experiment_name CHEMBL1909092
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': '/home/apappu/thesis/molecule-metalearning/filtered_chembl/chembl_less_1024_more_128_645_tasks.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'CHEMBL1909092',
+ 'features_generator': ['morgan'],
+ 'features_only': True,
+ 'features_path': None,
+ 'features_size': 2048,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'prc-auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 5,
+ 'num_lrs': 1,
+ 'num_tasks': 1,
+ 'num_workers': 0,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/ecfp_single_task_on_test_tasks/',
+ 'save_dir': '/tmp/2323266.1.gpu.q/tmp03gzvx1s/fold_4',
+ 'save_smiles_splits': False,
+ 'seed': 4,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'scaffold_balanced',
+ 'target_columns': ['CHEMBL1909092'],
+ 'task_names': ['CHEMBL1909092'],
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': 670,
+ 'undirected': False,
+ 'use_input_features': True,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]626it [00:00, 6254.21it/s]1514it [00:00, 6861.67it/s]2529it [00:00, 7600.28it/s]3561it [00:00, 8252.20it/s]4599it [00:00, 8791.98it/s]5662it [00:00, 9272.64it/s]6726it [00:00, 9642.24it/s]7792it [00:00, 9925.83it/s]8772it [00:00, 9887.07it/s]9831it [00:01, 10087.47it/s]10909it [00:01, 10284.86it/s]11980it [00:01, 10407.96it/s]13058it [00:01, 10516.46it/s]14133it [00:01, 10583.24it/s]15204it [00:01, 10620.62it/s]16275it [00:01, 10646.11it/s]17340it [00:01, 10590.51it/s]18420it [00:01, 10652.21it/s]19499it [00:01, 10690.58it/s]20569it [00:02, 10670.06it/s]21637it [00:02, 10656.51it/s]22714it [00:02, 10688.10it/s]23786it [00:02, 10697.58it/s]24864it [00:02, 10719.90it/s]25937it [00:02, 10682.99it/s]27013it [00:02, 10705.21it/s]28088it [00:02, 10716.55it/s]29166it [00:02, 10734.65it/s]30240it [00:02, 10706.99it/s]31311it [00:03, 10703.53it/s]32388it [00:03, 10723.27it/s]33461it [00:03, 10715.72it/s]34536it [00:03, 10723.86it/s]35613it [00:03, 10737.43it/s]36687it [00:03, 10725.71it/s]37760it [00:03, 10681.89it/s]38829it [00:03, 10653.03it/s]39895it [00:03, 10653.22it/s]40961it [00:03, 10637.79it/s]42025it [00:04, 10617.34it/s]43087it [00:04, 10599.38it/s]44147it [00:04, 10552.83it/s]45203it [00:04, 8614.64it/s] 46123it [00:04, 8634.50it/s]47049it [00:04, 8812.99it/s]47960it [00:04, 8766.41it/s]48920it [00:04, 9000.85it/s]49844it [00:04, 9070.41it/s]50794it [00:04, 9192.83it/s]51753it [00:05, 9307.96it/s]52716it [00:05, 9401.82it/s]53704it [00:05, 9538.57it/s]54706it [00:05, 9677.73it/s]55754it [00:05, 9904.48it/s]56809it [00:05, 10088.10it/s]57879it [00:05, 10262.70it/s]58947it [00:05, 10384.05it/s]60015it [00:05, 10468.04it/s]61079it [00:05, 10518.78it/s]61865it [00:06, 10185.39it/s]
+  0% 0/838 [00:00<?, ?it/s] 20% 164/838 [00:00<00:00, 1632.74it/s] 39% 329/838 [00:00<00:00, 1636.06it/s] 58% 486/838 [00:00<00:00, 1613.33it/s] 77% 643/838 [00:00<00:00, 1598.86it/s] 95% 793/838 [00:00<00:00, 1562.04it/s]100% 838/838 [00:00<00:00, 1550.89it/s]
+  0% 0/838 [00:00<?, ?it/s]100% 838/838 [00:00<00:00, 292755.85it/s]
+Number of tasks = 1
+Splitting data with seed 4
+  0% 0/838 [00:00<?, ?it/s] 63% 529/838 [00:00<00:00, 5282.16it/s] 99% 833/838 [00:00<00:00, 4309.11it/s]100% 838/838 [00:00<00:00, 4003.32it/s]
+Total scaffolds = 491 | train scaffolds = 372 | val scaffolds = 59 | test scaffolds = 60
+Label averages per scaffold, in decreasing order of scaffold frequency,capped at 10 scaffolds and 20 labels: [(array([0.]), array([55])), (array([0.07216495]), array([97])), (array([0.]), array([1])), (array([0.]), array([2])), (array([0.]), array([1])), (array([0.]), array([1])), (array([0.]), array([3])), (array([0.]), array([1])), (array([0.]), array([3])), (array([0.]), array([1]))]
+Class sizes
+CHEMBL1909092 0: 97.14%, 1: 2.86%
+Total size = 838 | train size = 670 | val size = 83 | test size = 85
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder()
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=2048, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+Number of parameters = 820,001
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 50% 7/14 [00:00<00:00, 69.70it/s][ALoss = 2.1451e-02, PNorm = 25.9359, GNorm = 8.0409, lr_0 = 4.8077e-04
+100% 14/14 [00:00<00:00, 77.75it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 103.19it/s]
+Warning: Found a task with targets all 0s or all 1s
+/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/train/run_training.py:220: RuntimeWarning: Mean of empty slice
+  avg_val_score = np.nanmean(val_scores)
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+  3% 1/30 [00:00<00:05,  4.97it/s]Epoch 1
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.7337e-03, PNorm = 26.2078, GNorm = 3.2660, lr_0 = 8.6154e-04
+
+ 64% 9/14 [00:00<00:00, 89.49it/s][A100% 14/14 [00:00<00:00, 93.78it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 114.97it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+  7% 2/30 [00:00<00:05,  5.23it/s]Epoch 2
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.0054e-04, PNorm = 26.6262, GNorm = 0.6447, lr_0 = 9.5669e-04
+
+ 71% 10/14 [00:00<00:00, 91.77it/s][ALoss = 6.7225e-04, PNorm = 26.8302, GNorm = 0.1371, lr_0 = 8.9804e-04
+100% 14/14 [00:00<00:00, 92.99it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 114.43it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 10% 3/30 [00:00<00:04,  5.41it/s]Epoch 3
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.0012e-04, PNorm = 26.9195, GNorm = 0.4650, lr_0 = 8.4299e-04
+
+ 71% 10/14 [00:00<00:00, 89.84it/s][A100% 14/14 [00:00<00:00, 93.97it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 114.82it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 13% 4/30 [00:00<00:04,  5.57it/s]Epoch 4
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.2979e-04, PNorm = 26.9669, GNorm = 0.1709, lr_0 = 7.8633e-04
+
+ 64% 9/14 [00:00<00:00, 89.46it/s][A100% 14/14 [00:00<00:00, 93.52it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 114.96it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 17% 5/30 [00:00<00:04,  5.67it/s]Epoch 5
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 14% 2/14 [00:00<00:01,  6.79it/s][ALoss = 2.2782e-04, PNorm = 26.9938, GNorm = 0.1331, lr_0 = 7.3813e-04
+
+ 79% 11/14 [00:00<00:00,  9.37it/s][ALoss = 9.2938e-05, PNorm = 27.0116, GNorm = 0.0566, lr_0 = 6.9288e-04
+Loss = 6.0309e-05, PNorm = 27.0129, GNorm = 0.0298, lr_0 = 6.8851e-04
+100% 14/14 [00:00<00:00, 32.31it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 105.77it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 20% 6/30 [00:01<00:06,  3.85it/s]Epoch 6
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 89.09it/s][ALoss = 1.1285e-04, PNorm = 27.0212, GNorm = 0.0784, lr_0 = 6.4631e-04
+100% 14/14 [00:00<00:00, 91.72it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.89it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 23% 7/30 [00:01<00:05,  4.29it/s]Epoch 7
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.5609e-04, PNorm = 27.0328, GNorm = 0.1093, lr_0 = 6.0286e-04
+
+ 71% 10/14 [00:00<00:00, 89.79it/s][A100% 14/14 [00:00<00:00, 92.13it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.97it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 27% 8/30 [00:01<00:04,  4.66it/s]Epoch 8
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 8.0642e-05, PNorm = 27.0420, GNorm = 0.3149, lr_0 = 5.6591e-04
+
+ 64% 9/14 [00:00<00:00, 87.00it/s][ALoss = 1.1442e-04, PNorm = 27.0510, GNorm = 0.4924, lr_0 = 5.3122e-04
+Loss = 1.1431e-04, PNorm = 27.0514, GNorm = 0.0642, lr_0 = 5.2787e-04
+100% 14/14 [00:00<00:00, 88.11it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.49it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 30% 9/30 [00:01<00:04,  4.91it/s]Epoch 9
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 64% 9/14 [00:00<00:00, 89.99it/s][ALoss = 8.2432e-05, PNorm = 27.0578, GNorm = 0.1663, lr_0 = 4.9551e-04
+100% 14/14 [00:00<00:00, 91.86it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 78.98it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 33% 10/30 [00:02<00:03,  5.09it/s]Epoch 10
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.9573e-05, PNorm = 27.0624, GNorm = 0.0319, lr_0 = 4.6514e-04
+
+ 64% 9/14 [00:00<00:00, 87.65it/s][A100% 14/14 [00:00<00:00, 92.07it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 111.93it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 37% 11/30 [00:02<00:03,  5.30it/s]Epoch 11
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.3813e-04, PNorm = 27.0725, GNorm = 0.0365, lr_0 = 4.3387e-04
+
+ 64% 9/14 [00:00<00:00, 88.34it/s][ALoss = 4.6093e-05, PNorm = 27.0848, GNorm = 0.0754, lr_0 = 4.0728e-04
+Loss = 8.3093e-05, PNorm = 27.0858, GNorm = 0.0336, lr_0 = 4.0471e-04
+100% 14/14 [00:00<00:00, 90.79it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.10it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 40% 12/30 [00:02<00:03,  5.43it/s]Epoch 12
+
+  0% 0/14 [00:00<?, ?it/s][A
+ 43% 6/14 [00:00<00:00, 52.90it/s][ALoss = 4.3055e-05, PNorm = 27.0954, GNorm = 0.0353, lr_0 = 3.7990e-04
+
+ 86% 12/14 [00:00<00:00, 52.95it/s][A100% 14/14 [00:00<00:00, 55.37it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 63.62it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 43% 13/30 [00:02<00:03,  4.66it/s]Epoch 13
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.7371e-05, PNorm = 27.1018, GNorm = 0.0833, lr_0 = 3.5661e-04
+
+ 64% 9/14 [00:00<00:00, 82.04it/s][A100% 14/14 [00:00<00:00, 84.48it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.74it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 47% 14/30 [00:02<00:03,  4.86it/s]Epoch 14
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.6972e-05, PNorm = 27.1084, GNorm = 0.0289, lr_0 = 3.3264e-04
+
+ 64% 9/14 [00:00<00:00, 87.04it/s][ALoss = 4.4416e-05, PNorm = 27.1149, GNorm = 0.0228, lr_0 = 3.1225e-04
+100% 14/14 [00:00<00:00, 90.05it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.12it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 50% 15/30 [00:03<00:02,  5.09it/s]Epoch 15
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.0855e-05, PNorm = 27.1212, GNorm = 0.0557, lr_0 = 2.9311e-04
+
+ 64% 9/14 [00:00<00:00, 88.12it/s][A100% 14/14 [00:00<00:00, 92.48it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.87it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 53% 16/30 [00:03<00:02,  5.30it/s]Epoch 16
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.3692e-05, PNorm = 27.1271, GNorm = 0.0196, lr_0 = 2.7341e-04
+
+ 64% 9/14 [00:00<00:00, 86.58it/s][A100% 14/14 [00:00<00:00, 92.46it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.29it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 57% 17/30 [00:03<00:02,  5.46it/s]Epoch 17
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.5309e-04, PNorm = 27.1308, GNorm = 0.0257, lr_0 = 2.5503e-04
+
+ 71% 10/14 [00:00<00:00, 40.84it/s][ALoss = 3.7912e-05, PNorm = 27.1332, GNorm = 0.0266, lr_0 = 2.3940e-04
+100% 14/14 [00:00<00:00, 48.79it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.41it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 60% 18/30 [00:03<00:02,  4.54it/s]Epoch 18
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.7836e-05, PNorm = 27.1378, GNorm = 0.4044, lr_0 = 2.2472e-04
+
+ 64% 9/14 [00:00<00:00, 89.36it/s][A100% 14/14 [00:00<00:00, 92.23it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.81it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 63% 19/30 [00:03<00:02,  4.87it/s]Epoch 19
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 3.9960e-05, PNorm = 27.1427, GNorm = 0.0319, lr_0 = 2.0962e-04
+
+ 64% 9/14 [00:00<00:00, 89.42it/s][A100% 14/14 [00:00<00:00, 92.48it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.34it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 67% 20/30 [00:04<00:01,  5.13it/s]Epoch 20
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 1.9997e-05, PNorm = 27.1456, GNorm = 0.0196, lr_0 = 1.9677e-04
+
+ 57% 8/14 [00:00<00:00, 76.09it/s][ALoss = 5.9115e-05, PNorm = 27.1468, GNorm = 0.0115, lr_0 = 1.8471e-04
+100% 14/14 [00:00<00:00, 84.18it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.45it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 70% 21/30 [00:04<00:01,  5.21it/s]Epoch 21
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.1850e-05, PNorm = 27.1496, GNorm = 0.0744, lr_0 = 1.7229e-04
+
+ 64% 9/14 [00:00<00:00, 87.37it/s][A100% 14/14 [00:00<00:00, 92.57it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.48it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 73% 22/30 [00:04<00:01,  5.39it/s]Epoch 22
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.0027e-05, PNorm = 27.1526, GNorm = 0.0536, lr_0 = 1.6071e-04
+
+ 64% 9/14 [00:00<00:00, 88.37it/s][A100% 14/14 [00:00<00:00, 92.75it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.34it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 77% 23/30 [00:04<00:01,  5.53it/s]Epoch 23
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.8353e-05, PNorm = 27.1555, GNorm = 0.0656, lr_0 = 1.5086e-04
+
+ 71% 10/14 [00:00<00:00, 91.08it/s][ALoss = 1.5278e-04, PNorm = 27.1576, GNorm = 0.7121, lr_0 = 1.4161e-04
+100% 14/14 [00:00<00:00, 92.00it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.47it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 80% 24/30 [00:04<00:01,  5.62it/s]Epoch 24
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.2635e-05, PNorm = 27.1575, GNorm = 0.0409, lr_0 = 1.3209e-04
+
+ 71% 10/14 [00:00<00:00, 90.99it/s][A100% 14/14 [00:00<00:00, 92.57it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.54it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 83% 25/30 [00:04<00:00,  5.69it/s]Epoch 25
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 5.2271e-05, PNorm = 27.1595, GNorm = 0.1969, lr_0 = 1.2400e-04
+
+ 64% 9/14 [00:00<00:00, 89.10it/s][A100% 14/14 [00:00<00:00, 92.42it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 112.77it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 87% 26/30 [00:05<00:00,  5.74it/s]Epoch 26
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 4.8723e-05, PNorm = 27.1615, GNorm = 0.0746, lr_0 = 1.1566e-04
+
+ 64% 9/14 [00:00<00:00, 87.48it/s][ALoss = 6.8202e-05, PNorm = 27.1638, GNorm = 0.0285, lr_0 = 1.0857e-04
+100% 14/14 [00:00<00:00, 91.85it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.41it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 90% 27/30 [00:05<00:00,  5.77it/s]Epoch 27
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.8337e-05, PNorm = 27.1658, GNorm = 0.0417, lr_0 = 1.0127e-04
+
+ 64% 9/14 [00:00<00:00, 89.02it/s][A100% 14/14 [00:00<00:00, 92.55it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.55it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 93% 28/30 [00:05<00:00,  5.80it/s]Epoch 28
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.2739e-05, PNorm = 27.1679, GNorm = 0.0120, lr_0 = 1.0000e-04
+
+ 64% 9/14 [00:00<00:00, 80.73it/s][A100% 14/14 [00:00<00:00, 84.13it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 103.00it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+ 97% 29/30 [00:05<00:00,  5.63it/s]Epoch 29
+
+  0% 0/14 [00:00<?, ?it/s][ALoss = 2.9920e-05, PNorm = 27.1711, GNorm = 0.0349, lr_0 = 1.0000e-04
+
+ 64% 9/14 [00:00<00:00, 86.40it/s][ALoss = 1.0973e-04, PNorm = 27.1715, GNorm = 0.0447, lr_0 = 1.0000e-04
+100% 14/14 [00:00<00:00, 89.85it/s]
+
+  0% 0/2 [00:00<?, ?it/s][A100% 2/2 [00:00<00:00, 113.99it/s]
+Warning: Found a task with targets all 0s or all 1s
+Validation prc-auc = nan
+WARNING:root:NaN or Inf found in input tensor.
+100% 30/30 [00:05<00:00,  5.66it/s]100% 30/30 [00:05<00:00,  5.22it/s]
+Model 0 best validation prc-auc = -inf on epoch 0
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/2 [00:00<?, ?it/s]100% 2/2 [00:00<00:00, 112.34it/s]
+Model 0 test prc-auc = 0.013881
+Ensemble test prc-auc = 0.013881
+5-fold cross validation
+Seed 0 ==> test prc-auc = 0.083333
+Seed 1 ==> test prc-auc = 0.015152
+Seed 2 ==> test prc-auc = 0.200744
+Seed 3 ==> test prc-auc = 0.014706
+Seed 4 ==> test prc-auc = 0.013881
+Overall test prc-auc = 0.065563 +/- 0.072648
+
+wandb: Waiting for W&B process to finish, PID 10058
+wandb: Program ended successfully.
+wandb: Run summary:
+wandb:               _step 0
+wandb:          _timestamp 1596826436.3349724
+wandb:   test_prc-auc_mean 0.06556306262536912
+wandb:            _runtime 70.46690964698792
+wandb:    test_prc-auc_std 0.07264783799222518
+wandb: Syncing 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: - 0.09MB of 0.09MB uploaded (0.00MB deduped)wandb: \ 0.09MB of 0.09MB uploaded (0.00MB deduped)wandb: | 0.09MB of 0.09MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Synced CHEMBL1909092: https://app.wandb.ai/apappu97/molecule-metalearning/runs/1bc81qkl

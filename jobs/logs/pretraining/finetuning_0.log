@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "chemprop/finetune.py", line 3, in <module>
+    from chemprop.args import TrainArgs
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/__init__.py", line 1, in <module>
+    import chemprop.data
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/data/__init__.py", line 1, in <module>
+    from .data import MoleculeDatapoint, MoleculeDataset, MoleculeDataLoader
+  File "/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/data/data.py", line 5, in <module>
+    import numpy as np
+  File "/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/__init__.py", line 259, in <module>
+    _sanity_check()
+  File "/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/__init__.py", line 249, in _sanity_check
+    if not abs(x.dot(x) - 2.0) < 1e-5:
+KeyboardInterrupt

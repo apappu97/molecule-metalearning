@@ -1,0 +1,3552 @@
+wandb: Tracking run with wandb version 0.9.3
+wandb: Wandb version 0.9.4 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Run data is saved locally in wandb/run-20200808_154151-3r8y4xjv
+wandb: Syncing run less_128_random_split
+wandb: ⭐️ View project at https://app.wandb.ai/apappu97/molecule-metalearning
+wandb: 🚀 View run at https://app.wandb.ai/apappu97/molecule-metalearning/runs/3r8y4xjv
+wandb: Run `wandb off` to turn off syncing.
+
+Fold 0
+Command line
+python chemprop/train.py --data_path filtered_chembl/chembl_less_128_instances.csv --dataset_type classification --split_type random --dropout 0.2 --num_folds 1 --epochs 30 --results_save_dir results/motivational/chemprop/ --experiment_name less_128_random_split
+Args
+{'activation': 'ReLU',
+ 'atom_messages': False,
+ 'batch_size': 50,
+ 'bias': False,
+ 'cache_cutoff': 10000,
+ 'checkpoint_dir': None,
+ 'checkpoint_path': None,
+ 'checkpoint_paths': None,
+ 'chembl_assay_metadata_pickle_path': None,
+ 'class_balance': False,
+ 'config_path': None,
+ 'crossval_index_dir': None,
+ 'crossval_index_file': None,
+ 'crossval_index_sets': None,
+ 'data_path': 'filtered_chembl/chembl_less_128_instances.csv',
+ 'dataset_type': 'classification',
+ 'depth': 3,
+ 'dropout': 0.2,
+ 'ensemble_size': 1,
+ 'epochs': 30,
+ 'experiment_name': 'less_128_random_split',
+ 'features_generator': None,
+ 'features_only': False,
+ 'features_path': None,
+ 'features_size': None,
+ 'ffn_hidden_size': 400,
+ 'ffn_num_layers': 2,
+ 'final_lr': 0.0001,
+ 'folds_file': None,
+ 'gpu': None,
+ 'hidden_size': 300,
+ 'init_lr': 0.0001,
+ 'log_frequency': 10,
+ 'max_data_size': None,
+ 'max_lr': 0.001,
+ 'meta_split_sizes_BF': (10, 10),
+ 'metric': 'auc',
+ 'minimize_score': False,
+ 'multiclass_num_classes': 3,
+ 'no_cuda': False,
+ 'no_features_scaling': False,
+ 'num_folds': 1,
+ 'num_lrs': 1,
+ 'num_tasks': None,
+ 'num_workers': 8,
+ 'pytorch_seed': 0,
+ 'quiet': False,
+ 'results_save_dir': 'results/motivational/chemprop/',
+ 'save_dir': '/tmp/2321739.2.gpu.q/tmpifnlgvf8/fold_0',
+ 'save_smiles_splits': False,
+ 'seed': 0,
+ 'seeds': None,
+ 'separate_test_features_path': None,
+ 'separate_test_path': None,
+ 'separate_val_features_path': None,
+ 'separate_val_path': None,
+ 'show_individual_scores': False,
+ 'smiles_column': None,
+ 'split_sizes': (0.8, 0.1, 0.1),
+ 'split_type': 'random',
+ 'target_columns': None,
+ 'task_names': None,
+ 'test': False,
+ 'test_fold_index': None,
+ 'train_data_size': None,
+ 'undirected': False,
+ 'use_input_features': False,
+ 'val_fold_index': None,
+ 'warmup_epochs': 2.0}
+Loading data
+0it [00:00, ?it/s]587it [00:00, 5587.48it/s]1145it [00:00, 5501.29it/s]1699it [00:00, 5497.54it/s]2256it [00:00, 5474.94it/s]2938it [00:00, 5818.33it/s]3452it [00:00, 5594.95it/s]3952it [00:00, 4455.05it/s]4393it [00:00, 4282.57it/s]5020it [00:00, 4731.62it/s]5537it [00:01, 4331.88it/s]6075it [00:01, 4600.22it/s]6551it [00:01, 3955.18it/s]6974it [00:01, 3474.35it/s]7801it [00:01, 4194.36it/s]8309it [00:01, 4265.06it/s]8935it [00:01, 4715.50it/s]9494it [00:01, 4930.60it/s]9964it [00:02, 4720.73it/s]
+  0% 0/9964 [00:00<?, ?it/s]100% 9964/9964 [00:00<00:00, 643093.05it/s]
+  0% 0/9964 [00:00<?, ?it/s]  4% 407/9964 [00:00<00:02, 3985.58it/s]  7% 715/9964 [00:00<00:02, 3661.49it/s] 10% 1025/9964 [00:00<00:02, 3471.56it/s] 13% 1342/9964 [00:00<00:02, 3303.76it/s] 17% 1669/9964 [00:00<00:02, 3293.20it/s] 22% 2192/9964 [00:00<00:02, 3704.15it/s] 27% 2728/9964 [00:00<00:01, 4081.59it/s] 33% 3261/9964 [00:00<00:01, 4389.04it/s] 37% 3702/9964 [00:00<00:01, 4377.06it/s] 42% 4204/9964 [00:01<00:01, 4551.25it/s] 47% 4721/9964 [00:01<00:01, 4720.66it/s] 52% 5197/9964 [00:01<00:01, 4480.19it/s] 57% 5650/9964 [00:01<00:01, 3712.12it/s] 61% 6047/9964 [00:01<00:01, 3329.72it/s] 66% 6573/9964 [00:01<00:00, 3740.37it/s] 71% 7097/9964 [00:01<00:00, 4089.26it/s] 76% 7620/9964 [00:01<00:00, 4373.91it/s] 82% 8144/9964 [00:01<00:00, 4600.92it/s] 87% 8635/9964 [00:02<00:00, 4689.40it/s] 92% 9121/9964 [00:02<00:00, 4587.92it/s] 96% 9593/9964 [00:02<00:00, 4604.23it/s]100% 9964/9964 [00:02<00:00, 4277.18it/s]
+Number of tasks = 397
+Splitting data with seed 0
+Class sizes
+CHEMBL1002712 0: 27.00%, 1: 73.00%
+CHEMBL1022010 0: 6.90%, 1: 93.10%
+CHEMBL1024480 0: 89.58%, 1: 10.42%
+CHEMBL1026933 0: 40.85%, 1: 59.15%
+CHEMBL1026934 0: 5.61%, 1: 94.39%
+CHEMBL1031359 0: 4.00%, 1: 96.00%
+CHEMBL1034533 0: 17.31%, 1: 82.69%
+CHEMBL1034535 0: 46.15%, 1: 53.85%
+CHEMBL1167052 0: 17.78%, 1: 82.22%
+CHEMBL1169087 0: 77.78%, 1: 22.22%
+CHEMBL1243969 0: 20.17%, 1: 79.83%
+CHEMBL1243971 0: 48.89%, 1: 51.11%
+CHEMBL1243975 0: 51.38%, 1: 48.62%
+CHEMBL1243977 0: 31.19%, 1: 68.81%
+CHEMBL1243978 0: 27.12%, 1: 72.88%
+CHEMBL1613775 0: 40.78%, 1: 59.22%
+CHEMBL1613806 0: 49.11%, 1: 50.89%
+CHEMBL1613812 0: 7.35%, 1: 92.65%
+CHEMBL1613821 0: 13.79%, 1: 86.21%
+CHEMBL1613859 0: 72.94%, 1: 27.06%
+CHEMBL1613893 0: 74.40%, 1: 25.60%
+CHEMBL1613903 0: 56.44%, 1: 43.56%
+CHEMBL1613956 0: 37.82%, 1: 62.18%
+CHEMBL1613980 0: 84.92%, 1: 15.08%
+CHEMBL1613998 0: 15.74%, 1: 84.26%
+CHEMBL1614007 0: 13.33%, 1: 86.67%
+CHEMBL1614008 0: 38.40%, 1: 61.60%
+CHEMBL1614044 0: 23.88%, 1: 76.12%
+CHEMBL1614056 0: 81.19%, 1: 18.81%
+CHEMBL1614070 0: 18.75%, 1: 81.25%
+CHEMBL1614083 0: 94.44%, 1: 5.56%
+CHEMBL1614086 0: 5.94%, 1: 94.06%
+CHEMBL1614117 0: 16.35%, 1: 83.65%
+CHEMBL1614147 0: 7.78%, 1: 92.22%
+CHEMBL1614154 0: 9.52%, 1: 90.48%
+CHEMBL1614177 0: 94.85%, 1: 5.15%
+CHEMBL1614210 0: 60.16%, 1: 39.84%
+CHEMBL1614220 0: 32.80%, 1: 67.20%
+CHEMBL1614225 0: 62.50%, 1: 37.50%
+CHEMBL1614226 0: 81.15%, 1: 18.85%
+CHEMBL1614231 0: 46.96%, 1: 53.04%
+CHEMBL1614265 0: 26.51%, 1: 73.49%
+CHEMBL1614267 0: 29.46%, 1: 70.54%
+CHEMBL1614273 0: 51.97%, 1: 48.03%
+CHEMBL1614283 0: 52.89%, 1: 47.11%
+CHEMBL1614308 0: 50.82%, 1: 49.18%
+CHEMBL1614310 0: 51.81%, 1: 48.19%
+CHEMBL1614321 0: 60.16%, 1: 39.84%
+CHEMBL1614338 0: 15.00%, 1: 85.00%
+CHEMBL1614345 0: 39.50%, 1: 60.50%
+CHEMBL1614355 0: 4.11%, 1: 95.89%
+CHEMBL1614362 0: 19.17%, 1: 80.83%
+CHEMBL1614373 0: 30.84%, 1: 69.16%
+CHEMBL1614376 0: 4.07%, 1: 95.93%
+CHEMBL1614380 0: 78.10%, 1: 21.90%
+CHEMBL1614405 0: 50.94%, 1: 49.06%
+CHEMBL1614408 0: 33.33%, 1: 66.67%
+CHEMBL1614417 0: 27.19%, 1: 72.81%
+CHEMBL1614450 0: 10.32%, 1: 89.68%
+CHEMBL1614462 0: 65.35%, 1: 34.65%
+CHEMBL1614463 0: 49.61%, 1: 50.39%
+CHEMBL1614465 0: 20.00%, 1: 80.00%
+CHEMBL1614478 0: 12.50%, 1: 87.50%
+CHEMBL1614479 0: 8.49%, 1: 91.51%
+CHEMBL1614482 0: 59.82%, 1: 40.18%
+CHEMBL1614486 0: 40.48%, 1: 59.52%
+CHEMBL1614518 0: 45.69%, 1: 54.31%
+CHEMBL1614525 0: 52.00%, 1: 48.00%
+CHEMBL1614539 0: 14.12%, 1: 85.88%
+CHEMBL1670561 0: 15.13%, 1: 84.87%
+CHEMBL1737862 0: 25.69%, 1: 74.31%
+CHEMBL1738092 0: 13.76%, 1: 86.24%
+CHEMBL1738192 0: 83.17%, 1: 16.83%
+CHEMBL1738246 0: 14.52%, 1: 85.48%
+CHEMBL1738313 0: 57.69%, 1: 42.31%
+CHEMBL1738423 0: 76.15%, 1: 23.85%
+CHEMBL1738514 0: 26.73%, 1: 73.27%
+CHEMBL1738619 0: 83.17%, 1: 16.83%
+CHEMBL1738684 0: 13.21%, 1: 86.79%
+CHEMBL1794367 0: 42.52%, 1: 57.48%
+CHEMBL1794400 0: 35.59%, 1: 64.41%
+CHEMBL1794420 0: 54.46%, 1: 45.54%
+CHEMBL1794455 0: 52.48%, 1: 47.52%
+CHEMBL1794498 0: 53.47%, 1: 46.53%
+CHEMBL1804798 0: 71.83%, 1: 28.17%
+CHEMBL1820680 0: 46.81%, 1: 53.19%
+CHEMBL1827362 0: 25.62%, 1: 74.38%
+CHEMBL1963849 0: 21.77%, 1: 78.23%
+CHEMBL1963857 0: 39.45%, 1: 60.55%
+CHEMBL1963899 0: 24.19%, 1: 75.81%
+CHEMBL1964046 0: 36.29%, 1: 63.71%
+CHEMBL1964055 0: 10.00%, 1: 90.00%
+CHEMBL2045986 0: 7.37%, 1: 92.63%
+CHEMBL2091156 0: 19.10%, 1: 80.90%
+CHEMBL2114717 0: 69.29%, 1: 30.71%
+CHEMBL2114718 0: 16.81%, 1: 83.19%
+CHEMBL2114803 0: 22.86%, 1: 77.14%
+CHEMBL2114826 0: 50.79%, 1: 49.21%
+CHEMBL2114883 0: 44.95%, 1: 55.05%
+CHEMBL2114914 0: 20.72%, 1: 79.28%
+CHEMBL2114927 0: 84.11%, 1: 15.89%
+CHEMBL2155446 0: 5.83%, 1: 94.17%
+CHEMBL2303649 0: 68.09%, 1: 31.91%
+CHEMBL2354260 0: 54.63%, 1: 45.37%
+CHEMBL2354307 0: 9.17%, 1: 90.83%
+CHEMBL2363140 0: 68.70%, 1: 31.30%
+CHEMBL2363141 0: 76.19%, 1: 23.81%
+CHEMBL2363142 0: 60.20%, 1: 39.80%
+CHEMBL2363146 0: 67.68%, 1: 32.32%
+CHEMBL2363148 0: 67.68%, 1: 32.32%
+CHEMBL2363152 0: 41.86%, 1: 58.14%
+CHEMBL2363153 0: 34.07%, 1: 65.93%
+CHEMBL2363154 0: 89.66%, 1: 10.34%
+CHEMBL2363160 0: 68.69%, 1: 31.31%
+CHEMBL2363165 0: 64.38%, 1: 35.62%
+CHEMBL2363166 0: 62.50%, 1: 37.50%
+CHEMBL2363167 0: 68.32%, 1: 31.68%
+CHEMBL2363168 0: 59.76%, 1: 40.24%
+CHEMBL2363169 0: 65.48%, 1: 34.52%
+CHEMBL2363171 0: 74.75%, 1: 25.25%
+CHEMBL2363174 0: 55.79%, 1: 44.21%
+CHEMBL2363176 0: 36.67%, 1: 63.33%
+CHEMBL2363178 0: 70.41%, 1: 29.59%
+CHEMBL2363180 0: 72.57%, 1: 27.43%
+CHEMBL2363184 0: 79.79%, 1: 20.21%
+CHEMBL2363185 0: 49.02%, 1: 50.98%
+CHEMBL2363187 0: 62.00%, 1: 38.00%
+CHEMBL2363189 0: 42.57%, 1: 57.43%
+CHEMBL2363197 0: 76.29%, 1: 23.71%
+CHEMBL2363207 0: 67.31%, 1: 32.69%
+CHEMBL2363208 0: 38.24%, 1: 61.76%
+CHEMBL2363210 0: 50.00%, 1: 50.00%
+CHEMBL2363211 0: 60.64%, 1: 39.36%
+CHEMBL2363212 0: 48.57%, 1: 51.43%
+CHEMBL2363213 0: 67.71%, 1: 32.29%
+CHEMBL2363214 0: 50.52%, 1: 49.48%
+CHEMBL2363215 0: 56.00%, 1: 44.00%
+CHEMBL2363216 0: 46.53%, 1: 53.47%
+CHEMBL2363218 0: 48.04%, 1: 51.96%
+CHEMBL2363220 0: 54.21%, 1: 45.79%
+CHEMBL2363221 0: 71.96%, 1: 28.04%
+CHEMBL2363223 0: 57.30%, 1: 42.70%
+CHEMBL2363224 0: 43.00%, 1: 57.00%
+CHEMBL2363225 0: 62.89%, 1: 37.11%
+CHEMBL2363227 0: 67.42%, 1: 32.58%
+CHEMBL2363228 0: 51.22%, 1: 48.78%
+CHEMBL2363230 0: 28.12%, 1: 71.88%
+CHEMBL2363236 0: 69.44%, 1: 30.56%
+CHEMBL2363238 0: 51.92%, 1: 48.08%
+CHEMBL2363239 0: 53.61%, 1: 46.39%
+CHEMBL2363242 0: 49.48%, 1: 50.52%
+CHEMBL2363243 0: 50.00%, 1: 50.00%
+CHEMBL2363245 0: 60.82%, 1: 39.18%
+CHEMBL2363247 0: 58.06%, 1: 41.94%
+CHEMBL2363248 0: 55.56%, 1: 44.44%
+CHEMBL2363252 0: 46.24%, 1: 53.76%
+CHEMBL2363253 0: 46.67%, 1: 53.33%
+CHEMBL2363255 0: 73.20%, 1: 26.80%
+CHEMBL2363263 0: 58.90%, 1: 41.10%
+CHEMBL2363264 0: 58.76%, 1: 41.24%
+CHEMBL2363265 0: 57.47%, 1: 42.53%
+CHEMBL2363268 0: 57.14%, 1: 42.86%
+CHEMBL2363269 0: 58.10%, 1: 41.90%
+CHEMBL2363272 0: 56.73%, 1: 43.27%
+CHEMBL2363273 0: 68.32%, 1: 31.68%
+CHEMBL2363275 0: 56.19%, 1: 43.81%
+CHEMBL2363277 0: 51.06%, 1: 48.94%
+CHEMBL2363278 0: 44.44%, 1: 55.56%
+CHEMBL2363283 0: 43.53%, 1: 56.47%
+CHEMBL2363290 0: 65.05%, 1: 34.95%
+CHEMBL2363294 0: 46.08%, 1: 53.92%
+CHEMBL2363299 0: 46.51%, 1: 53.49%
+CHEMBL2363307 0: 55.17%, 1: 44.83%
+CHEMBL2363313 0: 54.26%, 1: 45.74%
+CHEMBL2363314 0: 65.69%, 1: 34.31%
+CHEMBL2363315 0: 63.89%, 1: 36.11%
+CHEMBL2363317 0: 54.55%, 1: 45.45%
+CHEMBL2363319 0: 70.18%, 1: 29.82%
+CHEMBL2363321 0: 77.89%, 1: 22.11%
+CHEMBL2363322 0: 68.27%, 1: 31.73%
+CHEMBL2363324 0: 67.35%, 1: 32.65%
+CHEMBL2363326 0: 50.94%, 1: 49.06%
+CHEMBL2363327 0: 57.29%, 1: 42.71%
+CHEMBL2363328 0: 71.43%, 1: 28.57%
+CHEMBL2363330 0: 40.91%, 1: 59.09%
+CHEMBL2363332 0: 51.43%, 1: 48.57%
+CHEMBL2363333 0: 51.04%, 1: 48.96%
+CHEMBL2363334 0: 48.21%, 1: 51.79%
+CHEMBL2363335 0: 63.00%, 1: 37.00%
+CHEMBL2363336 0: 63.04%, 1: 36.96%
+CHEMBL2363337 0: 66.99%, 1: 33.01%
+CHEMBL2363338 0: 48.11%, 1: 51.89%
+CHEMBL2363339 0: 55.26%, 1: 44.74%
+CHEMBL2363341 0: 70.75%, 1: 29.25%
+CHEMBL2363343 0: 68.63%, 1: 31.37%
+CHEMBL2363348 0: 66.32%, 1: 33.68%
+CHEMBL2363349 0: 40.59%, 1: 59.41%
+CHEMBL2363351 0: 38.64%, 1: 61.36%
+CHEMBL2363352 0: 59.80%, 1: 40.20%
+CHEMBL2363353 0: 59.41%, 1: 40.59%
+CHEMBL2363363 0: 49.00%, 1: 51.00%
+CHEMBL2363364 0: 71.70%, 1: 28.30%
+CHEMBL2363366 0: 34.00%, 1: 66.00%
+CHEMBL2363367 0: 69.52%, 1: 30.48%
+CHEMBL2363368 0: 38.95%, 1: 61.05%
+CHEMBL2363369 0: 46.94%, 1: 53.06%
+CHEMBL2363370 0: 61.68%, 1: 38.32%
+CHEMBL2363371 0: 66.29%, 1: 33.71%
+CHEMBL2363373 0: 62.75%, 1: 37.25%
+CHEMBL2363374 0: 57.55%, 1: 42.45%
+CHEMBL2363375 0: 50.00%, 1: 50.00%
+CHEMBL2363377 0: 45.00%, 1: 55.00%
+CHEMBL2363383 0: 71.84%, 1: 28.16%
+CHEMBL2363385 0: 52.43%, 1: 47.57%
+CHEMBL2363387 0: 70.54%, 1: 29.46%
+CHEMBL2363388 0: 62.89%, 1: 37.11%
+CHEMBL2363389 0: 55.14%, 1: 44.86%
+CHEMBL2363390 0: 65.74%, 1: 34.26%
+CHEMBL2363391 0: 58.00%, 1: 42.00%
+CHEMBL2363393 0: 63.74%, 1: 36.26%
+CHEMBL2363395 0: 70.65%, 1: 29.35%
+CHEMBL2363397 0: 42.86%, 1: 57.14%
+CHEMBL2363403 0: 55.00%, 1: 45.00%
+CHEMBL2363414 0: 42.11%, 1: 57.89%
+CHEMBL2363420 0: 53.26%, 1: 46.74%
+CHEMBL2363421 0: 83.78%, 1: 16.22%
+CHEMBL2363425 0: 58.59%, 1: 41.41%
+CHEMBL2363426 0: 50.57%, 1: 49.43%
+CHEMBL2363432 0: 40.00%, 1: 60.00%
+CHEMBL2363433 0: 54.37%, 1: 45.63%
+CHEMBL2363434 0: 65.96%, 1: 34.04%
+CHEMBL2363435 0: 60.82%, 1: 39.18%
+CHEMBL2363437 0: 44.57%, 1: 55.43%
+CHEMBL2363438 0: 47.25%, 1: 52.75%
+CHEMBL2363440 0: 60.00%, 1: 40.00%
+CHEMBL2363442 0: 62.92%, 1: 37.08%
+CHEMBL2363443 0: 72.32%, 1: 27.68%
+CHEMBL2363444 0: 24.00%, 1: 76.00%
+CHEMBL2363445 0: 53.68%, 1: 46.32%
+CHEMBL2363446 0: 54.64%, 1: 45.36%
+CHEMBL2363447 0: 62.73%, 1: 37.27%
+CHEMBL2363449 0: 84.47%, 1: 15.53%
+CHEMBL2363452 0: 61.00%, 1: 39.00%
+CHEMBL2363453 0: 67.44%, 1: 32.56%
+CHEMBL2363454 0: 58.00%, 1: 42.00%
+CHEMBL2363457 0: 58.25%, 1: 41.75%
+CHEMBL2363458 0: 65.74%, 1: 34.26%
+CHEMBL2363459 0: 48.15%, 1: 51.85%
+CHEMBL2363464 0: 67.68%, 1: 32.32%
+CHEMBL2363465 0: 69.61%, 1: 30.39%
+CHEMBL2363467 0: 59.52%, 1: 40.48%
+CHEMBL2363468 0: 66.67%, 1: 33.33%
+CHEMBL2363469 0: 52.53%, 1: 47.47%
+CHEMBL2363470 0: 77.48%, 1: 22.52%
+CHEMBL2363477 0: 62.38%, 1: 37.62%
+CHEMBL2363480 0: 52.08%, 1: 47.92%
+CHEMBL2363481 0: 70.71%, 1: 29.29%
+CHEMBL2363489 0: 61.54%, 1: 38.46%
+CHEMBL2363492 0: 85.32%, 1: 14.68%
+CHEMBL2363504 0: 59.80%, 1: 40.20%
+CHEMBL2363507 0: 65.05%, 1: 34.95%
+CHEMBL2363514 0: 75.00%, 1: 25.00%
+CHEMBL2363516 0: 69.16%, 1: 30.84%
+CHEMBL2363529 0: 71.70%, 1: 28.30%
+CHEMBL2363531 0: 63.10%, 1: 36.90%
+CHEMBL2363535 0: 55.10%, 1: 44.90%
+CHEMBL2363541 0: 65.96%, 1: 34.04%
+CHEMBL2363544 0: 60.82%, 1: 39.18%
+CHEMBL2363546 0: 53.85%, 1: 46.15%
+CHEMBL2363549 0: 73.40%, 1: 26.60%
+CHEMBL2363552 0: 68.35%, 1: 31.65%
+CHEMBL2363553 0: 47.42%, 1: 52.58%
+CHEMBL2363555 0: 65.71%, 1: 34.29%
+CHEMBL2363556 0: 52.53%, 1: 47.47%
+CHEMBL2363557 0: 60.75%, 1: 39.25%
+CHEMBL2363558 0: 34.95%, 1: 65.05%
+CHEMBL2363559 0: 56.25%, 1: 43.75%
+CHEMBL2363560 0: 56.57%, 1: 43.43%
+CHEMBL2363561 0: 33.71%, 1: 66.29%
+CHEMBL2363562 0: 48.04%, 1: 51.96%
+CHEMBL2363568 0: 56.67%, 1: 43.33%
+CHEMBL2363569 0: 52.43%, 1: 47.57%
+CHEMBL2363572 0: 66.67%, 1: 33.33%
+CHEMBL2363573 0: 52.34%, 1: 47.66%
+CHEMBL2363575 0: 47.52%, 1: 52.48%
+CHEMBL2363577 0: 54.55%, 1: 45.45%
+CHEMBL2363581 0: 62.11%, 1: 37.89%
+CHEMBL2363592 0: 51.72%, 1: 48.28%
+CHEMBL2363593 0: 34.44%, 1: 65.56%
+CHEMBL2363594 0: 73.63%, 1: 26.37%
+CHEMBL2363599 0: 66.09%, 1: 33.91%
+CHEMBL2363601 0: 48.62%, 1: 51.38%
+CHEMBL2363609 0: 53.76%, 1: 46.24%
+CHEMBL2363611 0: 71.96%, 1: 28.04%
+CHEMBL2363612 0: 35.23%, 1: 64.77%
+CHEMBL2363616 0: 55.14%, 1: 44.86%
+CHEMBL2363618 0: 47.83%, 1: 52.17%
+CHEMBL2363621 0: 58.95%, 1: 41.05%
+CHEMBL2363623 0: 65.05%, 1: 34.95%
+CHEMBL2363628 0: 81.25%, 1: 18.75%
+CHEMBL2363630 0: 50.00%, 1: 50.00%
+CHEMBL2363631 0: 54.26%, 1: 45.74%
+CHEMBL2363633 0: 57.58%, 1: 42.42%
+CHEMBL2363634 0: 49.07%, 1: 50.93%
+CHEMBL2363635 0: 78.50%, 1: 21.50%
+CHEMBL2363639 0: 53.77%, 1: 46.23%
+CHEMBL2363642 0: 56.18%, 1: 43.82%
+CHEMBL2363644 0: 75.76%, 1: 24.24%
+CHEMBL2363645 0: 63.21%, 1: 36.79%
+CHEMBL2363655 0: 55.66%, 1: 44.34%
+CHEMBL2363656 0: 74.04%, 1: 25.96%
+CHEMBL2363657 0: 39.78%, 1: 60.22%
+CHEMBL2363659 0: 53.76%, 1: 46.24%
+CHEMBL2363660 0: 53.40%, 1: 46.60%
+CHEMBL2363664 0: 60.58%, 1: 39.42%
+CHEMBL2363671 0: 60.22%, 1: 39.78%
+CHEMBL2363688 0: 79.82%, 1: 20.18%
+CHEMBL2363692 0: 53.64%, 1: 46.36%
+CHEMBL2363695 0: 46.73%, 1: 53.27%
+CHEMBL2363696 0: 55.67%, 1: 44.33%
+CHEMBL2363697 0: 37.93%, 1: 62.07%
+CHEMBL2363707 0: 54.26%, 1: 45.74%
+CHEMBL2363713 0: 30.85%, 1: 69.15%
+CHEMBL2363716 0: 51.55%, 1: 48.45%
+CHEMBL2363719 0: 41.00%, 1: 59.00%
+CHEMBL2363723 0: 64.10%, 1: 35.90%
+CHEMBL2363725 0: 46.15%, 1: 53.85%
+CHEMBL2363727 0: 52.63%, 1: 47.37%
+CHEMBL2363728 0: 45.71%, 1: 54.29%
+CHEMBL2363731 0: 67.96%, 1: 32.04%
+CHEMBL2363734 0: 52.87%, 1: 47.13%
+CHEMBL2363737 0: 42.86%, 1: 57.14%
+CHEMBL2363739 0: 37.08%, 1: 62.92%
+CHEMBL2363740 0: 70.19%, 1: 29.81%
+CHEMBL2363743 0: 55.77%, 1: 44.23%
+CHEMBL2363747 0: 41.67%, 1: 58.33%
+CHEMBL2363748 0: 67.01%, 1: 32.99%
+CHEMBL2363749 0: 48.45%, 1: 51.55%
+CHEMBL2363753 0: 47.47%, 1: 52.53%
+CHEMBL2363764 0: 73.21%, 1: 26.79%
+CHEMBL2363766 0: 32.67%, 1: 67.33%
+CHEMBL2363767 0: 55.79%, 1: 44.21%
+CHEMBL2363771 0: 60.19%, 1: 39.81%
+CHEMBL2363774 0: 76.92%, 1: 23.08%
+CHEMBL2363788 0: 53.61%, 1: 46.39%
+CHEMBL2363789 0: 51.96%, 1: 48.04%
+CHEMBL2363790 0: 42.11%, 1: 57.89%
+CHEMBL2363793 0: 64.95%, 1: 35.05%
+CHEMBL2363794 0: 66.02%, 1: 33.98%
+CHEMBL2363795 0: 45.71%, 1: 54.29%
+CHEMBL2363796 0: 57.89%, 1: 42.11%
+CHEMBL2363798 0: 67.00%, 1: 33.00%
+CHEMBL2363799 0: 57.89%, 1: 42.11%
+CHEMBL2363800 0: 63.29%, 1: 36.71%
+CHEMBL2363803 0: 50.49%, 1: 49.51%
+CHEMBL2363809 0: 65.38%, 1: 34.62%
+CHEMBL2363811 0: 73.53%, 1: 26.47%
+CHEMBL2363814 0: 63.92%, 1: 36.08%
+CHEMBL2363820 0: 47.12%, 1: 52.88%
+CHEMBL2363830 0: 65.69%, 1: 34.31%
+CHEMBL2363831 0: 70.10%, 1: 29.90%
+CHEMBL2363834 0: 64.65%, 1: 35.35%
+CHEMBL2363836 0: 58.00%, 1: 42.00%
+CHEMBL2363839 0: 50.00%, 1: 50.00%
+CHEMBL2363846 0: 65.98%, 1: 34.02%
+CHEMBL2363847 0: 68.81%, 1: 31.19%
+CHEMBL2363851 0: 57.47%, 1: 42.53%
+CHEMBL3079731 0: 11.76%, 1: 88.24%
+CHEMBL3111191 0: 87.27%, 1: 12.73%
+CHEMBL3111192 0: 90.00%, 1: 10.00%
+CHEMBL3111194 0: 87.27%, 1: 12.73%
+CHEMBL3111195 0: 74.55%, 1: 25.45%
+CHEMBL3111197 0: 87.27%, 1: 12.73%
+CHEMBL3111198 0: 74.55%, 1: 25.45%
+CHEMBL3214782 0: 16.53%, 1: 83.47%
+CHEMBL3214806 0: 9.62%, 1: 90.38%
+CHEMBL3214828 0: 52.68%, 1: 47.32%
+CHEMBL3214965 0: 62.10%, 1: 37.90%
+CHEMBL3214981 0: 10.62%, 1: 89.38%
+CHEMBL3215132 0: 12.28%, 1: 87.72%
+CHEMBL3215144 0: 18.35%, 1: 81.65%
+CHEMBL3215266 0: 9.17%, 1: 90.83%
+CHEMBL618396 0: 13.51%, 1: 86.49%
+CHEMBL641707 0: 64.29%, 1: 35.71%
+CHEMBL648337 0: 25.86%, 1: 74.14%
+CHEMBL653167 0: 11.76%, 1: 88.24%
+CHEMBL663474 0: 14.74%, 1: 85.26%
+CHEMBL681296 0: 5.56%, 1: 94.44%
+CHEMBL687330 0: 52.70%, 1: 47.30%
+CHEMBL698689 0: 6.48%, 1: 93.52%
+CHEMBL763093 0: 26.53%, 1: 73.47%
+CHEMBL772766 0: 71.25%, 1: 28.75%
+CHEMBL806152 0: 48.08%, 1: 51.92%
+CHEMBL856174 0: 2.44%, 1: 97.56%
+CHEMBL864855 0: 8.99%, 1: 91.01%
+CHEMBL872182 0: 63.29%, 1: 36.71%
+CHEMBL938648 0: 14.42%, 1: 85.58%
+Total size = 9,964 | train size = 7,971 | val size = 996 | test size = 997
+Building model 0
+MoleculeModel(
+  (sigmoid): Sigmoid()
+  (encoder): MPN(
+    (encoder): MPNEncoder(
+      (dropout_layer): Dropout(p=0.2, inplace=False)
+      (act_func): ReLU()
+      (W_i): Linear(in_features=147, out_features=300, bias=False)
+      (W_h): Linear(in_features=300, out_features=300, bias=False)
+      (W_o): Linear(in_features=433, out_features=300, bias=True)
+    )
+  )
+  (ffn): Sequential(
+    (0): Dropout(p=0.2, inplace=False)
+    (1): Linear(in_features=300, out_features=400, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=400, out_features=397, bias=True)
+  )
+)
+Number of parameters = 543,897
+Moving model to cuda
+  0% 0/30 [00:00<?, ?it/s]Epoch 0
+
+  0% 0/160 [00:00<?, ?it/s][A
+  1% 1/160 [00:10<26:46, 10.10s/it][A
+  1% 2/160 [00:10<18:44,  7.12s/it][A
+  2% 3/160 [00:10<13:34,  5.19s/it][A
+  2% 4/160 [00:11<09:33,  3.68s/it][A
+  4% 6/160 [00:11<06:40,  2.60s/it][A
+  5% 8/160 [00:11<04:39,  1.84s/it][ALoss = 1.4171e-02, PNorm = 39.9037, GNorm = 0.4915, lr_0 = 1.3113e-04
+
+  6% 10/160 [00:11<03:15,  1.31s/it][A
+  8% 12/160 [00:11<02:20,  1.06it/s][A
+  9% 14/160 [00:12<01:49,  1.34it/s][A
+ 10% 16/160 [00:12<01:19,  1.81it/s][A
+ 11% 18/160 [00:12<00:58,  2.42it/s][ALoss = 1.3816e-02, PNorm = 39.9038, GNorm = 0.4847, lr_0 = 1.5943e-04
+
+ 12% 20/160 [00:12<00:44,  3.17it/s][A
+ 14% 22/160 [00:13<00:34,  4.05it/s][A
+ 15% 24/160 [00:13<00:28,  4.71it/s][A
+ 16% 25/160 [00:13<00:27,  4.86it/s][A
+ 16% 26/160 [00:14<00:45,  2.92it/s][A
+ 18% 28/160 [00:14<00:34,  3.81it/s][A
+ 18% 29/160 [00:14<00:30,  4.31it/s][ALoss = 1.3648e-02, PNorm = 39.9062, GNorm = 0.4612, lr_0 = 1.8774e-04
+
+ 19% 31/160 [00:14<00:24,  5.19it/s][A
+ 20% 32/160 [00:14<00:23,  5.43it/s][A
+ 21% 33/160 [00:15<00:23,  5.32it/s][A
+ 22% 35/160 [00:15<00:19,  6.39it/s][A
+ 23% 37/160 [00:15<00:15,  7.86it/s][A
+ 24% 39/160 [00:15<00:13,  9.14it/s][ALoss = 1.3114e-02, PNorm = 39.9110, GNorm = 0.5139, lr_0 = 2.1604e-04
+
+ 26% 41/160 [00:15<00:17,  6.73it/s][A
+ 27% 43/160 [00:16<00:14,  8.25it/s][A
+ 28% 45/160 [00:16<00:11,  9.79it/s][A
+ 29% 47/160 [00:16<00:10, 11.11it/s][A
+ 31% 49/160 [00:16<00:08, 12.50it/s][ALoss = 1.3572e-02, PNorm = 39.9182, GNorm = 0.3857, lr_0 = 2.4434e-04
+
+ 32% 51/160 [00:16<00:08, 13.51it/s][A
+ 33% 53/160 [00:16<00:07, 13.91it/s][A
+ 34% 55/160 [00:16<00:07, 14.46it/s][A
+ 36% 57/160 [00:16<00:07, 14.64it/s][A
+ 37% 59/160 [00:17<00:12,  8.14it/s][ALoss = 1.3584e-02, PNorm = 39.9204, GNorm = 0.5875, lr_0 = 2.7264e-04
+
+ 38% 61/160 [00:17<00:10,  9.41it/s][A
+ 39% 63/160 [00:17<00:08, 10.82it/s][A
+ 41% 65/160 [00:17<00:07, 12.00it/s][A
+ 42% 67/160 [00:17<00:07, 12.13it/s][A
+ 43% 69/160 [00:18<00:06, 13.09it/s][ALoss = 1.2456e-02, PNorm = 39.9280, GNorm = 0.6522, lr_0 = 3.0094e-04
+
+ 44% 71/160 [00:18<00:06, 14.14it/s][A
+ 46% 73/160 [00:18<00:05, 14.98it/s][A
+ 47% 75/160 [00:18<00:05, 15.54it/s][A
+ 48% 77/160 [00:18<00:05, 15.95it/s][A
+ 49% 79/160 [00:18<00:04, 16.40it/s][ALoss = 1.2501e-02, PNorm = 39.9381, GNorm = 0.7399, lr_0 = 3.2925e-04
+
+ 51% 81/160 [00:18<00:04, 16.49it/s][A
+ 52% 83/160 [00:19<00:09,  7.92it/s][A
+ 53% 85/160 [00:19<00:08,  9.36it/s][A
+ 54% 87/160 [00:19<00:06, 10.68it/s][A
+ 56% 89/160 [00:19<00:06, 11.82it/s][ALoss = 1.1553e-02, PNorm = 39.9496, GNorm = 0.9563, lr_0 = 3.5755e-04
+
+ 57% 91/160 [00:19<00:05, 12.92it/s][A
+ 58% 93/160 [00:19<00:05, 13.08it/s][A
+ 59% 95/160 [00:20<00:05, 11.72it/s][A
+ 61% 97/160 [00:20<00:05, 11.19it/s][A
+ 62% 99/160 [00:20<00:04, 12.48it/s][ALoss = 1.2470e-02, PNorm = 39.9550, GNorm = 0.8439, lr_0 = 3.8585e-04
+
+ 63% 101/160 [00:20<00:04, 12.31it/s][A
+ 64% 103/160 [00:20<00:04, 13.34it/s][A
+ 66% 105/160 [00:20<00:03, 13.90it/s][A
+ 67% 107/160 [00:21<00:03, 14.86it/s][A
+ 68% 109/160 [00:21<00:03, 15.59it/s][ALoss = 1.2447e-02, PNorm = 39.9581, GNorm = 0.2819, lr_0 = 4.1415e-04
+
+ 69% 111/160 [00:22<00:10,  4.57it/s][A
+ 71% 113/160 [00:22<00:08,  5.77it/s][A
+ 72% 115/160 [00:22<00:06,  7.19it/s][A
+ 73% 117/160 [00:22<00:04,  8.74it/s][A
+ 74% 119/160 [00:22<00:03, 10.33it/s][ALoss = 1.2305e-02, PNorm = 39.9633, GNorm = 0.5703, lr_0 = 4.4245e-04
+
+ 76% 121/160 [00:22<00:03, 11.35it/s][A
+ 77% 123/160 [00:23<00:02, 12.74it/s][A
+ 78% 125/160 [00:23<00:02, 13.56it/s][A
+ 79% 127/160 [00:23<00:02, 14.61it/s][A
+ 81% 129/160 [00:23<00:02, 15.50it/s][ALoss = 1.1822e-02, PNorm = 39.9777, GNorm = 0.6450, lr_0 = 4.7075e-04
+
+ 82% 131/160 [00:23<00:01, 15.51it/s][A
+ 83% 133/160 [00:23<00:01, 16.23it/s][A
+ 84% 135/160 [00:23<00:01, 14.88it/s][A
+ 86% 137/160 [00:23<00:01, 15.62it/s][A
+ 87% 139/160 [00:24<00:01, 13.12it/s][ALoss = 1.1166e-02, PNorm = 39.9902, GNorm = 0.6199, lr_0 = 4.9906e-04
+
+ 88% 141/160 [00:24<00:02,  9.25it/s][A
+ 89% 143/160 [00:24<00:01,  8.54it/s][A
+ 91% 145/160 [00:24<00:01,  9.94it/s][A
+ 92% 147/160 [00:25<00:02,  4.76it/s][A
+ 93% 149/160 [00:25<00:01,  5.71it/s][ALoss = 1.1213e-02, PNorm = 40.0074, GNorm = 0.9112, lr_0 = 5.2736e-04
+
+ 94% 151/160 [00:26<00:01,  7.03it/s][A
+ 96% 153/160 [00:26<00:01,  6.79it/s][A
+ 96% 154/160 [00:26<00:00,  7.37it/s][A
+ 97% 155/160 [00:26<00:00,  6.29it/s][A
+ 98% 156/160 [00:26<00:00,  5.82it/s][A
+ 98% 157/160 [00:27<00:00,  6.16it/s][A
+ 99% 159/160 [00:27<00:00,  7.33it/s][A100% 160/160 [00:27<00:00,  5.87it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 10% 2/20 [00:00<00:01, 11.95it/s][A
+ 20% 4/20 [00:00<00:01, 11.39it/s][A
+ 30% 6/20 [00:00<00:01, 12.40it/s][A
+ 40% 8/20 [00:00<00:00, 13.57it/s][A
+ 55% 11/20 [00:00<00:00, 15.04it/s][A
+ 65% 13/20 [00:00<00:00, 14.64it/s][A
+ 75% 15/20 [00:01<00:00, 14.64it/s][A
+ 85% 17/20 [00:01<00:00, 12.99it/s][A
+ 95% 19/20 [00:01<00:00, 14.42it/s][A100% 20/20 [00:01<00:00, 14.49it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.522274
+  3% 1/30 [00:29<14:03, 29.10s/it]Epoch 1
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.1829e-02, PNorm = 40.0016, GNorm = 0.4621, lr_0 = 5.5849e-04
+
+  1% 1/160 [00:00<00:20,  7.82it/s][A
+  2% 3/160 [00:00<00:17,  8.83it/s][A
+  4% 6/160 [00:00<00:14, 10.95it/s][A
+  6% 10/160 [00:00<00:10, 13.67it/s][ALoss = 1.2145e-02, PNorm = 40.0167, GNorm = 0.2451, lr_0 = 5.8679e-04
+
+  8% 13/160 [00:00<00:09, 15.07it/s][A
+ 10% 16/160 [00:00<00:08, 17.31it/s][A
+ 12% 19/160 [00:00<00:07, 18.79it/s][ALoss = 1.1438e-02, PNorm = 40.0287, GNorm = 0.5520, lr_0 = 6.1509e-04
+
+ 14% 22/160 [00:01<00:06, 20.07it/s][A
+ 16% 25/160 [00:01<00:06, 20.59it/s][A
+ 18% 28/160 [00:01<00:06, 20.60it/s][ALoss = 1.1616e-02, PNorm = 40.0443, GNorm = 0.4958, lr_0 = 6.4340e-04
+
+ 19% 31/160 [00:01<00:05, 21.92it/s][A
+ 21% 34/160 [00:01<00:05, 22.17it/s][A
+ 23% 37/160 [00:01<00:05, 22.94it/s][A
+ 25% 40/160 [00:01<00:05, 20.10it/s][ALoss = 1.1525e-02, PNorm = 40.0553, GNorm = 0.3437, lr_0 = 6.7170e-04
+
+ 27% 43/160 [00:02<00:05, 20.58it/s][A
+ 29% 46/160 [00:02<00:05, 19.82it/s][A
+ 31% 50/160 [00:02<00:04, 22.79it/s][ALoss = 1.1784e-02, PNorm = 40.0721, GNorm = 0.3224, lr_0 = 7.0000e-04
+
+ 33% 53/160 [00:02<00:05, 21.16it/s][A
+ 36% 57/160 [00:02<00:04, 24.32it/s][ALoss = 1.1883e-02, PNorm = 40.0882, GNorm = 0.5855, lr_0 = 7.2830e-04
+
+ 39% 62/160 [00:02<00:03, 27.99it/s][A
+ 41% 66/160 [00:02<00:03, 24.94it/s][A
+ 43% 69/160 [00:03<00:03, 23.78it/s][ALoss = 1.0517e-02, PNorm = 40.1175, GNorm = 0.3645, lr_0 = 7.5660e-04
+
+ 45% 72/160 [00:03<00:04, 20.69it/s][A
+ 47% 75/160 [00:03<00:04, 19.91it/s][A
+ 49% 78/160 [00:03<00:04, 19.69it/s][ALoss = 1.3734e-02, PNorm = 40.1321, GNorm = 1.5748, lr_0 = 7.8491e-04
+
+ 51% 81/160 [00:03<00:04, 18.50it/s][A
+ 52% 84/160 [00:03<00:03, 20.59it/s][A
+ 54% 87/160 [00:03<00:03, 20.32it/s][A
+ 56% 90/160 [00:04<00:03, 22.37it/s][ALoss = 1.2063e-02, PNorm = 40.1366, GNorm = 0.3630, lr_0 = 8.1321e-04
+
+ 58% 93/160 [00:04<00:03, 20.34it/s][A
+ 60% 96/160 [00:04<00:03, 20.11it/s][A
+ 62% 99/160 [00:04<00:03, 19.21it/s][ALoss = 1.0913e-02, PNorm = 40.1936, GNorm = 0.7031, lr_0 = 8.4151e-04
+
+ 64% 102/160 [00:04<00:02, 20.75it/s][A
+ 66% 106/160 [00:04<00:02, 23.75it/s][A
+ 68% 109/160 [00:04<00:02, 24.74it/s][ALoss = 1.2863e-02, PNorm = 40.2156, GNorm = 0.1379, lr_0 = 8.6981e-04
+
+ 70% 112/160 [00:05<00:01, 24.63it/s][A
+ 72% 115/160 [00:05<00:01, 25.64it/s][A
+ 74% 118/160 [00:05<00:01, 24.98it/s][ALoss = 1.1176e-02, PNorm = 40.2604, GNorm = 0.5034, lr_0 = 8.9811e-04
+
+ 76% 122/160 [00:05<00:01, 27.85it/s][A
+ 79% 126/160 [00:05<00:01, 28.68it/s][A
+ 81% 130/160 [00:05<00:01, 29.32it/s][ALoss = 1.1706e-02, PNorm = 40.2872, GNorm = 0.2552, lr_0 = 9.2642e-04
+
+ 84% 134/160 [00:05<00:00, 28.27it/s][A
+ 86% 138/160 [00:05<00:00, 29.14it/s][ALoss = 1.0877e-02, PNorm = 40.3186, GNorm = 0.4689, lr_0 = 9.5472e-04
+
+ 89% 142/160 [00:06<00:00, 29.51it/s][A
+ 91% 146/160 [00:06<00:00, 31.42it/s][A
+ 94% 150/160 [00:07<00:00, 10.22it/s][ALoss = 1.1254e-02, PNorm = 40.3479, GNorm = 0.4163, lr_0 = 9.8302e-04
+
+ 97% 155/160 [00:07<00:00, 13.22it/s][A100% 160/160 [00:07<00:00, 21.64it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 75.80it/s][A
+ 80% 16/20 [00:00<00:00, 76.10it/s][A100% 20/20 [00:00<00:00, 76.58it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.580749
+  7% 2/30 [00:37<10:37, 22.77s/it]Epoch 2
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.0085e-02, PNorm = 40.3618, GNorm = 0.3804, lr_0 = 9.9742e-04
+
+  3% 5/160 [00:00<00:03, 47.43it/s][A
+  7% 11/160 [00:00<00:03, 48.45it/s][ALoss = 1.1111e-02, PNorm = 40.3995, GNorm = 0.4108, lr_0 = 9.9227e-04
+
+ 10% 16/160 [00:00<00:02, 48.77it/s][ALoss = 1.1633e-02, PNorm = 40.4334, GNorm = 0.6829, lr_0 = 9.8715e-04
+
+ 14% 22/160 [00:00<00:02, 48.77it/s][A
+ 17% 27/160 [00:00<00:02, 47.87it/s][ALoss = 1.1043e-02, PNorm = 40.4456, GNorm = 0.4482, lr_0 = 9.8206e-04
+
+ 20% 32/160 [00:00<00:02, 46.84it/s][A
+ 23% 37/160 [00:00<00:02, 47.74it/s][ALoss = 1.1297e-02, PNorm = 40.4644, GNorm = 0.2906, lr_0 = 9.7699e-04
+
+ 27% 43/160 [00:00<00:02, 48.55it/s][A
+ 31% 49/160 [00:01<00:02, 49.07it/s][ALoss = 1.1857e-02, PNorm = 40.4871, GNorm = 0.4290, lr_0 = 9.7195e-04
+
+ 34% 54/160 [00:01<00:02, 49.29it/s][A
+ 37% 59/160 [00:01<00:02, 49.35it/s][ALoss = 1.1972e-02, PNorm = 40.4877, GNorm = 0.3265, lr_0 = 9.6694e-04
+
+ 40% 64/160 [00:01<00:01, 48.50it/s][A
+ 43% 69/160 [00:01<00:01, 48.52it/s][ALoss = 1.2236e-02, PNorm = 40.5006, GNorm = 0.3103, lr_0 = 9.6195e-04
+
+ 46% 74/160 [00:01<00:01, 47.68it/s][A
+ 49% 79/160 [00:01<00:01, 46.96it/s][ALoss = 1.1764e-02, PNorm = 40.5262, GNorm = 0.3479, lr_0 = 9.5699e-04
+
+ 52% 84/160 [00:01<00:01, 45.91it/s][A
+ 56% 89/160 [00:01<00:01, 45.14it/s][ALoss = 1.1488e-02, PNorm = 40.5454, GNorm = 0.2116, lr_0 = 9.5205e-04
+
+ 59% 94/160 [00:01<00:01, 44.10it/s][A
+ 62% 99/160 [00:02<00:01, 43.73it/s][ALoss = 1.0856e-02, PNorm = 40.5697, GNorm = 0.3180, lr_0 = 9.4714e-04
+
+ 65% 104/160 [00:02<00:01, 42.52it/s][A
+ 68% 109/160 [00:02<00:01, 42.69it/s][ALoss = 1.2443e-02, PNorm = 40.5822, GNorm = 0.2454, lr_0 = 9.4226e-04
+
+ 71% 114/160 [00:02<00:01, 41.94it/s][A
+ 74% 119/160 [00:02<00:00, 42.04it/s][ALoss = 1.1189e-02, PNorm = 40.6031, GNorm = 0.4060, lr_0 = 9.3740e-04
+
+ 78% 124/160 [00:02<00:00, 42.49it/s][A
+ 81% 129/160 [00:02<00:00, 42.96it/s][ALoss = 1.1632e-02, PNorm = 40.6212, GNorm = 0.2305, lr_0 = 9.3256e-04
+
+ 84% 134/160 [00:02<00:00, 41.77it/s][A
+ 87% 139/160 [00:03<00:00, 42.68it/s][ALoss = 1.0951e-02, PNorm = 40.6330, GNorm = 0.2682, lr_0 = 9.2775e-04
+
+ 90% 144/160 [00:03<00:00, 43.73it/s][A
+ 93% 149/160 [00:03<00:00, 43.05it/s][ALoss = 1.1055e-02, PNorm = 40.6478, GNorm = 0.4821, lr_0 = 9.2296e-04
+
+ 96% 154/160 [00:03<00:00, 42.45it/s][A
+100% 160/160 [00:03<00:00, 45.71it/s][A100% 160/160 [00:03<00:00, 45.57it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 73.03it/s][A
+ 85% 17/20 [00:00<00:00, 75.46it/s][A100% 20/20 [00:00<00:00, 78.39it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.583911
+ 10% 3/30 [00:41<07:44, 17.21s/it]Epoch 3
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.0974e-02, PNorm = 40.6630, GNorm = 0.3199, lr_0 = 9.1820e-04
+
+  2% 4/160 [00:00<00:04, 32.19it/s][A
+  4% 7/160 [00:00<00:04, 30.87it/s][A
+  6% 10/160 [00:00<00:05, 29.44it/s][ALoss = 1.1341e-02, PNorm = 40.6936, GNorm = 0.6645, lr_0 = 9.1346e-04
+
+  9% 14/160 [00:00<00:04, 31.52it/s][A
+ 12% 20/160 [00:00<00:03, 35.55it/s][ALoss = 1.1603e-02, PNorm = 40.7088, GNorm = 0.2939, lr_0 = 9.0875e-04
+
+ 15% 24/160 [00:00<00:03, 35.84it/s][A
+ 18% 28/160 [00:00<00:03, 34.65it/s][ALoss = 1.1802e-02, PNorm = 40.7159, GNorm = 0.3071, lr_0 = 9.0406e-04
+
+ 21% 33/160 [00:00<00:03, 36.99it/s][A
+ 24% 38/160 [00:01<00:03, 40.09it/s][ALoss = 1.1407e-02, PNorm = 40.7510, GNorm = 0.2750, lr_0 = 8.9940e-04
+
+ 27% 43/160 [00:01<00:03, 38.53it/s][A
+ 31% 49/160 [00:01<00:02, 41.94it/s][ALoss = 1.1575e-02, PNorm = 40.7867, GNorm = 0.3395, lr_0 = 8.9476e-04
+
+ 34% 55/160 [00:01<00:02, 44.11it/s][A
+ 38% 60/160 [00:01<00:02, 43.23it/s][ALoss = 1.0796e-02, PNorm = 40.8217, GNorm = 0.3930, lr_0 = 8.9015e-04
+
+ 41% 66/160 [00:01<00:02, 45.09it/s][A
+ 44% 71/160 [00:01<00:01, 46.33it/s][ALoss = 1.1765e-02, PNorm = 40.8415, GNorm = 0.2934, lr_0 = 8.8555e-04
+
+ 48% 76/160 [00:01<00:02, 41.15it/s][ALoss = 1.0175e-02, PNorm = 40.8793, GNorm = 0.3963, lr_0 = 8.8099e-04
+
+ 51% 82/160 [00:02<00:01, 43.78it/s][A
+ 54% 87/160 [00:02<00:02, 32.60it/s][A
+ 57% 91/160 [00:02<00:02, 28.83it/s][ALoss = 1.2147e-02, PNorm = 40.8978, GNorm = 0.3900, lr_0 = 8.7644e-04
+
+ 59% 95/160 [00:02<00:02, 28.01it/s][A
+ 62% 99/160 [00:02<00:02, 28.45it/s][ALoss = 1.1014e-02, PNorm = 40.9101, GNorm = 0.2974, lr_0 = 8.7192e-04
+
+ 64% 103/160 [00:02<00:02, 26.83it/s][A
+ 66% 106/160 [00:03<00:02, 25.30it/s][A
+ 68% 109/160 [00:03<00:01, 26.34it/s][ALoss = 1.1220e-02, PNorm = 40.9358, GNorm = 0.3564, lr_0 = 8.6742e-04
+
+ 71% 114/160 [00:03<00:01, 29.75it/s][A
+ 74% 118/160 [00:03<00:01, 28.29it/s][ALoss = 1.0085e-02, PNorm = 40.9638, GNorm = 0.4496, lr_0 = 8.6295e-04
+
+ 76% 122/160 [00:03<00:01, 28.41it/s][A
+ 78% 125/160 [00:03<00:01, 28.65it/s][A
+ 80% 128/160 [00:03<00:01, 27.78it/s][A
+ 82% 131/160 [00:03<00:01, 23.86it/s][ALoss = 1.2355e-02, PNorm = 40.9696, GNorm = 0.2458, lr_0 = 8.5849e-04
+
+ 84% 135/160 [00:04<00:01, 24.44it/s][A
+ 86% 138/160 [00:04<00:00, 22.27it/s][A
+ 88% 141/160 [00:04<00:00, 21.97it/s][ALoss = 1.0835e-02, PNorm = 40.9784, GNorm = 0.2190, lr_0 = 8.5407e-04
+
+ 90% 144/160 [00:04<00:00, 18.79it/s][A
+ 92% 147/160 [00:04<00:00, 17.33it/s][A
+ 94% 151/160 [00:04<00:00, 20.49it/s][ALoss = 1.0761e-02, PNorm = 40.9974, GNorm = 0.3283, lr_0 = 8.4966e-04
+
+ 96% 154/160 [00:05<00:00, 19.31it/s][A
+ 98% 157/160 [00:05<00:00, 21.43it/s][A
+100% 160/160 [00:05<00:00, 21.45it/s][A100% 160/160 [00:05<00:00, 30.04it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 20% 4/20 [00:00<00:00, 33.54it/s][A
+ 45% 9/20 [00:00<00:00, 36.27it/s][A
+ 70% 14/20 [00:00<00:00, 36.65it/s][A
+100% 20/20 [00:00<00:00, 41.31it/s][A100% 20/20 [00:00<00:00, 42.85it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.574347
+ 13% 4/30 [00:47<06:03, 13.98s/it]Epoch 4
+
+  0% 0/160 [00:00<?, ?it/s][A
+  1% 2/160 [00:00<00:12, 12.63it/s][ALoss = 1.3266e-02, PNorm = 41.0258, GNorm = 0.3171, lr_0 = 8.4484e-04
+
+  3% 5/160 [00:00<00:11, 14.06it/s][A
+  6% 10/160 [00:00<00:08, 17.75it/s][ALoss = 1.0975e-02, PNorm = 41.0420, GNorm = 0.3886, lr_0 = 8.4048e-04
+
+  8% 13/160 [00:00<00:07, 20.01it/s][A
+ 10% 16/160 [00:00<00:06, 21.67it/s][A
+ 12% 19/160 [00:00<00:06, 21.34it/s][A
+ 14% 22/160 [00:00<00:06, 19.76it/s][ALoss = 1.1414e-02, PNorm = 41.0589, GNorm = 0.3355, lr_0 = 8.3615e-04
+
+ 16% 25/160 [00:01<00:06, 19.97it/s][A
+ 18% 29/160 [00:01<00:05, 23.13it/s][A
+ 20% 32/160 [00:01<00:05, 24.69it/s][ALoss = 1.0766e-02, PNorm = 41.0802, GNorm = 0.3606, lr_0 = 8.3183e-04
+
+ 22% 35/160 [00:01<00:05, 24.12it/s][A
+ 24% 38/160 [00:01<00:05, 20.62it/s][A
+ 26% 41/160 [00:01<00:05, 20.17it/s][ALoss = 1.1883e-02, PNorm = 41.1041, GNorm = 0.2057, lr_0 = 8.2754e-04
+
+ 28% 44/160 [00:01<00:06, 19.07it/s][A
+ 29% 47/160 [00:02<00:05, 21.04it/s][A
+ 32% 51/160 [00:02<00:04, 23.89it/s][ALoss = 1.1012e-02, PNorm = 41.1496, GNorm = 0.3134, lr_0 = 8.2327e-04
+
+ 34% 54/160 [00:02<00:04, 24.20it/s][A
+ 36% 57/160 [00:02<00:04, 23.44it/s][A
+ 38% 60/160 [00:02<00:04, 22.32it/s][ALoss = 1.1661e-02, PNorm = 41.1637, GNorm = 0.3177, lr_0 = 8.1903e-04
+
+ 39% 63/160 [00:02<00:04, 20.40it/s][A
+ 41% 66/160 [00:02<00:04, 20.61it/s][A
+ 43% 69/160 [00:03<00:04, 22.28it/s][ALoss = 1.1557e-02, PNorm = 41.1769, GNorm = 0.3146, lr_0 = 8.1480e-04
+
+ 47% 75/160 [00:03<00:03, 26.82it/s][A
+ 51% 81/160 [00:03<00:02, 31.32it/s][ALoss = 1.1548e-02, PNorm = 41.1940, GNorm = 0.3431, lr_0 = 8.1060e-04
+
+ 54% 87/160 [00:03<00:02, 35.33it/s][ALoss = 1.1096e-02, PNorm = 41.2125, GNorm = 0.2712, lr_0 = 8.0642e-04
+
+ 58% 93/160 [00:03<00:01, 38.74it/s][A
+ 62% 99/160 [00:03<00:01, 41.83it/s][ALoss = 1.0999e-02, PNorm = 41.2381, GNorm = 0.2432, lr_0 = 8.0226e-04
+
+ 65% 104/160 [00:03<00:01, 43.85it/s][A
+ 69% 110/160 [00:03<00:01, 45.83it/s][ALoss = 1.1213e-02, PNorm = 41.2707, GNorm = 0.2254, lr_0 = 7.9812e-04
+
+ 72% 115/160 [00:03<00:01, 42.62it/s][A
+ 75% 120/160 [00:04<00:01, 36.37it/s][ALoss = 1.0189e-02, PNorm = 41.3053, GNorm = 0.2674, lr_0 = 7.9400e-04
+
+ 78% 124/160 [00:04<00:01, 35.61it/s][A
+ 80% 128/160 [00:04<00:01, 31.54it/s][A
+ 82% 132/160 [00:04<00:00, 31.83it/s][ALoss = 1.1900e-02, PNorm = 41.3193, GNorm = 0.3608, lr_0 = 7.8990e-04
+
+ 85% 136/160 [00:04<00:00, 32.81it/s][A
+ 89% 142/160 [00:04<00:00, 36.66it/s][ALoss = 1.0188e-02, PNorm = 41.3687, GNorm = 0.3904, lr_0 = 7.8583e-04
+
+ 92% 147/160 [00:04<00:00, 38.57it/s][A
+ 95% 152/160 [00:05<00:00, 32.16it/s][ALoss = 1.1176e-02, PNorm = 41.3828, GNorm = 0.3182, lr_0 = 7.8177e-04
+
+ 98% 156/160 [00:05<00:00, 32.66it/s][A
+100% 160/160 [00:05<00:00, 30.11it/s][A100% 160/160 [00:05<00:00, 29.59it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 35% 7/20 [00:00<00:00, 58.77it/s][A
+ 65% 13/20 [00:00<00:00, 55.62it/s][A
+ 95% 19/20 [00:00<00:00, 55.29it/s][A100% 20/20 [00:00<00:00, 55.26it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.596788
+ 17% 5/30 [00:54<04:51, 11.66s/it]Epoch 5
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.0015e-02, PNorm = 41.4135, GNorm = 0.3698, lr_0 = 7.7774e-04
+
+  2% 4/160 [00:00<00:04, 36.96it/s][A
+  6% 10/160 [00:00<00:03, 40.29it/s][ALoss = 1.1173e-02, PNorm = 41.4445, GNorm = 0.3121, lr_0 = 7.7373e-04
+
+  9% 15/160 [00:00<00:03, 42.58it/s][A
+ 12% 20/160 [00:00<00:03, 44.55it/s][ALoss = 9.6455e-03, PNorm = 41.4814, GNorm = 0.5859, lr_0 = 7.6974e-04
+
+ 15% 24/160 [00:00<00:04, 33.44it/s][A
+ 18% 28/160 [00:00<00:04, 30.72it/s][A
+ 20% 32/160 [00:00<00:04, 30.73it/s][ALoss = 1.1278e-02, PNorm = 41.4980, GNorm = 0.3596, lr_0 = 7.6577e-04
+
+ 22% 36/160 [00:01<00:05, 23.14it/s][A
+ 24% 39/160 [00:01<00:06, 17.78it/s][A
+ 26% 42/160 [00:01<00:06, 19.65it/s][ALoss = 9.5685e-03, PNorm = 41.5275, GNorm = 0.3092, lr_0 = 7.6182e-04
+
+ 29% 46/160 [00:01<00:04, 23.06it/s][A
+ 31% 49/160 [00:01<00:04, 24.61it/s][A
+ 32% 52/160 [00:01<00:04, 24.94it/s][ALoss = 1.1767e-02, PNorm = 41.5491, GNorm = 0.4876, lr_0 = 7.5789e-04
+
+ 35% 56/160 [00:01<00:03, 27.11it/s][A
+ 37% 59/160 [00:02<00:03, 26.32it/s][ALoss = 1.1611e-02, PNorm = 41.5504, GNorm = 0.3207, lr_0 = 7.5398e-04
+
+ 39% 63/160 [00:02<00:03, 29.02it/s][A
+ 42% 67/160 [00:02<00:03, 28.47it/s][A
+ 44% 70/160 [00:02<00:03, 26.96it/s][ALoss = 1.1102e-02, PNorm = 41.5809, GNorm = 0.2665, lr_0 = 7.5009e-04
+
+ 46% 73/160 [00:02<00:03, 27.80it/s][A
+ 48% 76/160 [00:02<00:03, 26.30it/s][A
+ 49% 79/160 [00:02<00:03, 25.93it/s][ALoss = 1.2540e-02, PNorm = 41.5889, GNorm = 0.4184, lr_0 = 7.4622e-04
+
+ 52% 83/160 [00:02<00:02, 26.23it/s][A
+ 54% 86/160 [00:03<00:02, 24.80it/s][A
+ 56% 89/160 [00:03<00:02, 24.37it/s][ALoss = 1.1409e-02, PNorm = 41.6179, GNorm = 0.3440, lr_0 = 7.4237e-04
+
+ 58% 93/160 [00:03<00:02, 27.21it/s][A
+ 61% 98/160 [00:03<00:02, 30.60it/s][ALoss = 1.1565e-02, PNorm = 41.6637, GNorm = 0.7947, lr_0 = 7.3854e-04
+
+ 64% 103/160 [00:03<00:01, 33.29it/s][A
+ 68% 108/160 [00:03<00:01, 36.24it/s][ALoss = 1.0311e-02, PNorm = 41.7013, GNorm = 0.2982, lr_0 = 7.3473e-04
+
+ 71% 113/160 [00:03<00:01, 39.48it/s][A
+ 74% 119/160 [00:03<00:00, 42.06it/s][ALoss = 1.1257e-02, PNorm = 41.7377, GNorm = 0.6276, lr_0 = 7.3094e-04
+
+ 78% 124/160 [00:04<00:00, 44.12it/s][A
+ 81% 130/160 [00:04<00:00, 45.97it/s][ALoss = 1.1466e-02, PNorm = 41.7669, GNorm = 0.1931, lr_0 = 7.2717e-04
+
+ 84% 135/160 [00:04<00:00, 46.85it/s][A
+ 88% 140/160 [00:04<00:00, 45.12it/s][ALoss = 1.1252e-02, PNorm = 41.7898, GNorm = 0.2413, lr_0 = 7.2342e-04
+
+ 91% 145/160 [00:04<00:00, 45.28it/s][A
+ 94% 151/160 [00:04<00:00, 46.92it/s][ALoss = 1.1683e-02, PNorm = 41.7885, GNorm = 0.2609, lr_0 = 7.1969e-04
+
+ 98% 156/160 [00:04<00:00, 47.15it/s][A100% 160/160 [00:04<00:00, 33.49it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 82.90it/s][A
+ 90% 18/20 [00:00<00:00, 82.85it/s][A100% 20/20 [00:00<00:00, 83.21it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.570614
+ 20% 6/30 [00:59<03:53,  9.75s/it]Epoch 6
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.0302e-02, PNorm = 41.7983, GNorm = 0.3477, lr_0 = 7.1560e-04
+
+  2% 4/160 [00:00<00:03, 39.73it/s][A
+  6% 9/160 [00:00<00:03, 40.99it/s][ALoss = 1.0586e-02, PNorm = 41.8198, GNorm = 0.2507, lr_0 = 7.1191e-04
+
+  9% 14/160 [00:00<00:03, 40.84it/s][A
+ 12% 19/160 [00:00<00:03, 40.95it/s][A
+ 14% 23/160 [00:00<00:03, 40.50it/s][ALoss = 1.1658e-02, PNorm = 41.8413, GNorm = 0.2692, lr_0 = 7.0824e-04
+
+ 17% 27/160 [00:00<00:03, 40.32it/s][A
+ 20% 32/160 [00:00<00:03, 41.34it/s][ALoss = 1.1647e-02, PNorm = 41.8652, GNorm = 0.2447, lr_0 = 7.0459e-04
+
+ 23% 37/160 [00:00<00:02, 42.89it/s][A
+ 26% 42/160 [00:00<00:02, 43.98it/s][ALoss = 1.0275e-02, PNorm = 41.8977, GNorm = 0.2862, lr_0 = 7.0095e-04
+
+ 29% 47/160 [00:01<00:02, 44.49it/s][A
+ 32% 52/160 [00:01<00:02, 45.61it/s][ALoss = 1.0407e-02, PNorm = 41.9320, GNorm = 0.3556, lr_0 = 6.9733e-04
+
+ 36% 57/160 [00:01<00:02, 45.82it/s][A
+ 39% 62/160 [00:01<00:02, 46.55it/s][ALoss = 1.0885e-02, PNorm = 41.9539, GNorm = 0.2268, lr_0 = 6.9374e-04
+
+ 42% 67/160 [00:01<00:02, 45.71it/s][A
+ 45% 72/160 [00:01<00:01, 45.95it/s][ALoss = 1.1995e-02, PNorm = 41.9715, GNorm = 0.3501, lr_0 = 6.9016e-04
+
+ 48% 77/160 [00:01<00:01, 44.43it/s][A
+ 51% 82/160 [00:01<00:01, 45.83it/s][ALoss = 1.1473e-02, PNorm = 41.9814, GNorm = 0.2764, lr_0 = 6.8660e-04
+
+ 54% 87/160 [00:01<00:01, 45.64it/s][A
+ 57% 92/160 [00:02<00:01, 44.73it/s][ALoss = 1.1166e-02, PNorm = 41.9974, GNorm = 0.2783, lr_0 = 6.8306e-04
+
+ 61% 97/160 [00:02<00:01, 45.12it/s][A
+ 64% 102/160 [00:03<00:04, 13.47it/s][ALoss = 1.1147e-02, PNorm = 42.0167, GNorm = 0.2782, lr_0 = 6.7953e-04
+
+ 66% 106/160 [00:03<00:03, 16.58it/s][A
+ 69% 111/160 [00:03<00:02, 20.55it/s][ALoss = 1.0999e-02, PNorm = 42.0284, GNorm = 0.3171, lr_0 = 6.7603e-04
+
+ 72% 115/160 [00:03<00:01, 22.85it/s][A
+ 75% 120/160 [00:03<00:01, 26.98it/s][ALoss = 1.0629e-02, PNorm = 42.0539, GNorm = 0.1942, lr_0 = 6.7254e-04
+
+ 78% 124/160 [00:03<00:01, 27.59it/s][A
+ 80% 128/160 [00:03<00:01, 30.04it/s][ALoss = 9.4301e-03, PNorm = 42.0852, GNorm = 0.3245, lr_0 = 6.6907e-04
+
+ 84% 134/160 [00:04<00:00, 33.30it/s][A
+ 86% 138/160 [00:04<00:00, 33.57it/s][A
+ 89% 142/160 [00:04<00:00, 29.07it/s][ALoss = 1.0642e-02, PNorm = 42.1124, GNorm = 0.3030, lr_0 = 6.6562e-04
+
+ 91% 146/160 [00:04<00:00, 27.84it/s][A
+ 94% 150/160 [00:04<00:00, 22.40it/s][A
+ 96% 153/160 [00:04<00:00, 20.47it/s][ALoss = 1.1100e-02, PNorm = 42.1256, GNorm = 0.3318, lr_0 = 6.6218e-04
+
+ 98% 157/160 [00:05<00:00, 23.16it/s][A100% 160/160 [00:05<00:00, 31.47it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 30% 6/20 [00:00<00:00, 54.77it/s][A
+ 65% 13/20 [00:00<00:00, 56.87it/s][A100% 20/20 [00:00<00:00, 65.32it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.568677
+ 23% 7/30 [01:05<03:18,  8.61s/it]Epoch 7
+
+  0% 0/160 [00:00<?, ?it/s][A
+  1% 2/160 [00:00<00:10, 15.78it/s][ALoss = 1.1426e-02, PNorm = 42.1451, GNorm = 0.3047, lr_0 = 6.5843e-04
+
+  4% 7/160 [00:00<00:07, 19.53it/s][A
+  8% 12/160 [00:00<00:06, 22.83it/s][ALoss = 1.1344e-02, PNorm = 42.1697, GNorm = 0.6689, lr_0 = 6.5503e-04
+
+  9% 15/160 [00:00<00:05, 24.45it/s][A
+ 12% 19/160 [00:00<00:05, 26.27it/s][ALoss = 1.1238e-02, PNorm = 42.1933, GNorm = 0.3933, lr_0 = 6.5165e-04
+
+ 16% 25/160 [00:00<00:04, 30.62it/s][A
+ 19% 30/160 [00:00<00:03, 34.37it/s][ALoss = 1.1033e-02, PNorm = 42.2038, GNorm = 0.2177, lr_0 = 6.4829e-04
+
+ 22% 36/160 [00:00<00:03, 38.13it/s][A
+ 26% 42/160 [00:01<00:02, 41.32it/s][ALoss = 9.9137e-03, PNorm = 42.2409, GNorm = 0.3506, lr_0 = 6.4495e-04
+
+ 29% 47/160 [00:01<00:02, 38.38it/s][A
+ 32% 52/160 [00:01<00:02, 36.31it/s][ALoss = 8.8034e-03, PNorm = 42.2957, GNorm = 0.4500, lr_0 = 6.4162e-04
+
+ 35% 56/160 [00:01<00:03, 32.17it/s][A
+ 38% 60/160 [00:01<00:03, 28.61it/s][A
+ 40% 64/160 [00:01<00:03, 28.14it/s][ALoss = 1.1679e-02, PNorm = 42.3344, GNorm = 1.3571, lr_0 = 6.3831e-04
+
+ 42% 67/160 [00:01<00:03, 25.85it/s][A
+ 44% 71/160 [00:02<00:03, 27.14it/s][A
+ 46% 74/160 [00:02<00:03, 26.23it/s][ALoss = 1.1607e-02, PNorm = 42.3373, GNorm = 0.3066, lr_0 = 6.3502e-04
+
+ 49% 78/160 [00:02<00:03, 26.32it/s][A
+ 51% 81/160 [00:02<00:03, 25.30it/s][A
+ 52% 84/160 [00:02<00:03, 22.36it/s][ALoss = 1.3107e-02, PNorm = 42.3598, GNorm = 3.8488, lr_0 = 6.3174e-04
+
+ 55% 88/160 [00:02<00:02, 24.81it/s][A
+ 58% 93/160 [00:02<00:02, 28.58it/s][ALoss = 1.0298e-02, PNorm = 42.3789, GNorm = 0.2450, lr_0 = 6.2848e-04
+
+ 61% 98/160 [00:03<00:01, 32.56it/s][A
+ 64% 103/160 [00:03<00:01, 36.23it/s][ALoss = 1.0025e-02, PNorm = 42.4233, GNorm = 0.3498, lr_0 = 6.2524e-04
+
+ 68% 108/160 [00:03<00:01, 38.96it/s][A
+ 71% 113/160 [00:03<00:01, 34.86it/s][ALoss = 1.2238e-02, PNorm = 42.4287, GNorm = 0.9287, lr_0 = 6.2201e-04
+
+ 73% 117/160 [00:03<00:01, 27.36it/s][A
+ 77% 123/160 [00:03<00:01, 31.84it/s][ALoss = 1.1247e-02, PNorm = 42.4373, GNorm = 0.3356, lr_0 = 6.1881e-04
+
+ 80% 128/160 [00:03<00:00, 35.59it/s][A
+ 84% 134/160 [00:03<00:00, 39.23it/s][ALoss = 1.1034e-02, PNorm = 42.4548, GNorm = 0.4224, lr_0 = 6.1561e-04
+
+ 87% 139/160 [00:04<00:00, 38.35it/s][A
+ 90% 144/160 [00:04<00:00, 30.15it/s][ALoss = 1.1473e-02, PNorm = 42.4731, GNorm = 0.2371, lr_0 = 6.1244e-04
+
+ 92% 148/160 [00:04<00:00, 24.01it/s][A
+ 94% 151/160 [00:04<00:00, 21.12it/s][A
+ 96% 154/160 [00:04<00:00, 21.09it/s][ALoss = 1.1248e-02, PNorm = 42.4991, GNorm = 0.4275, lr_0 = 6.0928e-04
+
+ 98% 157/160 [00:05<00:00, 20.39it/s][A
+100% 160/160 [00:05<00:00, 20.84it/s][A100% 160/160 [00:05<00:00, 30.66it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 20% 4/20 [00:00<00:00, 33.28it/s][A
+ 35% 7/20 [00:00<00:00, 29.86it/s][A
+ 55% 11/20 [00:00<00:00, 30.50it/s][A
+ 85% 17/20 [00:00<00:00, 34.35it/s][A100% 20/20 [00:00<00:00, 35.42it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.543113
+ 27% 8/30 [01:11<02:53,  7.90s/it]Epoch 8
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.1243e-02, PNorm = 42.4933, GNorm = 0.3393, lr_0 = 6.0614e-04
+
+  3% 5/160 [00:00<00:05, 27.98it/s][A
+  4% 6/160 [00:00<00:10, 14.19it/s][A
+  5% 8/160 [00:00<00:11, 13.78it/s][A
+  7% 11/160 [00:00<00:09, 15.97it/s][ALoss = 1.0500e-02, PNorm = 42.5069, GNorm = 0.2787, lr_0 = 6.0301e-04
+
+  9% 15/160 [00:00<00:07, 19.24it/s][A
+ 12% 19/160 [00:00<00:06, 22.18it/s][A
+ 14% 23/160 [00:00<00:05, 23.71it/s][ALoss = 1.0175e-02, PNorm = 42.5333, GNorm = 0.3033, lr_0 = 5.9990e-04
+
+ 18% 28/160 [00:01<00:04, 28.11it/s][A
+ 21% 34/160 [00:01<00:03, 32.42it/s][ALoss = 1.1305e-02, PNorm = 42.5427, GNorm = 0.4244, lr_0 = 5.9680e-04
+
+ 24% 38/160 [00:01<00:03, 32.84it/s][A
+ 26% 42/160 [00:01<00:03, 33.18it/s][ALoss = 1.1048e-02, PNorm = 42.5542, GNorm = 0.4303, lr_0 = 5.9372e-04
+
+ 29% 46/160 [00:01<00:03, 34.26it/s][A
+ 31% 50/160 [00:01<00:03, 32.38it/s][A
+ 34% 54/160 [00:01<00:03, 32.95it/s][ALoss = 1.0450e-02, PNorm = 42.5736, GNorm = 0.2696, lr_0 = 5.9066e-04
+
+ 36% 58/160 [00:01<00:03, 31.40it/s][A
+ 39% 62/160 [00:02<00:03, 30.69it/s][ALoss = 1.0520e-02, PNorm = 42.5955, GNorm = 0.2329, lr_0 = 5.8761e-04
+
+ 41% 66/160 [00:02<00:03, 29.90it/s][A
+ 44% 70/160 [00:02<00:03, 28.81it/s][ALoss = 1.0137e-02, PNorm = 42.6281, GNorm = 0.2930, lr_0 = 5.8458e-04
+
+ 48% 76/160 [00:02<00:02, 33.12it/s][A
+ 50% 80/160 [00:02<00:02, 29.40it/s][A
+ 52% 84/160 [00:02<00:02, 29.42it/s][ALoss = 9.9145e-03, PNorm = 42.6648, GNorm = 0.3325, lr_0 = 5.8157e-04
+
+ 55% 88/160 [00:02<00:02, 27.44it/s][A
+ 57% 92/160 [00:03<00:02, 26.22it/s][ALoss = 1.0265e-02, PNorm = 42.7015, GNorm = 0.3186, lr_0 = 5.7857e-04
+
+ 59% 95/160 [00:03<00:02, 23.67it/s][A
+ 61% 98/160 [00:03<00:02, 25.11it/s][A
+ 64% 102/160 [00:03<00:02, 27.30it/s][ALoss = 9.9302e-03, PNorm = 42.7202, GNorm = 0.3063, lr_0 = 5.7558e-04
+
+ 66% 106/160 [00:03<00:01, 29.70it/s][A
+ 69% 111/160 [00:03<00:01, 33.38it/s][ALoss = 1.0423e-02, PNorm = 42.7416, GNorm = 0.3042, lr_0 = 5.7261e-04
+
+ 72% 115/160 [00:03<00:01, 31.85it/s][A
+ 76% 121/160 [00:03<00:01, 34.76it/s][ALoss = 1.0613e-02, PNorm = 42.7531, GNorm = 0.2872, lr_0 = 5.6966e-04
+
+ 79% 126/160 [00:04<00:00, 35.83it/s][A
+ 81% 130/160 [00:04<00:00, 34.52it/s][A
+ 84% 134/160 [00:04<00:00, 28.91it/s][ALoss = 1.0421e-02, PNorm = 42.7738, GNorm = 0.8931, lr_0 = 5.6672e-04
+
+ 86% 138/160 [00:04<00:00, 25.09it/s][A
+ 88% 141/160 [00:04<00:00, 22.40it/s][A
+ 90% 144/160 [00:04<00:00, 23.81it/s][ALoss = 1.2234e-02, PNorm = 42.7875, GNorm = 0.3699, lr_0 = 5.6380e-04
+
+ 92% 148/160 [00:05<00:00, 25.56it/s][A
+ 95% 152/160 [00:05<00:00, 26.98it/s][ALoss = 1.1177e-02, PNorm = 42.8028, GNorm = 0.3820, lr_0 = 5.6089e-04
+
+ 97% 155/160 [00:05<00:00, 26.99it/s][A
+ 99% 159/160 [00:05<00:00, 29.63it/s][A100% 160/160 [00:05<00:00, 29.50it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 35% 7/20 [00:00<00:00, 69.48it/s][A
+ 65% 13/20 [00:00<00:00, 64.20it/s][A
+ 85% 17/20 [00:00<00:00, 47.48it/s][A100% 20/20 [00:00<00:00, 49.16it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.539648
+ 30% 9/30 [01:17<02:35,  7.42s/it]Epoch 9
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 3/160 [00:00<00:06, 25.69it/s][A
+  3% 5/160 [00:00<00:06, 23.65it/s][ALoss = 1.0968e-02, PNorm = 42.8344, GNorm = 0.6964, lr_0 = 5.5771e-04
+
+  5% 8/160 [00:00<00:06, 24.07it/s][A
+  8% 12/160 [00:00<00:05, 27.18it/s][A
+  9% 15/160 [00:00<00:05, 27.07it/s][ALoss = 1.0208e-02, PNorm = 42.8562, GNorm = 0.3024, lr_0 = 5.5483e-04
+
+ 12% 20/160 [00:00<00:04, 30.76it/s][A
+ 16% 25/160 [00:00<00:03, 34.06it/s][ALoss = 9.9362e-03, PNorm = 42.8875, GNorm = 0.3487, lr_0 = 5.5197e-04
+
+ 19% 30/160 [00:00<00:03, 35.37it/s][A
+ 22% 35/160 [00:01<00:03, 38.41it/s][ALoss = 1.1353e-02, PNorm = 42.9081, GNorm = 0.4122, lr_0 = 5.4912e-04
+
+ 25% 40/160 [00:01<00:02, 40.65it/s][A
+ 28% 45/160 [00:01<00:02, 42.03it/s][ALoss = 9.8054e-03, PNorm = 42.9242, GNorm = 0.4365, lr_0 = 5.4629e-04
+
+ 31% 50/160 [00:01<00:02, 42.58it/s][ALoss = 9.8972e-03, PNorm = 42.9456, GNorm = 0.3521, lr_0 = 5.4347e-04
+
+ 35% 56/160 [00:01<00:02, 44.73it/s][A
+ 38% 61/160 [00:01<00:02, 43.50it/s][ALoss = 1.0013e-02, PNorm = 42.9643, GNorm = 0.2413, lr_0 = 5.4067e-04
+
+ 41% 66/160 [00:01<00:02, 43.82it/s][A
+ 44% 71/160 [00:01<00:02, 43.30it/s][ALoss = 1.0300e-02, PNorm = 42.9872, GNorm = 0.4542, lr_0 = 5.3788e-04
+
+ 48% 76/160 [00:01<00:01, 42.38it/s][A
+ 51% 81/160 [00:02<00:01, 41.05it/s][ALoss = 1.1006e-02, PNorm = 43.0055, GNorm = 0.6243, lr_0 = 5.3510e-04
+
+ 54% 86/160 [00:02<00:01, 40.58it/s][A
+ 57% 91/160 [00:02<00:01, 41.00it/s][ALoss = 1.2372e-02, PNorm = 43.0107, GNorm = 0.2569, lr_0 = 5.3234e-04
+
+ 60% 96/160 [00:02<00:01, 41.54it/s][A
+ 63% 101/160 [00:02<00:01, 41.65it/s][ALoss = 1.0661e-02, PNorm = 43.0132, GNorm = 0.3869, lr_0 = 5.2960e-04
+
+ 66% 106/160 [00:02<00:01, 40.87it/s][A
+ 69% 111/160 [00:02<00:01, 41.91it/s][ALoss = 8.4883e-03, PNorm = 43.0477, GNorm = 0.3301, lr_0 = 5.2686e-04
+
+ 72% 116/160 [00:02<00:01, 40.00it/s][A
+ 76% 121/160 [00:03<00:00, 40.26it/s][ALoss = 1.1599e-02, PNorm = 43.0606, GNorm = 0.2549, lr_0 = 5.2415e-04
+
+ 79% 126/160 [00:03<00:00, 39.44it/s][A
+ 81% 130/160 [00:03<00:00, 39.27it/s][A
+ 84% 135/160 [00:03<00:00, 39.70it/s][ALoss = 9.9684e-03, PNorm = 43.0750, GNorm = 0.4352, lr_0 = 5.2144e-04
+
+ 87% 139/160 [00:03<00:00, 39.36it/s][A
+ 89% 143/160 [00:03<00:00, 38.79it/s][ALoss = 1.0067e-02, PNorm = 43.0968, GNorm = 0.5729, lr_0 = 5.1875e-04
+
+ 92% 147/160 [00:03<00:00, 38.20it/s][A
+ 95% 152/160 [00:03<00:00, 38.81it/s][ALoss = 1.1494e-02, PNorm = 43.1069, GNorm = 0.2988, lr_0 = 5.1608e-04
+
+ 98% 156/160 [00:03<00:00, 38.52it/s][A100% 160/160 [00:04<00:00, 39.80it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 77.13it/s][A
+ 80% 16/20 [00:00<00:00, 77.11it/s][A100% 20/20 [00:00<00:00, 77.48it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.528697
+ 33% 10/30 [01:22<02:11,  6.56s/it]Epoch 10
+
+  0% 0/160 [00:00<?, ?it/s][A
+  3% 5/160 [00:00<00:03, 45.66it/s][ALoss = 9.7947e-03, PNorm = 43.1350, GNorm = 0.4919, lr_0 = 5.1341e-04
+
+  6% 10/160 [00:00<00:03, 46.73it/s][A
+  9% 15/160 [00:00<00:03, 45.57it/s][ALoss = 9.6520e-03, PNorm = 43.1787, GNorm = 0.4269, lr_0 = 5.1076e-04
+
+ 12% 19/160 [00:00<00:03, 41.48it/s][A
+ 14% 23/160 [00:00<00:03, 40.87it/s][ALoss = 1.0705e-02, PNorm = 43.2059, GNorm = 0.3555, lr_0 = 5.0813e-04
+
+ 17% 27/160 [00:00<00:03, 38.09it/s][A
+ 20% 32/160 [00:00<00:03, 40.38it/s][ALoss = 1.0872e-02, PNorm = 43.2358, GNorm = 0.5228, lr_0 = 5.0551e-04
+
+ 22% 36/160 [00:00<00:03, 39.96it/s][A
+ 26% 41/160 [00:00<00:02, 41.69it/s][ALoss = 1.0102e-02, PNorm = 43.2670, GNorm = 0.2031, lr_0 = 5.0290e-04
+
+ 29% 46/160 [00:01<00:02, 41.21it/s][A
+ 32% 51/160 [00:01<00:02, 42.98it/s][ALoss = 9.9896e-03, PNorm = 43.2850, GNorm = 0.3724, lr_0 = 5.0031e-04
+
+ 35% 56/160 [00:01<00:02, 43.54it/s][A
+ 38% 61/160 [00:01<00:02, 44.37it/s][ALoss = 9.9683e-03, PNorm = 43.3029, GNorm = 0.3319, lr_0 = 4.9773e-04
+
+ 41% 66/160 [00:01<00:02, 44.99it/s][A
+ 45% 72/160 [00:01<00:01, 46.73it/s][ALoss = 9.3277e-03, PNorm = 43.3264, GNorm = 0.5140, lr_0 = 4.9516e-04
+
+ 48% 77/160 [00:01<00:02, 41.44it/s][A
+ 51% 82/160 [00:02<00:02, 34.30it/s][ALoss = 1.0138e-02, PNorm = 43.3536, GNorm = 0.4522, lr_0 = 4.9260e-04
+
+ 54% 86/160 [00:02<00:02, 30.02it/s][A
+ 56% 90/160 [00:02<00:02, 27.16it/s][A
+ 58% 93/160 [00:02<00:02, 27.01it/s][ALoss = 1.1116e-02, PNorm = 43.3690, GNorm = 0.7192, lr_0 = 4.9006e-04
+
+ 60% 96/160 [00:02<00:02, 27.83it/s][A
+ 62% 100/160 [00:02<00:02, 29.30it/s][A
+ 65% 104/160 [00:02<00:01, 29.86it/s][ALoss = 9.0634e-03, PNorm = 43.3856, GNorm = 0.3645, lr_0 = 4.8753e-04
+
+ 68% 108/160 [00:02<00:01, 28.96it/s][A
+ 69% 111/160 [00:03<00:01, 28.54it/s][A
+ 71% 114/160 [00:03<00:01, 27.96it/s][ALoss = 1.1848e-02, PNorm = 43.3886, GNorm = 0.3073, lr_0 = 4.8502e-04
+
+ 73% 117/160 [00:03<00:01, 27.37it/s][A
+ 75% 120/160 [00:03<00:01, 25.25it/s][A
+ 78% 125/160 [00:03<00:01, 29.51it/s][ALoss = 1.3637e-02, PNorm = 43.3764, GNorm = 0.3230, lr_0 = 4.8252e-04
+
+ 81% 129/160 [00:03<00:01, 27.50it/s][A
+ 82% 132/160 [00:03<00:01, 26.72it/s][ALoss = 9.9433e-03, PNorm = 43.4013, GNorm = 0.2711, lr_0 = 4.8003e-04
+
+ 86% 137/160 [00:03<00:00, 31.04it/s][A
+ 89% 143/160 [00:04<00:00, 35.03it/s][ALoss = 1.0771e-02, PNorm = 43.4278, GNorm = 0.3494, lr_0 = 4.7755e-04
+
+ 92% 147/160 [00:04<00:00, 33.50it/s][A
+ 94% 151/160 [00:04<00:00, 32.86it/s][A
+ 97% 155/160 [00:04<00:00, 27.93it/s][ALoss = 1.1639e-02, PNorm = 43.4494, GNorm = 1.0965, lr_0 = 4.7509e-04
+
+ 99% 159/160 [00:04<00:00, 26.66it/s][A100% 160/160 [00:04<00:00, 34.07it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 81.69it/s][A
+ 90% 18/20 [00:00<00:00, 81.73it/s][A100% 20/20 [00:00<00:00, 82.01it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.542573
+ 37% 11/30 [01:27<01:57,  6.16s/it]Epoch 11
+
+  0% 0/160 [00:00<?, ?it/s][A
+  3% 5/160 [00:00<00:03, 48.20it/s][ALoss = 1.0235e-02, PNorm = 43.4683, GNorm = 0.2443, lr_0 = 4.7239e-04
+
+  6% 9/160 [00:00<00:03, 44.65it/s][A
+  8% 12/160 [00:00<00:03, 38.10it/s][A
+  9% 15/160 [00:00<00:04, 34.39it/s][ALoss = 9.6111e-03, PNorm = 43.5030, GNorm = 0.5031, lr_0 = 4.6996e-04
+
+ 11% 18/160 [00:00<00:04, 31.42it/s][A
+ 13% 21/160 [00:00<00:04, 30.37it/s][ALoss = 1.0304e-02, PNorm = 43.5293, GNorm = 0.2806, lr_0 = 4.6753e-04
+
+ 17% 27/160 [00:00<00:04, 32.64it/s][A
+ 19% 31/160 [00:00<00:04, 28.24it/s][A
+ 21% 34/160 [00:01<00:04, 28.13it/s][ALoss = 1.0490e-02, PNorm = 43.5542, GNorm = 0.3732, lr_0 = 4.6512e-04
+
+ 23% 37/160 [00:01<00:04, 27.10it/s][A
+ 25% 40/160 [00:01<00:04, 25.93it/s][A
+ 27% 43/160 [00:01<00:04, 24.01it/s][A
+ 29% 46/160 [00:02<00:14,  8.13it/s][ALoss = 9.9304e-03, PNorm = 43.5751, GNorm = 0.4214, lr_0 = 4.6272e-04
+
+ 31% 49/160 [00:02<00:10, 10.40it/s][A
+ 32% 52/160 [00:02<00:08, 12.78it/s][A
+ 34% 55/160 [00:02<00:07, 14.83it/s][ALoss = 1.0983e-02, PNorm = 43.5989, GNorm = 0.3994, lr_0 = 4.6033e-04
+
+ 37% 59/160 [00:02<00:05, 17.65it/s][A
+ 39% 63/160 [00:02<00:04, 20.98it/s][ALoss = 9.7001e-03, PNorm = 43.6166, GNorm = 0.3086, lr_0 = 4.5796e-04
+
+ 42% 68/160 [00:03<00:03, 24.68it/s][A
+ 45% 72/160 [00:03<00:03, 26.74it/s][A
+ 48% 76/160 [00:03<00:02, 29.13it/s][ALoss = 1.0488e-02, PNorm = 43.6303, GNorm = 0.3503, lr_0 = 4.5560e-04
+
+ 50% 80/160 [00:03<00:02, 27.86it/s][A
+ 54% 86/160 [00:03<00:02, 32.33it/s][ALoss = 8.9756e-03, PNorm = 43.6524, GNorm = 0.4035, lr_0 = 4.5325e-04
+
+ 57% 91/160 [00:03<00:02, 33.15it/s][A
+ 59% 95/160 [00:03<00:02, 31.62it/s][ALoss = 1.1956e-02, PNorm = 43.6507, GNorm = 0.3642, lr_0 = 4.5091e-04
+
+ 62% 100/160 [00:04<00:01, 35.14it/s][A
+ 66% 106/160 [00:04<00:01, 38.77it/s][ALoss = 1.1159e-02, PNorm = 43.6505, GNorm = 0.3813, lr_0 = 4.4858e-04
+
+ 70% 112/160 [00:04<00:01, 41.80it/s][ALoss = 9.7407e-03, PNorm = 43.6651, GNorm = 0.3751, lr_0 = 4.4627e-04
+
+ 74% 118/160 [00:04<00:00, 44.09it/s][A
+ 77% 123/160 [00:04<00:00, 41.02it/s][ALoss = 1.1141e-02, PNorm = 43.6689, GNorm = 0.2000, lr_0 = 4.4397e-04
+
+ 80% 128/160 [00:04<00:00, 34.83it/s][A
+ 82% 132/160 [00:04<00:00, 29.98it/s][A
+ 85% 136/160 [00:04<00:00, 30.30it/s][ALoss = 1.0543e-02, PNorm = 43.6881, GNorm = 0.1696, lr_0 = 4.4168e-04
+
+ 88% 141/160 [00:05<00:00, 34.10it/s][A
+ 91% 146/160 [00:05<00:00, 36.24it/s][ALoss = 1.0113e-02, PNorm = 43.7117, GNorm = 0.8945, lr_0 = 4.3940e-04
+
+ 94% 151/160 [00:05<00:00, 39.34it/s][A
+ 98% 156/160 [00:05<00:00, 41.88it/s][ALoss = 1.1877e-02, PNorm = 43.7114, GNorm = 0.3642, lr_0 = 4.3713e-04
+100% 160/160 [00:05<00:00, 29.14it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 81.46it/s][A
+ 90% 18/20 [00:00<00:00, 81.54it/s][A100% 20/20 [00:00<00:00, 81.87it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.546505
+ 40% 12/30 [01:33<01:50,  6.11s/it]Epoch 12
+
+  0% 0/160 [00:00<?, ?it/s][A
+  3% 5/160 [00:00<00:03, 47.95it/s][ALoss = 1.0615e-02, PNorm = 43.7152, GNorm = 0.2823, lr_0 = 4.3488e-04
+
+  7% 11/160 [00:00<00:03, 48.75it/s][ALoss = 1.0276e-02, PNorm = 43.7329, GNorm = 0.4099, lr_0 = 4.3263e-04
+
+ 11% 17/160 [00:00<00:02, 49.36it/s][A
+ 14% 23/160 [00:00<00:02, 49.75it/s][ALoss = 9.0421e-03, PNorm = 43.7600, GNorm = 0.5620, lr_0 = 4.3040e-04
+
+ 18% 28/160 [00:00<00:02, 49.79it/s][A
+ 21% 33/160 [00:00<00:02, 46.52it/s][ALoss = 1.0313e-02, PNorm = 43.7935, GNorm = 0.8989, lr_0 = 4.2818e-04
+
+ 24% 38/160 [00:00<00:02, 45.82it/s][A
+ 27% 43/160 [00:00<00:02, 45.73it/s][ALoss = 1.0836e-02, PNorm = 43.8065, GNorm = 0.3207, lr_0 = 4.2597e-04
+
+ 30% 48/160 [00:01<00:02, 44.61it/s][A
+ 33% 53/160 [00:01<00:02, 42.95it/s][ALoss = 1.1264e-02, PNorm = 43.8217, GNorm = 0.2127, lr_0 = 4.2377e-04
+
+ 36% 58/160 [00:01<00:02, 43.82it/s][A
+ 39% 63/160 [00:01<00:02, 43.02it/s][ALoss = 1.1578e-02, PNorm = 43.8345, GNorm = 0.3247, lr_0 = 4.2159e-04
+
+ 42% 68/160 [00:01<00:02, 42.99it/s][A
+ 46% 73/160 [00:01<00:02, 42.20it/s][ALoss = 9.9545e-03, PNorm = 43.8521, GNorm = 0.4086, lr_0 = 4.1941e-04
+
+ 49% 78/160 [00:01<00:01, 41.16it/s][A
+ 52% 83/160 [00:01<00:01, 41.49it/s][ALoss = 9.4346e-03, PNorm = 43.8795, GNorm = 0.3818, lr_0 = 4.1725e-04
+
+ 55% 88/160 [00:01<00:01, 43.06it/s][A
+ 58% 93/160 [00:02<00:01, 42.86it/s][ALoss = 1.1426e-02, PNorm = 43.8943, GNorm = 0.4885, lr_0 = 4.1510e-04
+
+ 61% 98/160 [00:02<00:01, 43.04it/s][A
+ 65% 104/160 [00:02<00:01, 45.11it/s][ALoss = 1.0096e-02, PNorm = 43.9156, GNorm = 0.2640, lr_0 = 4.1296e-04
+
+ 69% 110/160 [00:02<00:01, 46.54it/s][A
+ 72% 116/160 [00:02<00:00, 47.97it/s][ALoss = 9.3395e-03, PNorm = 43.9431, GNorm = 0.4350, lr_0 = 4.1082e-04
+
+ 76% 122/160 [00:02<00:00, 48.67it/s][ALoss = 9.5411e-03, PNorm = 43.9689, GNorm = 0.4729, lr_0 = 4.0871e-04
+
+ 80% 128/160 [00:02<00:00, 49.22it/s][A
+ 84% 134/160 [00:02<00:00, 49.86it/s][ALoss = 1.0995e-02, PNorm = 43.9767, GNorm = 0.6358, lr_0 = 4.0660e-04
+
+ 88% 140/160 [00:03<00:00, 49.78it/s][A
+ 91% 146/160 [00:03<00:00, 50.22it/s][ALoss = 9.3742e-03, PNorm = 43.9993, GNorm = 0.6036, lr_0 = 4.0450e-04
+
+ 95% 152/160 [00:03<00:00, 45.11it/s][ALoss = 8.6939e-03, PNorm = 44.0334, GNorm = 0.9581, lr_0 = 4.0241e-04
+
+ 98% 157/160 [00:03<00:00, 44.81it/s][A100% 160/160 [00:03<00:00, 45.95it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 82.76it/s][A
+ 90% 18/20 [00:00<00:00, 82.54it/s][A100% 20/20 [00:00<00:00, 82.73it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.514009
+ 43% 13/30 [01:37<01:33,  5.48s/it]Epoch 13
+
+  0% 0/160 [00:00<?, ?it/s][A
+  3% 5/160 [00:00<00:03, 48.90it/s][ALoss = 9.9025e-03, PNorm = 44.0598, GNorm = 0.5393, lr_0 = 4.0013e-04
+
+  6% 10/160 [00:00<00:03, 46.05it/s][A
+  9% 14/160 [00:00<00:03, 42.90it/s][ALoss = 1.0974e-02, PNorm = 44.0661, GNorm = 0.3866, lr_0 = 3.9807e-04
+
+ 11% 18/160 [00:00<00:03, 38.20it/s][A
+ 13% 21/160 [00:00<00:04, 34.40it/s][A
+ 16% 25/160 [00:00<00:04, 33.69it/s][ALoss = 9.8689e-03, PNorm = 44.0855, GNorm = 0.3468, lr_0 = 3.9601e-04
+
+ 18% 29/160 [00:00<00:03, 34.82it/s][A
+ 21% 33/160 [00:00<00:03, 35.21it/s][ALoss = 9.2694e-03, PNorm = 44.1089, GNorm = 0.3348, lr_0 = 3.9397e-04
+
+ 24% 38/160 [00:01<00:03, 38.12it/s][A
+ 27% 43/160 [00:01<00:02, 40.78it/s][ALoss = 1.3026e-02, PNorm = 44.1083, GNorm = 0.3974, lr_0 = 3.9194e-04
+
+ 30% 48/160 [00:01<00:02, 40.45it/s][A
+ 33% 53/160 [00:01<00:02, 38.08it/s][A
+ 36% 57/160 [00:01<00:02, 35.74it/s][ALoss = 1.0059e-02, PNorm = 44.1073, GNorm = 0.6863, lr_0 = 3.8992e-04
+
+ 38% 61/160 [00:01<00:03, 30.98it/s][A
+ 41% 65/160 [00:01<00:03, 29.55it/s][ALoss = 1.0037e-02, PNorm = 44.1345, GNorm = 0.3657, lr_0 = 3.8790e-04
+
+ 43% 69/160 [00:02<00:03, 26.74it/s][A
+ 45% 72/160 [00:02<00:03, 25.91it/s][A
+ 47% 75/160 [00:02<00:03, 25.18it/s][ALoss = 9.0126e-03, PNorm = 44.1662, GNorm = 0.6320, lr_0 = 3.8590e-04
+
+ 49% 78/160 [00:02<00:03, 25.62it/s][A
+ 51% 81/160 [00:02<00:03, 24.44it/s][A
+ 53% 85/160 [00:02<00:02, 26.22it/s][ALoss = 9.4325e-03, PNorm = 44.2020, GNorm = 0.4418, lr_0 = 3.8391e-04
+
+ 55% 88/160 [00:02<00:02, 26.71it/s][A
+ 57% 92/160 [00:02<00:02, 28.02it/s][A
+ 61% 97/160 [00:02<00:01, 31.92it/s][ALoss = 9.4805e-03, PNorm = 44.2198, GNorm = 0.3584, lr_0 = 3.8193e-04
+
+ 64% 103/160 [00:03<00:01, 35.88it/s][A
+ 67% 107/160 [00:03<00:01, 30.70it/s][ALoss = 9.8660e-03, PNorm = 44.2354, GNorm = 0.3364, lr_0 = 3.7996e-04
+
+ 69% 111/160 [00:03<00:01, 32.75it/s][A
+ 72% 116/160 [00:03<00:01, 36.44it/s][ALoss = 1.0674e-02, PNorm = 44.2422, GNorm = 0.4421, lr_0 = 3.7800e-04
+
+ 76% 122/160 [00:03<00:00, 39.87it/s][ALoss = 1.1254e-02, PNorm = 44.2418, GNorm = 0.3479, lr_0 = 3.7605e-04
+
+ 80% 128/160 [00:03<00:00, 42.60it/s][A
+ 84% 134/160 [00:03<00:00, 44.90it/s][ALoss = 1.1140e-02, PNorm = 44.2426, GNorm = 0.9908, lr_0 = 3.7411e-04
+
+ 87% 139/160 [00:03<00:00, 46.20it/s][A
+ 91% 145/160 [00:04<00:00, 46.79it/s][ALoss = 9.7094e-03, PNorm = 44.2497, GNorm = 0.5371, lr_0 = 3.7218e-04
+
+ 94% 150/160 [00:04<00:00, 47.54it/s][A
+ 97% 155/160 [00:04<00:00, 48.18it/s][ALoss = 9.3483e-03, PNorm = 44.2656, GNorm = 0.5058, lr_0 = 3.7026e-04
+100% 160/160 [00:04<00:00, 36.71it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 82.02it/s][A
+ 90% 18/20 [00:00<00:00, 80.54it/s][A100% 20/20 [00:00<00:00, 76.48it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.542256
+ 47% 14/30 [01:42<01:25,  5.35s/it]Epoch 14
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 4/160 [00:00<00:04, 36.70it/s][A
+  5% 8/160 [00:00<00:04, 36.06it/s][ALoss = 9.9945e-03, PNorm = 44.2911, GNorm = 0.3803, lr_0 = 3.6816e-04
+
+  7% 11/160 [00:00<00:05, 27.53it/s][A
+  9% 14/160 [00:00<00:06, 23.79it/s][A
+ 11% 17/160 [00:00<00:05, 23.89it/s][ALoss = 8.3134e-03, PNorm = 44.3188, GNorm = 0.2313, lr_0 = 3.6626e-04
+
+ 12% 20/160 [00:00<00:06, 23.11it/s][A
+ 14% 23/160 [00:00<00:06, 21.92it/s][A
+ 16% 26/160 [00:01<00:06, 21.92it/s][ALoss = 9.4696e-03, PNorm = 44.3364, GNorm = 0.8077, lr_0 = 3.6437e-04
+
+ 18% 29/160 [00:01<00:05, 21.95it/s][A
+ 21% 33/160 [00:01<00:05, 24.39it/s][A
+ 23% 37/160 [00:01<00:04, 26.11it/s][ALoss = 1.1195e-02, PNorm = 44.3511, GNorm = 0.5488, lr_0 = 3.6249e-04
+
+ 26% 41/160 [00:01<00:04, 28.15it/s][A
+ 28% 45/160 [00:01<00:03, 29.68it/s][ALoss = 1.0226e-02, PNorm = 44.3583, GNorm = 0.4213, lr_0 = 3.6062e-04
+
+ 31% 49/160 [00:01<00:03, 27.94it/s][A
+ 32% 52/160 [00:02<00:04, 25.48it/s][A
+ 34% 55/160 [00:02<00:04, 21.54it/s][A
+ 36% 58/160 [00:02<00:04, 20.57it/s][ALoss = 9.0195e-03, PNorm = 44.3714, GNorm = 0.4438, lr_0 = 3.5876e-04
+
+ 38% 61/160 [00:02<00:05, 19.66it/s][A
+ 40% 64/160 [00:02<00:05, 18.37it/s][A
+ 41% 66/160 [00:02<00:05, 18.26it/s][ALoss = 1.0900e-02, PNorm = 44.3809, GNorm = 0.3228, lr_0 = 3.5691e-04
+
+ 43% 69/160 [00:03<00:04, 18.81it/s][A
+ 46% 73/160 [00:03<00:03, 21.89it/s][A
+ 48% 76/160 [00:03<00:03, 23.08it/s][ALoss = 1.0199e-02, PNorm = 44.3932, GNorm = 0.3205, lr_0 = 3.5507e-04
+
+ 49% 79/160 [00:03<00:03, 23.40it/s][A
+ 52% 84/160 [00:03<00:02, 27.21it/s][A
+ 55% 88/160 [00:03<00:02, 28.38it/s][ALoss = 9.3805e-03, PNorm = 44.4220, GNorm = 1.1082, lr_0 = 3.5324e-04
+
+ 57% 92/160 [00:03<00:02, 29.97it/s][A
+ 60% 96/160 [00:03<00:02, 28.20it/s][ALoss = 9.8537e-03, PNorm = 44.4451, GNorm = 0.7752, lr_0 = 3.5142e-04
+
+ 62% 99/160 [00:04<00:02, 26.38it/s][A
+ 64% 102/160 [00:04<00:02, 25.67it/s][A
+ 66% 105/160 [00:04<00:02, 23.69it/s][A
+ 68% 108/160 [00:04<00:02, 24.62it/s][ALoss = 1.0026e-02, PNorm = 44.4625, GNorm = 0.4611, lr_0 = 3.4960e-04
+
+ 70% 112/160 [00:04<00:01, 27.31it/s][A
+ 72% 116/160 [00:04<00:01, 30.07it/s][ALoss = 9.4101e-03, PNorm = 44.4760, GNorm = 0.4165, lr_0 = 3.4780e-04
+
+ 75% 120/160 [00:04<00:01, 28.85it/s][A
+ 78% 124/160 [00:04<00:01, 26.41it/s][A
+ 79% 127/160 [00:05<00:01, 18.08it/s][ALoss = 1.0333e-02, PNorm = 44.4909, GNorm = 0.2614, lr_0 = 3.4601e-04
+
+ 81% 130/160 [00:05<00:01, 18.51it/s][A
+ 83% 133/160 [00:05<00:01, 20.73it/s][A
+ 85% 136/160 [00:05<00:01, 22.43it/s][ALoss = 9.5616e-03, PNorm = 44.5023, GNorm = 0.5308, lr_0 = 3.4422e-04
+
+ 87% 139/160 [00:05<00:00, 22.12it/s][A
+ 89% 142/160 [00:05<00:00, 22.00it/s][A
+ 91% 146/160 [00:05<00:00, 24.92it/s][ALoss = 1.1088e-02, PNorm = 44.5128, GNorm = 0.2407, lr_0 = 3.4245e-04
+
+ 93% 149/160 [00:06<00:00, 22.29it/s][A
+ 95% 152/160 [00:06<00:00, 22.41it/s][A
+ 97% 155/160 [00:06<00:00, 21.80it/s][A
+ 99% 158/160 [00:06<00:00, 23.43it/s][ALoss = 1.0305e-02, PNorm = 44.5198, GNorm = 0.2188, lr_0 = 3.4068e-04
+100% 160/160 [00:06<00:00, 24.40it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 82.89it/s][A
+ 70% 14/20 [00:00<00:00, 65.33it/s][A
+ 90% 18/20 [00:00<00:00, 48.53it/s][A100% 20/20 [00:00<00:00, 45.35it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.559523
+ 50% 15/30 [01:49<01:28,  5.93s/it]Epoch 15
+
+  0% 0/160 [00:00<?, ?it/s][A
+  1% 2/160 [00:00<00:11, 14.13it/s][A
+  2% 4/160 [00:00<00:11, 13.95it/s][A
+  4% 7/160 [00:00<00:09, 15.55it/s][ALoss = 1.0457e-02, PNorm = 44.5298, GNorm = 0.2972, lr_0 = 3.3892e-04
+
+  6% 10/160 [00:00<00:08, 17.98it/s][A
+  8% 13/160 [00:00<00:07, 20.10it/s][A
+ 10% 16/160 [00:00<00:06, 22.18it/s][ALoss = 9.0203e-03, PNorm = 44.5485, GNorm = 0.8198, lr_0 = 3.3717e-04
+
+ 12% 20/160 [00:00<00:05, 23.68it/s][A
+ 14% 23/160 [00:01<00:05, 24.35it/s][A
+ 17% 27/160 [00:01<00:05, 25.90it/s][ALoss = 1.0449e-02, PNorm = 44.5648, GNorm = 0.4462, lr_0 = 3.3543e-04
+
+ 19% 31/160 [00:01<00:04, 27.77it/s][A
+ 21% 34/160 [00:01<00:04, 27.75it/s][ALoss = 9.5039e-03, PNorm = 44.5833, GNorm = 0.6110, lr_0 = 3.3370e-04
+
+ 24% 39/160 [00:01<00:03, 32.01it/s][A
+ 28% 45/160 [00:01<00:03, 36.01it/s][ALoss = 8.8376e-03, PNorm = 44.5940, GNorm = 0.4499, lr_0 = 3.3198e-04
+
+ 31% 50/160 [00:01<00:03, 35.92it/s][A
+ 34% 54/160 [00:01<00:02, 35.51it/s][A
+ 36% 58/160 [00:01<00:03, 32.42it/s][ALoss = 1.0485e-02, PNorm = 44.6051, GNorm = 0.3229, lr_0 = 3.3027e-04
+
+ 39% 62/160 [00:02<00:03, 29.90it/s][A
+ 41% 66/160 [00:02<00:02, 31.50it/s][ALoss = 9.6872e-03, PNorm = 44.6262, GNorm = 0.8202, lr_0 = 3.2857e-04
+
+ 44% 71/160 [00:02<00:02, 35.43it/s][A
+ 48% 77/160 [00:02<00:02, 39.18it/s][ALoss = 1.0095e-02, PNorm = 44.6411, GNorm = 0.3653, lr_0 = 3.2687e-04
+
+ 52% 83/160 [00:02<00:01, 42.14it/s][ALoss = 9.6313e-03, PNorm = 44.6525, GNorm = 1.1033, lr_0 = 3.2518e-04
+
+ 56% 89/160 [00:02<00:01, 44.37it/s][A
+ 59% 94/160 [00:02<00:01, 41.94it/s][ALoss = 9.7737e-03, PNorm = 44.6672, GNorm = 0.3538, lr_0 = 3.2351e-04
+
+ 62% 100/160 [00:02<00:01, 44.56it/s][A
+ 66% 105/160 [00:03<00:01, 43.98it/s][ALoss = 1.0923e-02, PNorm = 44.6702, GNorm = 0.5221, lr_0 = 3.2184e-04
+
+ 69% 110/160 [00:03<00:01, 42.83it/s][A
+ 72% 115/160 [00:03<00:01, 42.31it/s][ALoss = 9.8810e-03, PNorm = 44.6879, GNorm = 0.7325, lr_0 = 3.2018e-04
+
+ 75% 120/160 [00:03<00:00, 44.29it/s][A
+ 78% 125/160 [00:03<00:00, 43.01it/s][ALoss = 9.2084e-03, PNorm = 44.7068, GNorm = 0.3195, lr_0 = 3.1853e-04
+
+ 81% 130/160 [00:03<00:00, 43.35it/s][A
+ 84% 135/160 [00:03<00:00, 44.67it/s][ALoss = 1.2078e-02, PNorm = 44.7208, GNorm = 0.4772, lr_0 = 3.1688e-04
+
+ 88% 140/160 [00:03<00:00, 44.06it/s][A
+ 91% 146/160 [00:03<00:00, 45.85it/s][ALoss = 8.8805e-03, PNorm = 44.7302, GNorm = 0.4054, lr_0 = 3.1525e-04
+
+ 94% 151/160 [00:04<00:00, 42.43it/s][A
+ 98% 156/160 [00:04<00:00, 43.95it/s][ALoss = 9.2959e-03, PNorm = 44.7427, GNorm = 0.7034, lr_0 = 3.1362e-04
+Loss = 7.3853e-03, PNorm = 44.7450, GNorm = 0.3389, lr_0 = 3.1346e-04
+100% 160/160 [00:04<00:00, 37.08it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 82.38it/s][A
+ 90% 18/20 [00:00<00:00, 81.89it/s][A100% 20/20 [00:00<00:00, 81.98it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.544860
+ 53% 16/30 [01:54<01:18,  5.60s/it]Epoch 16
+
+  0% 0/160 [00:00<?, ?it/s][A
+  1% 2/160 [00:01<01:22,  1.92it/s][A
+  4% 6/160 [00:01<00:57,  2.67it/s][ALoss = 9.6350e-03, PNorm = 44.7625, GNorm = 0.3333, lr_0 = 3.1184e-04
+
+  7% 11/160 [00:01<00:40,  3.72it/s][A
+ 10% 16/160 [00:01<00:28,  5.12it/s][ALoss = 9.2665e-03, PNorm = 44.7896, GNorm = 0.8529, lr_0 = 3.1023e-04
+
+ 13% 21/160 [00:01<00:19,  6.97it/s][A
+ 16% 26/160 [00:01<00:14,  9.38it/s][ALoss = 9.5910e-03, PNorm = 44.8048, GNorm = 0.4233, lr_0 = 3.0863e-04
+
+ 19% 31/160 [00:01<00:10, 12.39it/s][A
+ 23% 37/160 [00:01<00:07, 16.01it/s][ALoss = 1.0367e-02, PNorm = 44.8160, GNorm = 0.4024, lr_0 = 3.0704e-04
+
+ 27% 43/160 [00:01<00:05, 20.13it/s][A
+ 31% 49/160 [00:02<00:04, 24.73it/s][ALoss = 1.0331e-02, PNorm = 44.8265, GNorm = 0.2412, lr_0 = 3.0546e-04
+
+ 34% 54/160 [00:02<00:03, 28.00it/s][ALoss = 9.5130e-03, PNorm = 44.8453, GNorm = 1.2808, lr_0 = 3.0388e-04
+
+ 38% 60/160 [00:02<00:03, 32.33it/s][A
+ 41% 66/160 [00:02<00:02, 36.51it/s][ALoss = 8.3857e-03, PNorm = 44.8679, GNorm = 0.5079, lr_0 = 3.0231e-04
+
+ 44% 71/160 [00:02<00:02, 37.74it/s][A
+ 48% 76/160 [00:02<00:02, 40.63it/s][ALoss = 8.7284e-03, PNorm = 44.8853, GNorm = 0.3668, lr_0 = 3.0075e-04
+
+ 51% 81/160 [00:02<00:01, 40.89it/s][A
+ 54% 86/160 [00:02<00:01, 41.52it/s][ALoss = 8.3628e-03, PNorm = 44.9011, GNorm = 0.4995, lr_0 = 2.9920e-04
+
+ 57% 92/160 [00:03<00:01, 43.87it/s][A
+ 61% 98/160 [00:03<00:01, 45.98it/s][ALoss = 9.9829e-03, PNorm = 44.9116, GNorm = 0.4436, lr_0 = 2.9766e-04
+
+ 65% 104/160 [00:03<00:01, 47.31it/s][ALoss = 9.1173e-03, PNorm = 44.9211, GNorm = 0.4410, lr_0 = 2.9612e-04
+
+ 69% 110/160 [00:03<00:01, 48.28it/s][A
+ 72% 116/160 [00:03<00:00, 49.07it/s][ALoss = 1.0543e-02, PNorm = 44.9226, GNorm = 0.6174, lr_0 = 2.9460e-04
+
+ 76% 121/160 [00:03<00:00, 49.04it/s][A
+ 79% 127/160 [00:03<00:00, 49.91it/s][ALoss = 9.3080e-03, PNorm = 44.9356, GNorm = 1.0504, lr_0 = 2.9308e-04
+
+ 83% 133/160 [00:03<00:00, 48.70it/s][A
+ 86% 138/160 [00:03<00:00, 48.83it/s][ALoss = 1.0514e-02, PNorm = 44.9373, GNorm = 0.4382, lr_0 = 2.9156e-04
+
+ 90% 144/160 [00:04<00:00, 49.81it/s][ALoss = 1.0577e-02, PNorm = 44.9333, GNorm = 0.3213, lr_0 = 2.9006e-04
+
+ 94% 150/160 [00:04<00:00, 50.20it/s][A
+ 98% 156/160 [00:04<00:00, 50.98it/s][ALoss = 1.0906e-02, PNorm = 44.9404, GNorm = 0.7369, lr_0 = 2.8856e-04
+100% 160/160 [00:04<00:00, 36.90it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 15% 3/20 [00:00<00:00, 28.49it/s][A
+ 50% 10/20 [00:00<00:00, 34.32it/s][A
+ 95% 19/20 [00:00<00:00, 41.51it/s][A100% 20/20 [00:00<00:00, 59.77it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.586286
+ 57% 17/30 [01:59<01:10,  5.42s/it]Epoch 17
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 3/160 [00:00<00:07, 19.63it/s][A
+  4% 6/160 [00:00<00:07, 21.84it/s][ALoss = 9.4482e-03, PNorm = 44.9530, GNorm = 0.2949, lr_0 = 2.8708e-04
+
+  6% 10/160 [00:00<00:06, 24.42it/s][A
+  8% 13/160 [00:00<00:05, 25.77it/s][A
+ 10% 16/160 [00:00<00:06, 22.97it/s][A
+ 12% 19/160 [00:00<00:06, 22.91it/s][ALoss = 8.1137e-03, PNorm = 44.9801, GNorm = 0.4999, lr_0 = 2.8559e-04
+
+ 14% 22/160 [00:00<00:06, 21.39it/s][A
+ 16% 26/160 [00:01<00:05, 24.02it/s][ALoss = 8.8000e-03, PNorm = 45.0085, GNorm = 0.4626, lr_0 = 2.8412e-04
+
+ 19% 30/160 [00:01<00:05, 25.57it/s][A
+ 21% 34/160 [00:01<00:04, 28.59it/s][ALoss = 1.0031e-02, PNorm = 45.0301, GNorm = 0.7891, lr_0 = 2.8266e-04
+
+ 25% 40/160 [00:01<00:03, 32.96it/s][A
+ 28% 44/160 [00:01<00:03, 34.55it/s][A
+ 30% 48/160 [00:01<00:03, 33.56it/s][ALoss = 9.3110e-03, PNorm = 45.0488, GNorm = 0.5272, lr_0 = 2.8120e-04
+
+ 32% 52/160 [00:01<00:03, 33.80it/s][A
+ 35% 56/160 [00:01<00:03, 33.07it/s][ALoss = 9.9833e-03, PNorm = 45.0598, GNorm = 0.2636, lr_0 = 2.7975e-04
+
+ 38% 60/160 [00:02<00:03, 31.66it/s][A
+ 41% 66/160 [00:02<00:02, 35.66it/s][ALoss = 9.8141e-03, PNorm = 45.0727, GNorm = 0.4014, lr_0 = 2.7830e-04
+
+ 44% 71/160 [00:02<00:02, 37.96it/s][A
+ 47% 75/160 [00:02<00:02, 38.19it/s][A
+ 49% 79/160 [00:02<00:02, 34.27it/s][ALoss = 9.4154e-03, PNorm = 45.0925, GNorm = 0.4670, lr_0 = 2.7687e-04
+
+ 52% 83/160 [00:02<00:02, 27.35it/s][A
+ 54% 87/160 [00:02<00:03, 22.63it/s][ALoss = 8.6235e-03, PNorm = 45.1133, GNorm = 0.7534, lr_0 = 2.7544e-04
+
+ 56% 90/160 [00:03<00:03, 23.05it/s][A
+ 59% 94/160 [00:03<00:02, 25.59it/s][A
+ 61% 98/160 [00:03<00:02, 26.99it/s][ALoss = 1.0672e-02, PNorm = 45.1291, GNorm = 0.8243, lr_0 = 2.7402e-04
+
+ 64% 102/160 [00:03<00:02, 28.07it/s][A
+ 66% 105/160 [00:03<00:02, 25.46it/s][A
+ 68% 108/160 [00:03<00:01, 26.26it/s][ALoss = 8.1583e-03, PNorm = 45.1473, GNorm = 0.4489, lr_0 = 2.7261e-04
+
+ 69% 111/160 [00:03<00:01, 26.30it/s][A
+ 72% 116/160 [00:03<00:01, 30.00it/s][ALoss = 9.1975e-03, PNorm = 45.1640, GNorm = 0.5756, lr_0 = 2.7120e-04
+
+ 76% 121/160 [00:04<00:01, 33.31it/s][A
+ 78% 125/160 [00:04<00:01, 32.73it/s][A
+ 81% 129/160 [00:04<00:00, 31.60it/s][ALoss = 1.2703e-02, PNorm = 45.1646, GNorm = 1.9731, lr_0 = 2.6980e-04
+
+ 83% 133/160 [00:04<00:00, 31.69it/s][A
+ 86% 138/160 [00:04<00:00, 34.87it/s][ALoss = 9.2211e-03, PNorm = 45.1567, GNorm = 0.4399, lr_0 = 2.6841e-04
+
+ 89% 142/160 [00:04<00:00, 32.85it/s][A
+ 91% 146/160 [00:04<00:00, 29.30it/s][ALoss = 1.0753e-02, PNorm = 45.1524, GNorm = 0.3051, lr_0 = 2.6702e-04
+
+ 94% 150/160 [00:04<00:00, 28.44it/s][A
+ 97% 155/160 [00:05<00:00, 31.98it/s][A100% 160/160 [00:05<00:00, 30.76it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 75.68it/s][A
+ 80% 16/20 [00:00<00:00, 75.70it/s][A100% 20/20 [00:00<00:00, 76.08it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.567644
+ 60% 18/30 [02:05<01:06,  5.52s/it]Epoch 18
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 7.9723e-03, PNorm = 45.1595, GNorm = 0.3390, lr_0 = 2.6551e-04
+
+  2% 4/160 [00:00<00:03, 39.81it/s][A
+  4% 7/160 [00:00<00:04, 34.68it/s][A
+  6% 9/160 [00:00<00:05, 25.63it/s][ALoss = 9.1761e-03, PNorm = 45.1788, GNorm = 0.5651, lr_0 = 2.6414e-04
+
+  7% 11/160 [00:00<00:06, 21.88it/s][A
+  8% 13/160 [00:00<00:07, 20.54it/s][A
+  9% 15/160 [00:00<00:07, 19.42it/s][A
+ 11% 18/160 [00:00<00:07, 19.72it/s][A
+ 12% 20/160 [00:00<00:07, 19.19it/s][ALoss = 7.9443e-03, PNorm = 45.2055, GNorm = 0.3873, lr_0 = 2.6278e-04
+
+ 14% 23/160 [00:01<00:06, 20.53it/s][A
+ 16% 26/160 [00:01<00:05, 22.39it/s][A
+ 19% 30/160 [00:01<00:05, 23.41it/s][ALoss = 9.8805e-03, PNorm = 45.2245, GNorm = 0.4405, lr_0 = 2.6142e-04
+
+ 21% 33/160 [00:01<00:06, 20.65it/s][A
+ 22% 36/160 [00:01<00:05, 22.22it/s][A
+ 25% 40/160 [00:01<00:04, 25.60it/s][ALoss = 8.5786e-03, PNorm = 45.2472, GNorm = 0.5117, lr_0 = 2.6007e-04
+
+ 27% 43/160 [00:01<00:05, 23.10it/s][A
+ 29% 46/160 [00:02<00:04, 23.05it/s][A
+ 31% 50/160 [00:02<00:04, 24.86it/s][ALoss = 9.5618e-03, PNorm = 45.2596, GNorm = 0.6110, lr_0 = 2.5873e-04
+
+ 34% 54/160 [00:02<00:04, 26.26it/s][A
+ 36% 57/160 [00:02<00:03, 27.13it/s][A
+ 38% 60/160 [00:02<00:03, 25.62it/s][ALoss = 8.1593e-03, PNorm = 45.2648, GNorm = 0.4014, lr_0 = 2.5740e-04
+
+ 39% 63/160 [00:02<00:03, 25.90it/s][A
+ 42% 68/160 [00:02<00:03, 29.49it/s][ALoss = 1.0532e-02, PNorm = 45.2681, GNorm = 0.4768, lr_0 = 2.5607e-04
+
+ 45% 72/160 [00:03<00:03, 22.92it/s][A
+ 47% 75/160 [00:03<00:03, 21.98it/s][A
+ 49% 78/160 [00:03<00:03, 23.66it/s][ALoss = 1.0848e-02, PNorm = 45.2704, GNorm = 0.6290, lr_0 = 2.5475e-04
+
+ 51% 81/160 [00:03<00:03, 23.88it/s][A
+ 53% 85/160 [00:03<00:02, 25.28it/s][A
+ 55% 88/160 [00:03<00:02, 24.46it/s][ALoss = 1.0160e-02, PNorm = 45.2743, GNorm = 0.5360, lr_0 = 2.5343e-04
+
+ 57% 91/160 [00:03<00:02, 23.86it/s][A
+ 60% 96/160 [00:03<00:02, 28.23it/s][A
+ 62% 100/160 [00:04<00:02, 27.76it/s][ALoss = 8.9400e-03, PNorm = 45.2865, GNorm = 0.4078, lr_0 = 2.5213e-04
+
+ 65% 104/160 [00:04<00:01, 29.55it/s][A
+ 69% 110/160 [00:04<00:01, 31.82it/s][ALoss = 9.5346e-03, PNorm = 45.2991, GNorm = 0.5840, lr_0 = 2.5083e-04
+
+ 71% 114/160 [00:04<00:01, 27.24it/s][A
+ 73% 117/160 [00:04<00:01, 24.70it/s][ALoss = 8.1172e-03, PNorm = 45.3221, GNorm = 0.3549, lr_0 = 2.4953e-04
+
+ 76% 122/160 [00:04<00:01, 28.99it/s][A
+ 80% 128/160 [00:04<00:00, 33.37it/s][ALoss = 9.5729e-03, PNorm = 45.3384, GNorm = 0.2334, lr_0 = 2.4824e-04
+
+ 84% 134/160 [00:04<00:00, 37.28it/s][A
+ 88% 140/160 [00:05<00:00, 40.61it/s][ALoss = 1.2226e-02, PNorm = 45.3425, GNorm = 0.5398, lr_0 = 2.4696e-04
+
+ 91% 145/160 [00:05<00:00, 42.46it/s][A
+ 94% 150/160 [00:05<00:00, 43.03it/s][ALoss = 9.9737e-03, PNorm = 45.3427, GNorm = 0.3689, lr_0 = 2.4569e-04
+
+ 97% 155/160 [00:05<00:00, 36.08it/s][A
+ 99% 159/160 [00:05<00:00, 34.41it/s][A100% 160/160 [00:05<00:00, 28.28it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 30% 6/20 [00:00<00:00, 54.49it/s][A
+ 70% 14/20 [00:00<00:00, 60.23it/s][A100% 20/20 [00:00<00:00, 70.66it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.565870
+ 63% 19/30 [02:11<01:03,  5.73s/it]Epoch 19
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 9.8111e-03, PNorm = 45.3572, GNorm = 0.3442, lr_0 = 2.4430e-04
+
+  2% 4/160 [00:00<00:05, 28.32it/s][A
+  6% 9/160 [00:00<00:04, 31.86it/s][ALoss = 1.0399e-02, PNorm = 45.3717, GNorm = 0.3680, lr_0 = 2.4304e-04
+
+  8% 13/160 [00:00<00:04, 31.64it/s][A
+ 11% 17/160 [00:00<00:04, 30.61it/s][A
+ 13% 21/160 [00:00<00:04, 30.59it/s][ALoss = 1.0367e-02, PNorm = 45.3843, GNorm = 0.4473, lr_0 = 2.4178e-04
+
+ 15% 24/160 [00:00<00:05, 26.06it/s][A
+ 17% 27/160 [00:00<00:05, 23.17it/s][A
+ 19% 30/160 [00:01<00:05, 23.62it/s][ALoss = 9.2450e-03, PNorm = 45.3928, GNorm = 0.5428, lr_0 = 2.4053e-04
+
+ 22% 35/160 [00:01<00:04, 25.94it/s][A
+ 24% 39/160 [00:01<00:04, 28.30it/s][ALoss = 9.3982e-03, PNorm = 45.3962, GNorm = 0.4307, lr_0 = 2.3929e-04
+
+ 27% 43/160 [00:01<00:04, 28.81it/s][A
+ 30% 48/160 [00:01<00:03, 31.19it/s][ALoss = 9.0915e-03, PNorm = 45.4071, GNorm = 0.3888, lr_0 = 2.3806e-04
+
+ 32% 52/160 [00:01<00:03, 32.99it/s][A
+ 35% 56/160 [00:01<00:03, 33.30it/s][A
+ 38% 60/160 [00:01<00:02, 34.99it/s][ALoss = 8.5972e-03, PNorm = 45.4196, GNorm = 0.3067, lr_0 = 2.3683e-04
+
+ 40% 64/160 [00:02<00:02, 33.33it/s][A
+ 42% 68/160 [00:02<00:02, 32.37it/s][ALoss = 8.2825e-03, PNorm = 45.4389, GNorm = 0.2536, lr_0 = 2.3561e-04
+
+ 45% 72/160 [00:02<00:02, 32.96it/s][A
+ 49% 78/160 [00:02<00:02, 36.74it/s][ALoss = 7.1971e-03, PNorm = 45.4601, GNorm = 0.3205, lr_0 = 2.3439e-04
+
+ 52% 84/160 [00:02<00:01, 38.81it/s][A
+ 56% 89/160 [00:02<00:01, 36.27it/s][ALoss = 1.0133e-02, PNorm = 45.4765, GNorm = 0.4282, lr_0 = 2.3318e-04
+
+ 58% 93/160 [00:02<00:02, 32.98it/s][A
+ 62% 99/160 [00:02<00:01, 36.93it/s][ALoss = 9.6967e-03, PNorm = 45.4862, GNorm = 0.2951, lr_0 = 2.3198e-04
+
+ 65% 104/160 [00:03<00:01, 39.49it/s][A
+ 68% 109/160 [00:03<00:01, 41.47it/s][ALoss = 9.7842e-03, PNorm = 45.5028, GNorm = 0.5771, lr_0 = 2.3078e-04
+
+ 72% 115/160 [00:03<00:01, 44.09it/s][A
+ 76% 121/160 [00:03<00:00, 46.41it/s][ALoss = 8.7933e-03, PNorm = 45.5187, GNorm = 0.6313, lr_0 = 2.2959e-04
+
+ 79% 126/160 [00:03<00:00, 44.45it/s][A
+ 82% 131/160 [00:03<00:00, 42.36it/s][ALoss = 8.8965e-03, PNorm = 45.5327, GNorm = 0.2376, lr_0 = 2.2841e-04
+
+ 85% 136/160 [00:03<00:00, 43.73it/s][A
+ 88% 141/160 [00:03<00:00, 44.89it/s][ALoss = 8.8787e-03, PNorm = 45.5428, GNorm = 0.3156, lr_0 = 2.2723e-04
+
+ 92% 147/160 [00:04<00:00, 46.43it/s][ALoss = 1.1604e-02, PNorm = 45.5418, GNorm = 0.4576, lr_0 = 2.2606e-04
+
+ 96% 153/160 [00:04<00:00, 47.63it/s][A
+ 99% 158/160 [00:04<00:00, 45.77it/s][A100% 160/160 [00:04<00:00, 37.30it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 78.31it/s][A
+ 80% 16/20 [00:00<00:00, 78.11it/s][A100% 20/20 [00:00<00:00, 78.22it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.587534
+ 67% 20/30 [02:16<00:54,  5.46s/it]Epoch 20
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.2030e-02, PNorm = 45.5456, GNorm = 1.3805, lr_0 = 2.2489e-04
+
+  3% 5/160 [00:00<00:03, 43.42it/s][A
+  7% 11/160 [00:00<00:03, 45.73it/s][ALoss = 9.2982e-03, PNorm = 45.5553, GNorm = 0.3838, lr_0 = 2.2373e-04
+
+ 11% 17/160 [00:00<00:03, 47.11it/s][ALoss = 9.1781e-03, PNorm = 45.5716, GNorm = 0.4694, lr_0 = 2.2258e-04
+
+ 14% 22/160 [00:00<00:02, 46.81it/s][A
+ 17% 27/160 [00:00<00:02, 46.22it/s][ALoss = 9.3260e-03, PNorm = 45.5865, GNorm = 0.4582, lr_0 = 2.2143e-04
+
+ 20% 32/160 [00:00<00:02, 46.67it/s][A
+ 23% 37/160 [00:00<00:02, 44.34it/s][ALoss = 9.9626e-03, PNorm = 45.5990, GNorm = 0.4659, lr_0 = 2.2029e-04
+
+ 27% 43/160 [00:00<00:02, 45.60it/s][A
+ 30% 48/160 [00:01<00:02, 45.11it/s][ALoss = 8.8189e-03, PNorm = 45.6103, GNorm = 0.4845, lr_0 = 2.1915e-04
+
+ 33% 53/160 [00:01<00:02, 43.95it/s][A
+ 36% 58/160 [00:01<00:02, 44.49it/s][ALoss = 7.5453e-03, PNorm = 45.6252, GNorm = 0.4464, lr_0 = 2.1802e-04
+
+ 39% 63/160 [00:01<00:02, 42.90it/s][A
+ 42% 68/160 [00:01<00:02, 44.76it/s][ALoss = 8.8703e-03, PNorm = 45.6381, GNorm = 0.4673, lr_0 = 2.1690e-04
+
+ 46% 73/160 [00:01<00:01, 45.57it/s][A
+ 49% 78/160 [00:01<00:01, 46.49it/s][ALoss = 9.3821e-03, PNorm = 45.6471, GNorm = 0.8540, lr_0 = 2.1578e-04
+
+ 52% 83/160 [00:02<00:06, 11.22it/s][A
+ 54% 87/160 [00:03<00:05, 13.78it/s][A
+ 57% 91/160 [00:03<00:04, 15.70it/s][ALoss = 1.1361e-02, PNorm = 45.6481, GNorm = 0.8855, lr_0 = 2.1466e-04
+
+ 60% 96/160 [00:03<00:03, 19.48it/s][A
+ 62% 100/160 [00:03<00:02, 22.87it/s][ALoss = 8.9017e-03, PNorm = 45.6578, GNorm = 0.5513, lr_0 = 2.1356e-04
+
+ 65% 104/160 [00:03<00:02, 23.44it/s][A
+ 68% 108/160 [00:03<00:01, 26.48it/s][ALoss = 1.0860e-02, PNorm = 45.6646, GNorm = 0.3981, lr_0 = 2.1246e-04
+
+ 71% 113/160 [00:03<00:01, 30.36it/s][A
+ 74% 118/160 [00:03<00:01, 33.60it/s][ALoss = 1.0659e-02, PNorm = 45.6683, GNorm = 1.0791, lr_0 = 2.1136e-04
+
+ 76% 122/160 [00:04<00:01, 33.08it/s][A
+ 79% 127/160 [00:04<00:00, 35.72it/s][ALoss = 8.4140e-03, PNorm = 45.6769, GNorm = 0.4389, lr_0 = 2.1027e-04
+
+ 82% 132/160 [00:04<00:00, 37.79it/s][A
+ 86% 137/160 [00:04<00:00, 39.60it/s][ALoss = 9.7381e-03, PNorm = 45.6925, GNorm = 0.6087, lr_0 = 2.0918e-04
+
+ 89% 142/160 [00:04<00:00, 40.47it/s][A
+ 92% 147/160 [00:04<00:00, 41.58it/s][ALoss = 8.8303e-03, PNorm = 45.7069, GNorm = 0.5228, lr_0 = 2.0811e-04
+
+ 95% 152/160 [00:04<00:00, 36.32it/s][A
+ 98% 156/160 [00:04<00:00, 32.35it/s][A
+100% 160/160 [00:05<00:00, 29.64it/s][A100% 160/160 [00:05<00:00, 31.16it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 72.21it/s][A
+ 80% 16/20 [00:00<00:00, 72.61it/s][A100% 20/20 [00:00<00:00, 73.77it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.573292
+ 70% 21/30 [02:22<00:50,  5.57s/it]Epoch 21
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 1.0962e-02, PNorm = 45.7232, GNorm = 0.3826, lr_0 = 2.0693e-04
+
+  2% 3/160 [00:00<00:06, 24.67it/s][A
+  4% 7/160 [00:00<00:05, 27.30it/s][A
+  6% 10/160 [00:00<00:05, 26.61it/s][ALoss = 8.5788e-03, PNorm = 45.7345, GNorm = 0.6498, lr_0 = 2.0586e-04
+
+  8% 13/160 [00:00<00:05, 27.15it/s][A
+ 10% 16/160 [00:00<00:05, 24.49it/s][A
+ 12% 19/160 [00:00<00:05, 24.16it/s][A
+ 14% 22/160 [00:00<00:05, 23.97it/s][ALoss = 9.4812e-03, PNorm = 45.7487, GNorm = 0.4691, lr_0 = 2.0480e-04
+
+ 16% 26/160 [00:00<00:05, 26.72it/s][A
+ 19% 31/160 [00:01<00:04, 30.97it/s][ALoss = 9.1493e-03, PNorm = 45.7621, GNorm = 2.4719, lr_0 = 2.0374e-04
+
+ 22% 35/160 [00:01<00:04, 29.34it/s][A
+ 24% 39/160 [00:01<00:04, 28.14it/s][A
+ 26% 42/160 [00:01<00:04, 24.63it/s][ALoss = 1.0153e-02, PNorm = 45.7629, GNorm = 0.5282, lr_0 = 2.0269e-04
+
+ 29% 46/160 [00:01<00:04, 26.01it/s][A
+ 31% 49/160 [00:01<00:04, 26.23it/s][ALoss = 9.5309e-03, PNorm = 45.7649, GNorm = 1.5113, lr_0 = 2.0164e-04
+
+ 33% 53/160 [00:01<00:04, 26.63it/s][A
+ 35% 56/160 [00:02<00:03, 27.20it/s][A
+ 38% 61/160 [00:02<00:03, 31.08it/s][ALoss = 8.7077e-03, PNorm = 45.7805, GNorm = 0.5607, lr_0 = 2.0060e-04
+
+ 41% 66/160 [00:02<00:02, 34.80it/s][A
+ 44% 71/160 [00:02<00:02, 37.66it/s][ALoss = 9.3595e-03, PNorm = 45.7915, GNorm = 0.4665, lr_0 = 1.9957e-04
+
+ 48% 76/160 [00:02<00:02, 38.76it/s][A
+ 51% 81/160 [00:02<00:01, 40.88it/s][ALoss = 9.0209e-03, PNorm = 45.8011, GNorm = 0.5737, lr_0 = 1.9854e-04
+
+ 54% 86/160 [00:02<00:01, 41.56it/s][A
+ 57% 91/160 [00:02<00:01, 43.10it/s][ALoss = 8.7738e-03, PNorm = 45.8164, GNorm = 0.4740, lr_0 = 1.9751e-04
+
+ 60% 96/160 [00:02<00:01, 40.50it/s][A
+ 63% 101/160 [00:03<00:01, 42.58it/s][ALoss = 9.0021e-03, PNorm = 45.8301, GNorm = 3.2464, lr_0 = 1.9649e-04
+
+ 66% 106/160 [00:03<00:01, 42.76it/s][A
+ 69% 111/160 [00:03<00:01, 43.17it/s][ALoss = 1.2125e-02, PNorm = 45.8300, GNorm = 3.3288, lr_0 = 1.9548e-04
+
+ 72% 116/160 [00:03<00:01, 42.83it/s][A
+ 76% 121/160 [00:03<00:00, 44.71it/s][ALoss = 9.1328e-03, PNorm = 45.8265, GNorm = 0.3399, lr_0 = 1.9447e-04
+
+ 79% 126/160 [00:03<00:00, 45.33it/s][A
+ 82% 131/160 [00:03<00:00, 46.48it/s][ALoss = 8.4853e-03, PNorm = 45.8359, GNorm = 0.3061, lr_0 = 1.9347e-04
+
+ 85% 136/160 [00:03<00:00, 44.10it/s][A
+ 88% 141/160 [00:03<00:00, 45.66it/s][ALoss = 7.6339e-03, PNorm = 45.8516, GNorm = 0.3005, lr_0 = 1.9247e-04
+
+ 91% 146/160 [00:04<00:00, 45.78it/s][A
+ 94% 151/160 [00:04<00:00, 46.39it/s][ALoss = 8.8075e-03, PNorm = 45.8644, GNorm = 0.5137, lr_0 = 1.9148e-04
+
+ 98% 156/160 [00:04<00:00, 46.70it/s][A100% 160/160 [00:04<00:00, 37.03it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 76.42it/s][A
+ 80% 16/20 [00:00<00:00, 75.36it/s][A100% 20/20 [00:00<00:00, 75.25it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.564083
+ 73% 22/30 [02:27<00:42,  5.36s/it]Epoch 22
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 9.2104e-03, PNorm = 45.8758, GNorm = 0.4051, lr_0 = 1.9049e-04
+
+  3% 5/160 [00:00<00:03, 46.26it/s][A
+  6% 10/160 [00:00<00:03, 47.28it/s][ALoss = 9.3985e-03, PNorm = 45.8832, GNorm = 0.1540, lr_0 = 1.8951e-04
+
+  9% 15/160 [00:00<00:03, 45.87it/s][A
+ 12% 20/160 [00:00<00:02, 47.01it/s][ALoss = 1.0066e-02, PNorm = 45.8879, GNorm = 0.5133, lr_0 = 1.8853e-04
+
+ 15% 24/160 [00:00<00:03, 44.59it/s][A
+ 18% 28/160 [00:00<00:03, 41.80it/s][ALoss = 8.4109e-03, PNorm = 45.8962, GNorm = 0.4039, lr_0 = 1.8756e-04
+
+ 21% 33/160 [00:00<00:02, 43.68it/s][A
+ 24% 38/160 [00:00<00:02, 45.24it/s][ALoss = 8.2746e-03, PNorm = 45.9119, GNorm = 0.3773, lr_0 = 1.8659e-04
+
+ 27% 43/160 [00:00<00:02, 45.95it/s][A
+ 30% 48/160 [00:01<00:02, 45.87it/s][ALoss = 8.5823e-03, PNorm = 45.9261, GNorm = 0.4708, lr_0 = 1.8563e-04
+
+ 33% 53/160 [00:01<00:02, 44.48it/s][A
+ 36% 58/160 [00:01<00:02, 42.96it/s][ALoss = 7.3637e-03, PNorm = 45.9385, GNorm = 0.7313, lr_0 = 1.8467e-04
+
+ 39% 63/160 [00:01<00:02, 43.90it/s][A
+ 42% 68/160 [00:01<00:02, 45.22it/s][ALoss = 8.5025e-03, PNorm = 45.9485, GNorm = 0.2952, lr_0 = 1.8372e-04
+
+ 46% 73/160 [00:01<00:01, 45.99it/s][A
+ 49% 78/160 [00:01<00:01, 45.68it/s][ALoss = 1.1116e-02, PNorm = 45.9546, GNorm = 0.4561, lr_0 = 1.8277e-04
+
+ 52% 83/160 [00:01<00:01, 46.20it/s][A
+ 55% 88/160 [00:01<00:01, 46.59it/s][ALoss = 1.0219e-02, PNorm = 45.9514, GNorm = 0.3289, lr_0 = 1.8183e-04
+
+ 58% 93/160 [00:02<00:01, 43.72it/s][A
+ 61% 98/160 [00:02<00:01, 38.08it/s][A
+ 64% 102/160 [00:02<00:01, 33.00it/s][ALoss = 9.5266e-03, PNorm = 45.9555, GNorm = 0.6214, lr_0 = 1.8089e-04
+
+ 66% 106/160 [00:02<00:01, 32.18it/s][A
+ 69% 110/160 [00:02<00:01, 31.66it/s][ALoss = 8.1408e-03, PNorm = 45.9643, GNorm = 0.4404, lr_0 = 1.7996e-04
+
+ 71% 114/160 [00:02<00:01, 33.52it/s][A
+ 74% 119/160 [00:02<00:01, 36.30it/s][ALoss = 9.4483e-03, PNorm = 45.9705, GNorm = 0.6243, lr_0 = 1.7903e-04
+
+ 77% 123/160 [00:02<00:01, 36.86it/s][A
+ 81% 129/160 [00:03<00:00, 40.13it/s][ALoss = 9.0033e-03, PNorm = 45.9763, GNorm = 0.4967, lr_0 = 1.7810e-04
+
+ 84% 134/160 [00:03<00:00, 35.99it/s][A
+ 86% 138/160 [00:03<00:00, 30.45it/s][ALoss = 9.0339e-03, PNorm = 45.9872, GNorm = 0.6537, lr_0 = 1.7719e-04
+
+ 89% 143/160 [00:03<00:00, 33.33it/s][A
+ 92% 147/160 [00:03<00:00, 32.75it/s][A
+ 94% 151/160 [00:03<00:00, 29.16it/s][ALoss = 8.9175e-03, PNorm = 46.0008, GNorm = 0.5510, lr_0 = 1.7627e-04
+
+ 97% 155/160 [00:04<00:00, 28.61it/s][A
+ 99% 159/160 [00:04<00:00, 27.81it/s][A100% 160/160 [00:04<00:00, 38.24it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 25% 5/20 [00:00<00:00, 43.07it/s][A
+ 50% 10/20 [00:00<00:00, 43.74it/s][A
+ 70% 14/20 [00:00<00:00, 42.52it/s][A
+100% 20/20 [00:00<00:00, 45.54it/s][A100% 20/20 [00:00<00:00, 45.82it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.584100
+ 77% 23/30 [02:32<00:36,  5.22s/it]Epoch 23
+
+  0% 0/160 [00:00<?, ?it/s][ALoss = 7.7971e-03, PNorm = 46.0125, GNorm = 0.6195, lr_0 = 1.7527e-04
+
+  2% 4/160 [00:00<00:05, 28.76it/s][A
+  4% 7/160 [00:00<00:05, 28.32it/s][A
+  8% 13/160 [00:00<00:04, 32.67it/s][ALoss = 7.8855e-03, PNorm = 46.0264, GNorm = 0.6640, lr_0 = 1.7437e-04
+
+ 11% 18/160 [00:00<00:04, 35.34it/s][A
+ 14% 22/160 [00:00<00:04, 30.71it/s][ALoss = 8.9281e-03, PNorm = 46.0354, GNorm = 0.4935, lr_0 = 1.7347e-04
+
+ 16% 26/160 [00:00<00:04, 31.67it/s][A
+ 19% 30/160 [00:00<00:04, 31.62it/s][ALoss = 9.9689e-03, PNorm = 46.0382, GNorm = 0.4616, lr_0 = 1.7257e-04
+
+ 21% 34/160 [00:01<00:03, 33.17it/s][A
+ 24% 38/160 [00:01<00:03, 30.63it/s][A
+ 26% 42/160 [00:01<00:03, 32.19it/s][ALoss = 8.8975e-03, PNorm = 46.0472, GNorm = 0.8981, lr_0 = 1.7168e-04
+
+ 29% 46/160 [00:01<00:03, 31.78it/s][A
+ 31% 50/160 [00:01<00:03, 27.69it/s][ALoss = 9.5690e-03, PNorm = 46.0567, GNorm = 2.5846, lr_0 = 1.7080e-04
+
+ 34% 55/160 [00:01<00:03, 31.29it/s][A
+ 38% 60/160 [00:01<00:03, 31.97it/s][ALoss = 8.7844e-03, PNorm = 46.0685, GNorm = 0.4219, lr_0 = 1.6992e-04
+
+ 40% 64/160 [00:02<00:03, 29.42it/s][A
+ 42% 68/160 [00:02<00:02, 31.06it/s][A
+ 45% 72/160 [00:02<00:02, 33.15it/s][ALoss = 8.4953e-03, PNorm = 46.0809, GNorm = 0.4092, lr_0 = 1.6904e-04
+
+ 48% 76/160 [00:02<00:02, 29.81it/s][A
+ 50% 80/160 [00:02<00:02, 27.20it/s][ALoss = 7.1424e-03, PNorm = 46.0914, GNorm = 0.4506, lr_0 = 1.6817e-04
+
+ 52% 84/160 [00:02<00:02, 29.81it/s][A
+ 56% 89/160 [00:02<00:02, 33.63it/s][A
+ 58% 93/160 [00:02<00:01, 35.12it/s][ALoss = 8.6047e-03, PNorm = 46.0994, GNorm = 0.7970, lr_0 = 1.6730e-04
+
+ 61% 98/160 [00:02<00:01, 38.17it/s][A
+ 64% 103/160 [00:03<00:01, 36.82it/s][ALoss = 8.8343e-03, PNorm = 46.1060, GNorm = 1.0353, lr_0 = 1.6644e-04
+
+ 67% 107/160 [00:03<00:01, 30.61it/s][A
+ 69% 111/160 [00:03<00:01, 28.52it/s][ALoss = 1.0329e-02, PNorm = 46.1098, GNorm = 0.5705, lr_0 = 1.6558e-04
+
+ 72% 115/160 [00:03<00:01, 28.29it/s][A
+ 74% 119/160 [00:03<00:01, 29.68it/s][A
+ 77% 123/160 [00:03<00:01, 28.52it/s][ALoss = 8.2709e-03, PNorm = 46.1163, GNorm = 0.4742, lr_0 = 1.6472e-04
+
+ 79% 126/160 [00:04<00:01, 24.36it/s][A
+ 81% 129/160 [00:04<00:01, 25.66it/s][A
+ 82% 132/160 [00:04<00:01, 25.46it/s][ALoss = 9.3678e-03, PNorm = 46.1247, GNorm = 0.5528, lr_0 = 1.6387e-04
+
+ 86% 137/160 [00:04<00:00, 28.93it/s][A
+ 88% 141/160 [00:04<00:00, 29.56it/s][ALoss = 8.8835e-03, PNorm = 46.1321, GNorm = 0.5085, lr_0 = 1.6303e-04
+
+ 91% 145/160 [00:04<00:00, 30.10it/s][A
+ 93% 149/160 [00:04<00:00, 29.80it/s][A
+ 96% 153/160 [00:04<00:00, 30.88it/s][ALoss = 9.7661e-03, PNorm = 46.1368, GNorm = 0.7242, lr_0 = 1.6219e-04
+
+ 99% 158/160 [00:05<00:00, 34.53it/s][A100% 160/160 [00:05<00:00, 31.76it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 25% 5/20 [00:00<00:00, 42.92it/s][A
+ 50% 10/20 [00:00<00:00, 42.51it/s][A
+ 70% 14/20 [00:00<00:00, 41.32it/s][A100% 20/20 [00:00<00:00, 47.83it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.564384
+ 80% 24/30 [02:38<00:32,  5.43s/it]Epoch 24
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 3/160 [00:00<00:05, 27.04it/s][ALoss = 8.4309e-03, PNorm = 46.1459, GNorm = 0.7364, lr_0 = 1.6135e-04
+
+  5% 8/160 [00:00<00:04, 31.27it/s][A
+  8% 13/160 [00:00<00:04, 33.83it/s][ALoss = 6.7448e-03, PNorm = 46.1620, GNorm = 0.5150, lr_0 = 1.6052e-04
+
+ 10% 16/160 [00:00<00:04, 32.53it/s][A
+ 12% 20/160 [00:00<00:04, 33.80it/s][ALoss = 7.7710e-03, PNorm = 46.1724, GNorm = 0.6095, lr_0 = 1.5969e-04
+
+ 15% 24/160 [00:00<00:03, 35.42it/s][A
+ 18% 28/160 [00:00<00:04, 30.26it/s][A
+ 20% 32/160 [00:01<00:04, 26.89it/s][ALoss = 7.5010e-03, PNorm = 46.1782, GNorm = 0.5546, lr_0 = 1.5887e-04
+
+ 22% 35/160 [00:01<00:04, 27.51it/s][A
+ 24% 39/160 [00:01<00:04, 28.61it/s][A
+ 26% 42/160 [00:01<00:04, 27.75it/s][ALoss = 9.7195e-03, PNorm = 46.1832, GNorm = 0.5477, lr_0 = 1.5805e-04
+
+ 28% 45/160 [00:01<00:04, 27.15it/s][A
+ 31% 50/160 [00:01<00:03, 30.51it/s][ALoss = 1.1995e-02, PNorm = 46.1820, GNorm = 0.8482, lr_0 = 1.5723e-04
+
+ 34% 55/160 [00:01<00:03, 34.05it/s][A
+ 37% 59/160 [00:01<00:02, 35.60it/s][A
+ 39% 63/160 [00:01<00:02, 33.77it/s][ALoss = 8.8873e-03, PNorm = 46.1870, GNorm = 0.3359, lr_0 = 1.5642e-04
+
+ 42% 68/160 [00:02<00:02, 36.14it/s][A
+ 46% 73/160 [00:02<00:02, 39.27it/s][ALoss = 9.9562e-03, PNorm = 46.1932, GNorm = 0.4341, lr_0 = 1.5561e-04
+
+ 49% 78/160 [00:02<00:01, 41.54it/s][A
+ 52% 83/160 [00:02<00:01, 43.39it/s][ALoss = 9.9604e-03, PNorm = 46.1982, GNorm = 0.5490, lr_0 = 1.5481e-04
+
+ 55% 88/160 [00:02<00:01, 44.63it/s][A
+ 58% 93/160 [00:02<00:01, 45.51it/s][ALoss = 8.5340e-03, PNorm = 46.2049, GNorm = 0.4711, lr_0 = 1.5401e-04
+
+ 61% 98/160 [00:02<00:01, 40.34it/s][A
+ 64% 103/160 [00:03<00:04, 11.86it/s][ALoss = 8.9504e-03, PNorm = 46.2122, GNorm = 0.4026, lr_0 = 1.5322e-04
+
+ 67% 107/160 [00:03<00:03, 15.01it/s][A
+ 70% 112/160 [00:04<00:02, 18.65it/s][ALoss = 8.4652e-03, PNorm = 46.2210, GNorm = 0.4602, lr_0 = 1.5243e-04
+
+ 73% 117/160 [00:04<00:01, 22.62it/s][A
+ 76% 122/160 [00:04<00:01, 26.09it/s][ALoss = 8.0182e-03, PNorm = 46.2316, GNorm = 0.6015, lr_0 = 1.5164e-04
+
+ 79% 126/160 [00:04<00:01, 28.98it/s][A
+ 81% 130/160 [00:04<00:00, 31.52it/s][ALoss = 9.8043e-03, PNorm = 46.2392, GNorm = 0.5394, lr_0 = 1.5086e-04
+
+ 84% 134/160 [00:04<00:00, 33.12it/s][A
+ 87% 139/160 [00:04<00:00, 36.07it/s][ALoss = 9.1492e-03, PNorm = 46.2475, GNorm = 1.0112, lr_0 = 1.5008e-04
+
+ 90% 144/160 [00:04<00:00, 38.31it/s][A
+ 93% 149/160 [00:04<00:00, 40.26it/s][ALoss = 8.3148e-03, PNorm = 46.2547, GNorm = 0.4981, lr_0 = 1.4931e-04
+
+ 96% 154/160 [00:05<00:00, 41.71it/s][A
+ 99% 159/160 [00:05<00:00, 43.52it/s][A100% 160/160 [00:05<00:00, 31.08it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 40% 8/20 [00:00<00:00, 75.52it/s][A
+ 85% 17/20 [00:00<00:00, 77.52it/s][A100% 20/20 [00:00<00:00, 80.04it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.584967
+ 83% 25/30 [02:43<00:27,  5.50s/it]Epoch 25
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 4/160 [00:00<00:03, 39.85it/s][ALoss = 8.0380e-03, PNorm = 46.2652, GNorm = 0.5220, lr_0 = 1.4846e-04
+
+  6% 9/160 [00:00<00:03, 41.12it/s][A
+  8% 13/160 [00:00<00:03, 40.47it/s][ALoss = 8.8446e-03, PNorm = 46.2741, GNorm = 0.5292, lr_0 = 1.4769e-04
+
+ 11% 17/160 [00:00<00:03, 39.75it/s][A
+ 13% 21/160 [00:00<00:03, 39.55it/s][ALoss = 9.2829e-03, PNorm = 46.2787, GNorm = 1.7574, lr_0 = 1.4693e-04
+
+ 16% 26/160 [00:00<00:03, 40.15it/s][A
+ 19% 30/160 [00:00<00:03, 39.84it/s][A
+ 21% 34/160 [00:00<00:03, 39.65it/s][ALoss = 7.9808e-03, PNorm = 46.2867, GNorm = 0.4725, lr_0 = 1.4617e-04
+
+ 24% 38/160 [00:00<00:03, 39.13it/s][A
+ 26% 42/160 [00:01<00:03, 39.04it/s][ALoss = 7.2332e-03, PNorm = 46.2971, GNorm = 0.6688, lr_0 = 1.4542e-04
+
+ 29% 46/160 [00:01<00:02, 38.84it/s][A
+ 31% 50/160 [00:01<00:02, 38.94it/s][ALoss = 9.1148e-03, PNorm = 46.3030, GNorm = 0.6681, lr_0 = 1.4467e-04
+
+ 34% 55/160 [00:01<00:02, 39.44it/s][A
+ 38% 60/160 [00:01<00:02, 39.82it/s][ALoss = 9.3032e-03, PNorm = 46.3064, GNorm = 0.5246, lr_0 = 1.4392e-04
+
+ 41% 65/160 [00:01<00:02, 40.41it/s][A
+ 44% 70/160 [00:01<00:02, 40.00it/s][ALoss = 1.0209e-02, PNorm = 46.3072, GNorm = 0.6728, lr_0 = 1.4318e-04
+
+ 47% 75/160 [00:01<00:02, 40.31it/s][A
+ 50% 80/160 [00:01<00:01, 41.59it/s][ALoss = 8.3071e-03, PNorm = 46.3125, GNorm = 0.4260, lr_0 = 1.4244e-04
+
+ 53% 85/160 [00:02<00:01, 41.37it/s][A
+ 56% 90/160 [00:02<00:01, 42.01it/s][ALoss = 1.0229e-02, PNorm = 46.3173, GNorm = 2.4229, lr_0 = 1.4171e-04
+
+ 59% 95/160 [00:02<00:01, 43.56it/s][A
+ 62% 100/160 [00:02<00:01, 42.00it/s][ALoss = 1.0741e-02, PNorm = 46.3176, GNorm = 1.3606, lr_0 = 1.4098e-04
+
+ 66% 105/160 [00:02<00:01, 35.76it/s][A
+ 68% 109/160 [00:02<00:01, 28.78it/s][A
+ 71% 113/160 [00:02<00:01, 28.65it/s][ALoss = 7.1928e-03, PNorm = 46.3243, GNorm = 0.3749, lr_0 = 1.4025e-04
+
+ 74% 118/160 [00:03<00:01, 32.57it/s][A
+ 76% 122/160 [00:03<00:01, 32.89it/s][ALoss = 8.9205e-03, PNorm = 46.3333, GNorm = 0.4651, lr_0 = 1.3953e-04
+
+ 79% 126/160 [00:03<00:01, 32.03it/s][A
+ 81% 130/160 [00:03<00:00, 32.63it/s][ALoss = 9.9980e-03, PNorm = 46.3410, GNorm = 0.3294, lr_0 = 1.3881e-04
+
+ 84% 135/160 [00:03<00:00, 35.25it/s][A
+ 88% 140/160 [00:03<00:00, 36.51it/s][ALoss = 7.6006e-03, PNorm = 46.3492, GNorm = 1.1153, lr_0 = 1.3809e-04
+
+ 91% 145/160 [00:03<00:00, 39.45it/s][A
+ 94% 150/160 [00:03<00:00, 37.41it/s][A
+ 96% 154/160 [00:04<00:00, 33.55it/s][ALoss = 8.4294e-03, PNorm = 46.3593, GNorm = 1.0354, lr_0 = 1.3738e-04
+
+ 99% 158/160 [00:04<00:00, 30.16it/s][A100% 160/160 [00:04<00:00, 37.03it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 20% 4/20 [00:00<00:00, 36.48it/s][A
+ 35% 7/20 [00:00<00:00, 33.82it/s][A
+ 75% 15/20 [00:00<00:00, 40.48it/s][A100% 20/20 [00:00<00:00, 50.69it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.551739
+ 87% 26/30 [02:48<00:21,  5.36s/it]Epoch 26
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 4/160 [00:00<00:04, 33.18it/s][ALoss = 8.9933e-03, PNorm = 46.3702, GNorm = 0.5075, lr_0 = 1.3660e-04
+
+  6% 9/160 [00:00<00:04, 35.92it/s][A
+  8% 12/160 [00:00<00:04, 33.47it/s][ALoss = 8.7141e-03, PNorm = 46.3755, GNorm = 0.5257, lr_0 = 1.3589e-04
+
+ 10% 16/160 [00:00<00:04, 33.67it/s][A
+ 14% 22/160 [00:00<00:03, 37.46it/s][ALoss = 9.2235e-03, PNorm = 46.3796, GNorm = 0.7623, lr_0 = 1.3519e-04
+
+ 18% 28/160 [00:00<00:03, 40.64it/s][A
+ 20% 32/160 [00:00<00:03, 36.22it/s][ALoss = 9.7020e-03, PNorm = 46.3831, GNorm = 0.6028, lr_0 = 1.3450e-04
+
+ 22% 36/160 [00:01<00:04, 29.74it/s][A
+ 26% 41/160 [00:01<00:03, 32.56it/s][ALoss = 8.5489e-03, PNorm = 46.3878, GNorm = 1.2074, lr_0 = 1.3380e-04
+
+ 29% 47/160 [00:01<00:03, 34.47it/s][A
+ 32% 51/160 [00:01<00:03, 33.37it/s][A
+ 34% 55/160 [00:01<00:03, 29.88it/s][ALoss = 9.1207e-03, PNorm = 46.3920, GNorm = 1.9031, lr_0 = 1.3311e-04
+
+ 37% 59/160 [00:01<00:03, 28.94it/s][A
+ 39% 63/160 [00:01<00:03, 26.89it/s][ALoss = 8.0999e-03, PNorm = 46.3992, GNorm = 0.4217, lr_0 = 1.3242e-04
+
+ 42% 67/160 [00:02<00:03, 29.03it/s][A
+ 44% 71/160 [00:02<00:03, 25.84it/s][A
+ 46% 74/160 [00:02<00:03, 26.28it/s][ALoss = 7.9040e-03, PNorm = 46.4059, GNorm = 0.2011, lr_0 = 1.3174e-04
+
+ 49% 79/160 [00:02<00:02, 29.67it/s][A
+ 53% 85/160 [00:02<00:02, 33.96it/s][ALoss = 8.6033e-03, PNorm = 46.4118, GNorm = 0.5202, lr_0 = 1.3106e-04
+
+ 56% 90/160 [00:02<00:01, 37.49it/s][A
+ 59% 95/160 [00:02<00:01, 34.60it/s][ALoss = 8.8009e-03, PNorm = 46.4174, GNorm = 0.4923, lr_0 = 1.3039e-04
+
+ 62% 99/160 [00:02<00:01, 33.56it/s][A
+ 65% 104/160 [00:03<00:01, 36.94it/s][ALoss = 1.0212e-02, PNorm = 46.4249, GNorm = 0.4485, lr_0 = 1.2971e-04
+
+ 68% 109/160 [00:03<00:01, 39.77it/s][A
+ 71% 114/160 [00:03<00:01, 42.21it/s][ALoss = 8.4693e-03, PNorm = 46.4318, GNorm = 0.6721, lr_0 = 1.2904e-04
+
+ 74% 119/160 [00:03<00:00, 41.07it/s][A
+ 78% 124/160 [00:03<00:00, 36.20it/s][ALoss = 8.4862e-03, PNorm = 46.4418, GNorm = 0.6234, lr_0 = 1.2838e-04
+
+ 80% 128/160 [00:03<00:00, 32.23it/s][A
+ 82% 132/160 [00:03<00:00, 29.33it/s][ALoss = 8.6950e-03, PNorm = 46.4497, GNorm = 0.7677, lr_0 = 1.2772e-04
+
+ 85% 136/160 [00:04<00:00, 26.68it/s][A
+ 88% 140/160 [00:04<00:00, 27.05it/s][A
+ 89% 143/160 [00:04<00:00, 26.43it/s][ALoss = 8.8230e-03, PNorm = 46.4580, GNorm = 0.3437, lr_0 = 1.2706e-04
+
+ 91% 146/160 [00:04<00:00, 26.87it/s][A
+ 94% 150/160 [00:04<00:00, 28.83it/s][A
+ 96% 154/160 [00:04<00:00, 29.24it/s][ALoss = 9.8687e-03, PNorm = 46.4606, GNorm = 0.4277, lr_0 = 1.2640e-04
+
+ 99% 159/160 [00:04<00:00, 32.60it/s][A100% 160/160 [00:04<00:00, 33.23it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 35% 7/20 [00:00<00:00, 60.50it/s][A
+ 60% 12/20 [00:00<00:00, 51.81it/s][A
+ 85% 17/20 [00:00<00:00, 50.07it/s][A100% 20/20 [00:00<00:00, 47.25it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.571102
+ 90% 27/30 [02:54<00:16,  5.42s/it]Epoch 27
+
+  0% 0/160 [00:00<?, ?it/s][A
+  3% 5/160 [00:00<00:03, 42.19it/s][ALoss = 8.5084e-03, PNorm = 46.4637, GNorm = 0.6700, lr_0 = 1.2575e-04
+
+  6% 10/160 [00:00<00:03, 43.98it/s][A
+  9% 15/160 [00:00<00:03, 44.19it/s][ALoss = 7.8955e-03, PNorm = 46.4703, GNorm = 0.6290, lr_0 = 1.2510e-04
+
+ 12% 20/160 [00:00<00:03, 45.60it/s][A
+ 16% 25/160 [00:00<00:02, 45.36it/s][ALoss = 7.9728e-03, PNorm = 46.4772, GNorm = 0.5317, lr_0 = 1.2446e-04
+
+ 18% 29/160 [00:00<00:03, 37.04it/s][A
+ 21% 33/160 [00:00<00:03, 32.96it/s][ALoss = 8.7522e-03, PNorm = 46.4831, GNorm = 0.6213, lr_0 = 1.2381e-04
+
+ 23% 37/160 [00:01<00:04, 29.64it/s][A
+ 26% 41/160 [00:01<00:03, 32.00it/s][ALoss = 8.4185e-03, PNorm = 46.4894, GNorm = 0.4216, lr_0 = 1.2317e-04
+
+ 29% 46/160 [00:01<00:03, 35.04it/s][A
+ 32% 51/160 [00:01<00:02, 37.74it/s][A
+ 34% 55/160 [00:01<00:02, 35.68it/s][ALoss = 9.3066e-03, PNorm = 46.4980, GNorm = 1.8331, lr_0 = 1.2254e-04
+
+ 37% 59/160 [00:01<00:03, 30.92it/s][A
+ 39% 63/160 [00:01<00:02, 32.34it/s][ALoss = 9.2755e-03, PNorm = 46.5041, GNorm = 0.6297, lr_0 = 1.2191e-04
+
+ 42% 67/160 [00:01<00:03, 29.77it/s][A
+ 45% 72/160 [00:02<00:02, 32.89it/s][ALoss = 7.8252e-03, PNorm = 46.5106, GNorm = 0.9986, lr_0 = 1.2128e-04
+
+ 48% 76/160 [00:02<00:02, 33.67it/s][A
+ 50% 80/160 [00:02<00:02, 30.61it/s][A
+ 52% 84/160 [00:02<00:02, 27.45it/s][ALoss = 9.6294e-03, PNorm = 46.5178, GNorm = 0.5625, lr_0 = 1.2065e-04
+
+ 55% 88/160 [00:02<00:02, 27.41it/s][A
+ 57% 91/160 [00:02<00:02, 25.38it/s][A
+ 59% 94/160 [00:02<00:02, 24.01it/s][ALoss = 7.8380e-03, PNorm = 46.5279, GNorm = 1.5804, lr_0 = 1.2003e-04
+
+ 62% 99/160 [00:03<00:02, 27.42it/s][A
+ 65% 104/160 [00:03<00:01, 28.83it/s][ALoss = 7.3568e-03, PNorm = 46.5371, GNorm = 0.5733, lr_0 = 1.1941e-04
+
+ 68% 108/160 [00:03<00:02, 25.89it/s][A
+ 71% 114/160 [00:03<00:01, 30.42it/s][ALoss = 6.8961e-03, PNorm = 46.5471, GNorm = 0.5308, lr_0 = 1.1879e-04
+
+ 75% 120/160 [00:03<00:01, 34.68it/s][A
+ 78% 125/160 [00:03<00:00, 37.99it/s][ALoss = 9.5383e-03, PNorm = 46.5577, GNorm = 1.7927, lr_0 = 1.1818e-04
+
+ 81% 130/160 [00:03<00:00, 40.14it/s][ALoss = 9.9693e-03, PNorm = 46.5629, GNorm = 0.5752, lr_0 = 1.1757e-04
+
+ 85% 136/160 [00:03<00:00, 42.64it/s][A
+ 89% 142/160 [00:04<00:00, 44.73it/s][ALoss = 1.1186e-02, PNorm = 46.5629, GNorm = 0.4507, lr_0 = 1.1697e-04
+
+ 92% 147/160 [00:04<00:00, 40.61it/s][A
+ 95% 152/160 [00:04<00:00, 42.30it/s][ALoss = 8.5566e-03, PNorm = 46.5611, GNorm = 0.4847, lr_0 = 1.1636e-04
+
+ 98% 157/160 [00:04<00:00, 43.54it/s][A100% 160/160 [00:04<00:00, 35.87it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 83.43it/s][A
+ 90% 18/20 [00:00<00:00, 83.50it/s][A100% 20/20 [00:00<00:00, 83.93it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.569226
+ 93% 28/30 [02:59<00:10,  5.28s/it]Epoch 28
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 4/160 [00:00<00:03, 39.98it/s][ALoss = 8.4964e-03, PNorm = 46.5658, GNorm = 0.6216, lr_0 = 1.1570e-04
+
+  6% 9/160 [00:00<00:03, 41.61it/s][A
+  9% 14/160 [00:00<00:03, 43.17it/s][ALoss = 8.1948e-03, PNorm = 46.5738, GNorm = 0.8085, lr_0 = 1.1511e-04
+
+ 12% 19/160 [00:00<00:03, 44.12it/s][A
+ 15% 24/160 [00:00<00:03, 44.66it/s][ALoss = 8.0474e-03, PNorm = 46.5808, GNorm = 0.7810, lr_0 = 1.1451e-04
+
+ 18% 29/160 [00:00<00:02, 45.50it/s][A
+ 21% 34/160 [00:00<00:02, 45.41it/s][ALoss = 9.1343e-03, PNorm = 46.5853, GNorm = 0.5352, lr_0 = 1.1392e-04
+
+ 24% 39/160 [00:00<00:02, 45.84it/s][A
+ 28% 44/160 [00:00<00:02, 46.76it/s][ALoss = 7.7257e-03, PNorm = 46.5939, GNorm = 1.2945, lr_0 = 1.1333e-04
+
+ 31% 49/160 [00:01<00:02, 46.34it/s][A
+ 34% 54/160 [00:01<00:02, 46.01it/s][ALoss = 9.7609e-03, PNorm = 46.6004, GNorm = 1.8715, lr_0 = 1.1275e-04
+
+ 37% 59/160 [00:01<00:02, 46.40it/s][A
+ 40% 64/160 [00:01<00:02, 46.25it/s][ALoss = 8.1957e-03, PNorm = 46.6045, GNorm = 0.5311, lr_0 = 1.1217e-04
+
+ 43% 69/160 [00:01<00:01, 45.98it/s][A
+ 46% 74/160 [00:01<00:01, 45.77it/s][ALoss = 1.0333e-02, PNorm = 46.6087, GNorm = 0.5486, lr_0 = 1.1159e-04
+
+ 49% 79/160 [00:01<00:01, 45.75it/s][A
+ 52% 84/160 [00:01<00:01, 45.92it/s][ALoss = 8.3481e-03, PNorm = 46.6116, GNorm = 0.7798, lr_0 = 1.1101e-04
+
+ 56% 89/160 [00:01<00:01, 43.78it/s][A
+ 59% 94/160 [00:02<00:01, 41.81it/s][ALoss = 8.8228e-03, PNorm = 46.6207, GNorm = 0.4968, lr_0 = 1.1044e-04
+
+ 62% 99/160 [00:02<00:01, 42.99it/s][A
+ 66% 105/160 [00:02<00:01, 45.26it/s][ALoss = 8.0254e-03, PNorm = 46.6282, GNorm = 0.5218, lr_0 = 1.0987e-04
+
+ 69% 111/160 [00:02<00:01, 46.95it/s][A
+ 72% 116/160 [00:02<00:01, 43.59it/s][ALoss = 8.7483e-03, PNorm = 46.6371, GNorm = 0.8582, lr_0 = 1.0930e-04
+
+ 76% 121/160 [00:02<00:00, 43.32it/s][A
+ 79% 126/160 [00:02<00:00, 42.51it/s][ALoss = 8.4361e-03, PNorm = 46.6450, GNorm = 1.1727, lr_0 = 1.0874e-04
+
+ 82% 131/160 [00:03<00:02, 13.48it/s][ALoss = 9.4398e-03, PNorm = 46.6498, GNorm = 0.8930, lr_0 = 1.0818e-04
+
+ 86% 137/160 [00:03<00:01, 17.29it/s][A
+ 89% 143/160 [00:03<00:00, 21.62it/s][ALoss = 8.7669e-03, PNorm = 46.6524, GNorm = 2.8659, lr_0 = 1.0762e-04
+
+ 92% 148/160 [00:04<00:00, 20.82it/s][A
+ 95% 152/160 [00:04<00:00, 21.71it/s][ALoss = 8.9423e-03, PNorm = 46.6551, GNorm = 0.4978, lr_0 = 1.0707e-04
+
+ 98% 157/160 [00:04<00:00, 25.69it/s][A100% 160/160 [00:04<00:00, 34.90it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 45% 9/20 [00:00<00:00, 81.25it/s][A
+ 70% 14/20 [00:00<00:00, 67.42it/s][A100% 20/20 [00:00<00:00, 69.58it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.577260
+ 97% 29/30 [03:04<00:05,  5.26s/it]Epoch 29
+
+  0% 0/160 [00:00<?, ?it/s][A
+  2% 4/160 [00:00<00:04, 32.53it/s][A
+  4% 6/160 [00:00<00:05, 25.80it/s][ALoss = 9.1074e-03, PNorm = 46.6593, GNorm = 0.4057, lr_0 = 1.0651e-04
+
+  5% 8/160 [00:00<00:06, 23.32it/s][A
+  6% 10/160 [00:00<00:07, 20.04it/s][A
+  8% 12/160 [00:00<00:07, 19.14it/s][A
+  9% 15/160 [00:00<00:06, 21.06it/s][ALoss = 7.4320e-03, PNorm = 46.6674, GNorm = 0.6668, lr_0 = 1.0596e-04
+
+ 11% 18/160 [00:00<00:06, 21.27it/s][A
+ 12% 20/160 [00:01<00:08, 15.90it/s][A
+ 14% 22/160 [00:01<00:08, 15.69it/s][A
+ 16% 25/160 [00:01<00:07, 18.31it/s][ALoss = 8.6172e-03, PNorm = 46.6743, GNorm = 0.5952, lr_0 = 1.0542e-04
+
+ 18% 28/160 [00:01<00:06, 20.34it/s][A
+ 20% 32/160 [00:01<00:05, 22.74it/s][A
+ 22% 35/160 [00:01<00:05, 22.15it/s][ALoss = 8.5710e-03, PNorm = 46.6810, GNorm = 0.3951, lr_0 = 1.0487e-04
+
+ 24% 38/160 [00:01<00:05, 23.97it/s][A
+ 26% 41/160 [00:01<00:04, 24.96it/s][A
+ 28% 44/160 [00:01<00:04, 25.60it/s][ALoss = 8.6291e-03, PNorm = 46.6873, GNorm = 0.4947, lr_0 = 1.0433e-04
+
+ 29% 47/160 [00:02<00:04, 25.56it/s][A
+ 31% 50/160 [00:02<00:04, 23.02it/s][A
+ 34% 54/160 [00:02<00:04, 25.73it/s][ALoss = 8.2838e-03, PNorm = 46.6906, GNorm = 0.9500, lr_0 = 1.0379e-04
+
+ 37% 59/160 [00:02<00:03, 27.05it/s][A
+ 39% 62/160 [00:02<00:04, 23.46it/s][A
+ 41% 65/160 [00:02<00:04, 20.09it/s][ALoss = 9.2344e-03, PNorm = 46.6929, GNorm = 1.2548, lr_0 = 1.0326e-04
+
+ 44% 70/160 [00:02<00:03, 24.32it/s][A
+ 46% 74/160 [00:03<00:03, 26.51it/s][ALoss = 1.2141e-02, PNorm = 46.6956, GNorm = 0.7056, lr_0 = 1.0273e-04
+
+ 49% 78/160 [00:03<00:03, 23.25it/s][A
+ 51% 82/160 [00:03<00:03, 25.82it/s][A
+ 53% 85/160 [00:03<00:02, 26.21it/s][ALoss = 6.5657e-03, PNorm = 46.7016, GNorm = 0.6530, lr_0 = 1.0220e-04
+
+ 55% 88/160 [00:03<00:02, 26.03it/s][A
+ 57% 91/160 [00:03<00:03, 22.08it/s][A
+ 59% 94/160 [00:03<00:02, 22.30it/s][ALoss = 7.1498e-03, PNorm = 46.7086, GNorm = 0.5988, lr_0 = 1.0167e-04
+
+ 61% 97/160 [00:04<00:02, 21.59it/s][A
+ 62% 100/160 [00:04<00:03, 19.45it/s][A
+ 64% 103/160 [00:04<00:03, 17.32it/s][A
+ 66% 105/160 [00:04<00:03, 16.68it/s][ALoss = 7.6977e-03, PNorm = 46.7157, GNorm = 0.9578, lr_0 = 1.0114e-04
+
+ 67% 107/160 [00:04<00:03, 16.99it/s][A
+ 69% 110/160 [00:04<00:02, 16.89it/s][A
+ 70% 112/160 [00:05<00:03, 15.93it/s][A
+ 71% 114/160 [00:05<00:02, 16.92it/s][A
+ 72% 116/160 [00:05<00:02, 17.55it/s][ALoss = 8.1889e-03, PNorm = 46.7227, GNorm = 0.6377, lr_0 = 1.0062e-04
+
+ 74% 118/160 [00:05<00:02, 17.80it/s][A
+ 76% 121/160 [00:05<00:02, 19.11it/s][A
+ 78% 125/160 [00:05<00:01, 21.39it/s][ALoss = 8.1177e-03, PNorm = 46.7286, GNorm = 0.6377, lr_0 = 1.0010e-04
+
+ 81% 129/160 [00:05<00:01, 24.02it/s][A
+ 83% 133/160 [00:05<00:01, 26.29it/s][A
+ 85% 136/160 [00:06<00:00, 24.89it/s][ALoss = 7.5788e-03, PNorm = 46.7353, GNorm = 0.5858, lr_0 = 1.0000e-04
+
+ 88% 140/160 [00:06<00:00, 27.65it/s][A
+ 91% 146/160 [00:06<00:00, 32.00it/s][ALoss = 1.0608e-02, PNorm = 46.7381, GNorm = 1.2519, lr_0 = 1.0000e-04
+
+ 94% 151/160 [00:06<00:00, 35.73it/s][ALoss = 8.6647e-03, PNorm = 46.7414, GNorm = 0.6684, lr_0 = 1.0000e-04
+
+ 98% 157/160 [00:06<00:00, 39.11it/s][A100% 160/160 [00:06<00:00, 24.25it/s]
+
+  0% 0/20 [00:00<?, ?it/s][A
+ 30% 6/20 [00:00<00:00, 59.19it/s][A
+ 55% 11/20 [00:00<00:00, 51.84it/s][A
+ 80% 16/20 [00:00<00:00, 47.36it/s][A
+ 95% 19/20 [00:00<00:00, 36.27it/s][A100% 20/20 [00:00<00:00, 40.50it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Validation auc = 0.547082
+100% 30/30 [03:12<00:00,  5.94s/it]100% 30/30 [03:12<00:00,  6.40s/it]
+Model 0 best validation auc = 0.596788 on epoch 4
+Loading pretrained parameter "encoder.encoder.cached_zero_vector".
+Loading pretrained parameter "encoder.encoder.W_i.weight".
+Loading pretrained parameter "encoder.encoder.W_h.weight".
+Loading pretrained parameter "encoder.encoder.W_o.weight".
+Loading pretrained parameter "encoder.encoder.W_o.bias".
+Loading pretrained parameter "ffn.1.weight".
+Loading pretrained parameter "ffn.1.bias".
+Loading pretrained parameter "ffn.4.weight".
+Loading pretrained parameter "ffn.4.bias".
+Moving model to cuda
+  0% 0/20 [00:00<?, ?it/s] 10% 2/20 [00:00<00:01,  9.64it/s] 20% 4/20 [00:00<00:01, 10.41it/s] 25% 5/20 [00:00<00:01, 10.28it/s] 35% 7/20 [00:00<00:01, 11.38it/s] 45% 9/20 [00:00<00:00, 12.00it/s] 60% 12/20 [00:00<00:00, 13.38it/s] 70% 14/20 [00:01<00:00, 13.44it/s] 80% 16/20 [00:01<00:00, 12.21it/s] 90% 18/20 [00:01<00:00,  9.98it/s]100% 20/20 [00:01<00:00,  9.83it/s]100% 20/20 [00:01<00:00, 11.44it/s]
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Model 0 test auc = 0.727841
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Warning: Found a task with targets all 0s or all 1s
+Ensemble test auc = 0.727841
+1-fold cross validation
+Seed 0 ==> test auc = 0.727841
+Overall test auc = 0.727841 +/- 0.000000
+
+wandb: Waiting for W&B process to finish, PID 4357
+wandb: Program ended successfully.
+/home/apappu/thesis/molecule-metalearning/chemprop/chemprop/utils.py:49: RuntimeWarning: Mean of empty slice
+  results_dict[task_name]['avg_score'] = np.nanmean(all_scores[:, task_num])
+/home/apappu/miniconda3/envs/chemprop/lib/python3.6/site-packages/numpy/lib/nanfunctions.py:1667: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  keepdims=keepdims)
+wandb: Run summary:
+wandb:    test_auc_std 0.0
+wandb:        _runtime 279.46827936172485
+wandb:   test_auc_mean 0.7278411652966403
+wandb:           _step 0
+wandb:      _timestamp 1596897984.3316882
+wandb: Syncing 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: - 0.16MB of 0.16MB uploaded (0.00MB deduped)wandb: \ 0.16MB of 0.16MB uploaded (0.00MB deduped)wandb: | 0.16MB of 0.16MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Synced less_128_random_split: https://app.wandb.ai/apappu97/molecule-metalearning/runs/3r8y4xjv
