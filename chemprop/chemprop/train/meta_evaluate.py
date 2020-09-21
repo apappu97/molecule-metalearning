@@ -156,7 +156,7 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
     best_val_loss = float('inf')
     best_epoch = 0
     # save the best performing model in case it occurred at 0 epochs 
-    save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)), learner, scaler=None, features_scaler=None, args=args)
+    save_checkpoint(os.path.join(save_dir, 'meta_test_{}_seed_{}_model.pt'.format(task.assay_name, args.seed)), learner, scaler=None, features_scaler=None, args=args)
 
     for epoch in trange(meta_test_epochs):
         # train model for one epoch
@@ -180,13 +180,14 @@ def _meta_test_on_task(maml_model, task, meta_test_epochs, loss_func, metric_fun
             best_val_loss = task_val_loss
             best_epoch = epoch
             # save best checkpoint at meta test time 
-            save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)), learner, args=args)  
+            save_checkpoint(os.path.join(save_dir, 'meta_test_{}_seed_{}_model.pt'.format(task.assay_name, args.seed)), learner, args=args)  
         else:
             info('Val loss: {}'.format(task_val_loss))   
     info('Finished early stopping for task {}, beginning testing'.format(task.assay_name))
-    
+    # save final checkpoint now 
+    save_checkpoint(os.path.join(save_dir, 'meta_test_{}_model_seed_{}_FINAL.pt'.format(task.assay_name, args.seed)), learner, args=args)
     # Now that early stopping has identified the best model, calculate test loss
-    model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_model.pt'.format(task.assay_name)))
+    model = load_checkpoint(os.path.join(save_dir, 'meta_test_{}_seed_{}_model.pt'.format(task.assay_name, args.seed)))
     results = _eval_trained_model(model, task.test_data_loader, curr_task_target_idx, metric_func, dataset_type, logger)
     # pdb.set_trace() # look at NVIDIA memory usage here 
     return results, best_epoch
