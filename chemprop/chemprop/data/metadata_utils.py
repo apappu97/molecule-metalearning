@@ -31,7 +31,9 @@ class TaskDataLoader:
             sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
             cache: bool = False,
             args: TrainArgs = None,
-            logger: Logger = None):
+            logger: Logger = None,
+            shuffle_train = True,
+            task_sim_flag = False):
         """
         Initializes a TaskDataLoader
         An important note on batch size: The batch size represents the k
@@ -116,13 +118,20 @@ class TaskDataLoader:
         # a batch at a time across loops called at different phases of training. This is most easily implemented if we can just
         # call next(iter(DataLoader)) for the number of batches required, which requires that shuffle be set to True,
         # so that on each creation of a new Iterator, the order is shuffled.
+
+        # if task sim flag is true, will load all the data at once
+        if task_sim_flag:
+            train_batch_size = len(train_data)
+        else:
+            train_batch_size = args.batch_size
+        
         self._train_data_loader = MoleculeDataLoader(
                 dataset=train_data,
-                batch_size=args.batch_size,
+                batch_size=train_batch_size,
                 num_workers=num_workers,
                 cache=cache,
                 class_balance=args.class_balance,
-                shuffle=True,
+                shuffle=shuffle_train,
                 seed=args.seed)
 
         self._val_data_loader = MoleculeDataLoader(
@@ -207,7 +216,7 @@ class MetaTaskDataset(Dataset):
     def __getitem__(self, index):
         return self.data[index]
 
-def create_meta_data_loader(dataset, tasks, task_names, meta_batch_size, sizes, cache, args, logger):
+def create_meta_data_loader(dataset, tasks, task_names, meta_batch_size, sizes, cache, args, logger, shuffle_train=True, task_sim_flag = False):
     """
     Creates a data loader over TaskDataLoaders for all tasks in a particular meta split, specified by the bit vector tasks.
 
@@ -252,7 +261,9 @@ def create_meta_data_loader(dataset, tasks, task_names, meta_batch_size, sizes, 
                 sizes=sizes,
                 cache=cache,
                 args=args,
-                logger=logger)
+                logger=logger,
+                shuffle_train=shuffle_train,
+                task_sim_flag = task_sim_flag)
         task_data_loaders.append(task_data_loader)
     
     # Create the MetaTaskDataset object
