@@ -135,14 +135,14 @@ def get_activations(args: TrainArgs, logger: Logger = None) -> List[float]:
     
     def get_first_linear_layer_acts():
         def hook(model, input, output):
-            activations_dict['ffn_1'] = output.T.detach()
+            activations_dict['ffn_1'] = output.T.detach().cpu().numpy()
         return hook
     
     def get_last_linear_layer_acts():
         def hook(model, input, output):
             sigmoid_func = nn.Sigmoid()
             sigmoid_acts = sigmoid_func(output.detach())
-            activations_dict['ffn_2'] = sigmoid_acts.T.detach()
+            activations_dict['ffn_2'] = sigmoid_acts.T.detach().cpu().numpy()
         return hook
 
 
@@ -159,7 +159,7 @@ def get_activations(args: TrainArgs, logger: Logger = None) -> List[float]:
             for batch in task.train_data_loader:
                 mol_batch, features_batch, target_batch = batch.batch_graph(), batch.features(), batch.targets()
                 # get gnn activations directly, i.e. the molecule vectors for each
-                activations_dict['gnn'] = model.encoder(mol_batch, features_batch).T.detach()
+                activations_dict['gnn'] = model.encoder(mol_batch, features_batch).T.detach().cpu().numpy()
                 # the next call will call forward on the feed forward nets too and get those activations
                 model(mol_batch, features_batch)
                 torch.cuda.empty_cache()
